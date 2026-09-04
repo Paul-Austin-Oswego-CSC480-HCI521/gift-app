@@ -1,0 +1,94 @@
+name: Bug Report
+description: Report something that's broken or not working as expected.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out as much detail as you can. This helps QA reproduce and prioritize it.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear, concise description of the bug.
+      placeholder: When I click X, Y happens instead of Z...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps so someone else can reproduce this.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where does this bug live?
+      multiple: true
+      options:
+        - Frontend / UI
+        - Backend / REST API
+        - Authentication (JWT)
+        - Open Liberty server config
+        - Database
+        - CI/CD / build
+        - Documentation
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How badly does this affect usage of the app?
+      options:
+        - Blocker (app/feature unusable, or breaks an end-to-end flow)
+        - Major (significant functionality broken, workaround exists)
+        - Minor (small/cosmetic issue)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser/OS, or "N/A" if this is a backend-only issue.
+      placeholder: e.g. Chrome 128 on macOS 15, or "N/A - backend"
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs, screenshots, or error output
+      description: Paste any server logs, stack traces, or screenshots. This will be formatted as code automatically.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else that might help, such as related issues/PRs or when this started happening.
+    validations:
+      required: false
+
