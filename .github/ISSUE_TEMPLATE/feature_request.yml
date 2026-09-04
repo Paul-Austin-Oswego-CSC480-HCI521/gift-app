@@ -1,0 +1,67 @@
+name: Feature Request
+description: Propose a new feature, or a change to an existing one.
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing an improvement! If this maps to something in the SRS/use cases, link it below so Requirements can keep things in sync.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: What's the user pain point or gap this addresses? (Tie back to a use case if you can.)
+      placeholder: As a gift-giver, I want to... so that I can...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe what you'd like to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you thought about, and why you didn't go with them.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which team(s) does this mainly involve?
+      multiple: true
+      options:
+        - Full Stack - Frontend
+        - Full Stack - Backend
+        - Quality Assurance
+        - Requirements
+        - Usability
+        - Not sure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: usability
+    attributes:
+      label: Usability & accessibility
+      description: Check any that apply. This helps the Usability team know if they need to weigh in.
+      options:
+        - label: This changes or adds a user-facing UI flow
+        - label: This may affect accessibility (screen readers, keyboard nav, color contrast, etc.)
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Mockups, links to related SRS sections, related issues, etc.
+    validations:
+      required: false
+
