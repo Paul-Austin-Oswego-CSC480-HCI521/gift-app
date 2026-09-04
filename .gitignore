@@ -5,12 +5,20 @@ target/
 *.war
 *.ear
 .mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+dependency-reduced-pom.xml
 
 # Open Liberty
 wlp/
 liberty/wlp/
 liberty-plugin-config.xml
 *.log
+release.properties
+buildNumber.properties
+.mvn/timing.properties
 
 # Node (frontend tooling, if used)
 node_modules/
