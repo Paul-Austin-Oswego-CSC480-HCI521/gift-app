@@ -1,0 +1,160 @@
+# CODEOWNERS
+#
+# This file maps paths in the repo to whoever should review changes to them.
+# GitHub auto-requests a review from the matching owner(s) when a PR touches
+# a given path.
+#
+# Handles below are pulled from the repo's Collaborators list (Settings >
+# Collaborators). A few people don't have a confirmed handle yet (pending
+# invite, or not matched). See the TODOs below.
+#
+# HOW GITHUB APPLIES THIS FILE (read before editing):
+#   - For a single file, only the LAST matching pattern in this file counts.
+#     Patterns don't stack for the same file. Order matters; more specific
+#     patterns should come after more general ones.
+#   - Across a whole PR, if different changed files match different owner
+#     groups, GitHub requires at least one approval from EACH distinct group
+#     represented, e.g. a PR touching both frontend/ and backend/ needs one
+#     approval from Frontend AND one from Backend.
+#   - Within one line/group, only ONE of the listed owners needs to approve
+#     to satisfy that line. GitHub can't natively express "this person AND
+#     that person" on a single path. See the gatekeeper note below for how
+#     we're handling that gap.
+
+# --------------------------------------------------------------------------
+# Default owner (fallback for anything not matched below)
+# --------------------------------------------------------------------------
+*                               @shkeating
+
+# --------------------------------------------------------------------------
+# Full Stack - Frontend
+# Lead: Lauren Johnson. Members: Paul O'Brien, Alex Duran, Shauna Keating,
+# River Simard
+# --------------------------------------------------------------------------
+#   Lauren Johnson (LEAD)   @ljohnsonsf   (pending invite as of this writing)
+#   Paul O'Brien            @paulobrienn
+#   Alex Duran              @ahlexs       (pending invite, best-guess match
+#                                          on name; please confirm)
+#   River Simard            @xXProgrammerXx (117Chaos), Shauna's best guess,
+#                                  not confirmed; please verify with River
+#   Shauna Keating          @shkeating
+#
+# Trigger, to start: anything under the frontend folder. Once visual
+# regression testing is in place, this may instead (or also) trigger off
+# failed/changed visual regression snapshots rather than the whole folder.
+# Revisit this rule then.
+/frontend/                     @shkeating @ljohnsonsf @paulobrienn @ahlexs @xXProgrammerXx
+/src/main/webapp/               @shkeating @ljohnsonsf @paulobrienn @ahlexs @xXProgrammerXx
+
+# --------------------------------------------------------------------------
+# Full Stack - Backend / Open Liberty
+# Focal point: Thomas "TJ" Tanner. Members: Ben Donohue,
+# Andrew F. Kerfien Torres, Lin Thant, Neh Patel (also Frontend)
+# --------------------------------------------------------------------------
+#   Thomas Tanner (Focal Point)   @ttanner04
+#   Ben Donohue                   @benkim0, Shauna's best guess, not
+#                                  confirmed; please verify with Ben
+#   Andrew F. Kerfien Torres      @AndrewFKerfienTorres
+#   Lin Thant                     @linthantaung-gif
+#   Neh Patel (Both)              @PatelNeh2004
+#
+# Trigger: any backend Java code or Open Liberty server config.
+/src/main/java/                 @shkeating @ttanner04 @AndrewFKerfienTorres @linthantaung-gif @PatelNeh2004 @benkim0
+/src/main/liberty/               @shkeating @ttanner04 @AndrewFKerfienTorres @linthantaung-gif @PatelNeh2004 @benkim0
+/pom.xml                        @shkeating @ttanner04 @AndrewFKerfienTorres @linthantaung-gif @PatelNeh2004 @benkim0
+
+# Full Stack members who work across both sides
+#   Ziaul Haque (Full Stack)   @ZiaulShamim   (best-guess match: the
+#                                              roster lists "Ziaul Haque"
+#                                              but this handle's display
+#                                              name is "ZiaulShamim"; please
+#                                              confirm this is the same
+#                                              person before relying on it)
+
+# --------------------------------------------------------------------------
+# Gatekeeper rule: Lin and Shauna (build coordinator + GitHub admin)
+# --------------------------------------------------------------------------
+# Policy (can't be fully expressed in CODEOWNERS syntax, see note below):
+#   At least one Frontend teammate must approve frontend PRs, and at least
+#   one Backend teammate must approve backend/Open Liberty PRs. IN ADDITION,
+#   if neither Lin nor Shauna was that approver, one of them should also
+#   approve before merge.
+#
+# Why this isn't just written as a rule below: GitHub only requires ONE
+# approval from the full list of owners on a matching line. It can't
+# require "teammate X" AND, conditionally, "teammate Y unless X was already
+# Y." Lin (@linthantaung-gif) and Shauna (@shkeating) are included in the
+# Frontend/Backend owner lists above so they're auto-requested on every
+# relevant PR, but satisfying this policy for real is on reviewers, not
+# automation, until we either:
+#   (a) turn on branch protection requiring 2+ approvals overall on
+#       protected branches (a blunter tool, doesn't guarantee it's
+#       specifically Lin/Shauna), or
+#   (b) move to GitHub repository rulesets, which can require review from
+#       multiple distinct code-owner groups on the same path.
+# Until (a) or (b) is set up, reviewers should manually check: "did Lin or
+# Shauna approve this?" before merging Full Stack PRs.
+
+# --------------------------------------------------------------------------
+# Quality Assurance (QA), FULL
+# Lead: Maureen Wang. Members: Anup, Ben Williams, Joseph Turcotte,
+# Shauna Keating (a11y testing support)
+# --------------------------------------------------------------------------
+#   Maureen Wang (LEAD)   @mwangster
+#   Anup                  @ahulyalkar
+#   Ben Williams          @benpwill
+#   Joseph Turcotte       @jturcot42
+#   Shauna Keating        @shkeating
+#
+# Every owner listed on the lines below is a QA team member (Shauna
+# included, she's on QA for a11y testing support), so whichever one of
+# them approves, "at least one QA member reviewed this test file" is
+# guaranteed. This one, unlike the Lin/Shauna gatekeeper rule above, is
+# fully enforceable by CODEOWNERS as-is; no branch-protection workaround
+# needed.
+#
+# Placed after the Full Stack sections above so it takes precedence: these
+# patterns match test files regardless of where they end up, overriding
+# the broader /src/main/java/ backend ownership for anything that looks
+# like a test.
+/src/test/                      @shkeating @mwangster @ahulyalkar @benpwill @jturcot42
+**/*Test.java                   @shkeating @mwangster @ahulyalkar @benpwill @jturcot42
+**/*Tests.java                  @shkeating @mwangster @ahulyalkar @benpwill @jturcot42
+**/*IT.java                     @shkeating @mwangster @ahulyalkar @benpwill @jturcot42
+
+# --------------------------------------------------------------------------
+# Requirements
+# Lead: Tulsi Nair. Members: Massai Torres, Veronica Wright
+# --------------------------------------------------------------------------
+#   Tulsi Nair (LEAD)     @tnair-ui
+#   Massai Torres         @massaitorres   (pending invite as of this writing)
+#   Veronica Wright       @vwright19
+/docs/                           @shkeating @tnair-ui @massaitorres @vwright19
+/README.md                      @shkeating @tnair-ui @massaitorres @vwright19
+
+# --------------------------------------------------------------------------
+# Usability, FULL (all HCI521 students sit on this team)
+# Lead: Jaritza Jara. Members: Anup, Maureen Wang, Shauna Keating, Kevin Chu,
+# Lauren Johnson, Tulsi Nair, Massai Torres, Veronica Wright
+# --------------------------------------------------------------------------
+#   Jaritza Jara (LEAD)   @jjara26
+#   Kevin Chu             @KC243
+#   (see Frontend/QA/Requirements sections above for overlapping members'
+#   handles: Anup, Maureen Wang, Lauren Johnson, Tulsi Nair, Massai Torres,
+#   Veronica Wright)
+/src/main/webapp/css/           @shkeating @jjara26 @KC243
+/src/main/webapp/**/*.html      @shkeating @jjara26 @KC243
+
+# --------------------------------------------------------------------------
+# CI/CD and repo governance, GitHub Admin
+# --------------------------------------------------------------------------
+/.github/                       @shkeating
+
+# --------------------------------------------------------------------------
+# Stakeholders (not reviewers, listed here for reference only)
+# --------------------------------------------------------------------------
+#   Paul Austin        paul.austin@oswego.edu
+#   Dr. Vanessa Maike  vanessa.maike@oswego.edu
+#   Adam Yoho          ayoho@us.ibm.com
+#   Rumana Haque       rhaque@us.ibm.com
+
