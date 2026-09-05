@@ -1,5 +1,3 @@
-# OZ-CSC-480-HCI-521-Fall-2026-Public
-
 For the Oswego Students of CSC480/HCI521 Fall 2026 (Software Design). See the [wiki](../../wiki) for course context, team rosters/workflow, branching & PR conventions, and in-progress architecture decisions.
 
 ## About this project
