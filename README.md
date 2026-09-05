@@ -44,7 +44,7 @@ Everything not listed above (frontend framework, CI/CD tooling, database, deploy
 ```bash
 # Clone the repo
 git clone https://github.com/Paul-Austin-Oswego-CSC480-HCI521/gift-app.git
-cd OZ-CSC-480-HCI-521-Fall-2026-Public
+cd gift-app
 
 # Database connectivity
 Install PostgreSQL and ensure the server is running
