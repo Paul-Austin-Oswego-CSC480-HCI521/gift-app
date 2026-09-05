@@ -5,6 +5,7 @@
     <featureManager>
         <feature>jakartaee-11.0</feature>
         <feature>microProfile-7.1</feature>
+        <feature>jdbc-4.3</feature>
     </featureManager>
 
     <!-- This template enables security. To get the full use of all the capabilities, a keystore and user registry are required. -->
@@ -29,16 +30,31 @@
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
 
-                  httpPort="$(http.port)"
-                  httpsPort="$(https.port)"
+                  httpPort="${http.port}"
+                  httpsPort="${https.port}"
     />
 
     <!-- Automatically expand WAR files and EAR files -->
     <applicationManager autoExpand="true"/>
 
     <!-- Configures the application on a specified context root -->
-    <webApplication contextRoot="$(app.context.root)" location="gift-app.war" />
+    <webApplication contextRoot="${app.context.root}" location="gift-app.war" />
 
     <!-- Default SSL configuration enables trust for default certificates from the Java runtime -->
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+
+    <!--  a library for the PostgreSQL JDBC driver and configure a data source -->
+    <library id="PostgreSQL">
+        <fileset dir="${shared.resource.dir}" includes="postgresql-*.jar"/>
+    </library>
+
+    <dataSource jndiName="jdbc/giftapp">
+        <jdbcDriver libraryRef="PostgreSQL"/>
+        <properties.postgresql
+                serverName="localhost"
+                portNumber="5432"
+                databaseName="giftapp"
+                user="postgres"
+                password="${env.POSTGRES_PASSWORD}"/>
+    </dataSource>
 </server>
