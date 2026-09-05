@@ -43,7 +43,7 @@ Everything not listed above (frontend framework, CI/CD tooling, database, deploy
 
 ```bash
 # Clone the repo
-git clone https://github.com/Paul-Austin-Oswego-CSC480-HCI521/OZ-CSC-480-HCI-521-Fall-2026-Public.git
+git clone https://github.com/Paul-Austin-Oswego-CSC480-HCI521/gift-app.git
 cd OZ-CSC-480-HCI-521-Fall-2026-Public
 
 # Build and start the server in dev mode (live reload, no manual rebuild/redeploy)
