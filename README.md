@@ -37,7 +37,7 @@ Everything not listed above (frontend framework, CI/CD tooling, database, deploy
 
 ### Prerequisites
 
-- JDK (version TBD, confirm with the team once the project's target Java version is set)
+- JDK 21 (target Java version set in `pom.xml`)
 - [Maven](https://maven.apache.org/install.html)
 - Git
 
@@ -56,21 +56,39 @@ Once running, the app is available at `http://localhost:9080` (or whatever port 
 
 > Fill in module-specific build/run instructions here as the project's services/modules take shape.
 
+### Running with Docker
+
+A root-level `Dockerfile` packages the built app into an Open Liberty container image (starting from `icr.io/appcafe/open-liberty:kernel-slim-java21-openj9-ubi-minimal`), copying in `src/main/liberty/config` and the built `.war` from `target/`. Build the `.war` first, then build/run the image:
+
+```bash
+mvn package
+docker build -t gift-app .
+docker run -p 9080:9080 -p 9443:9443 gift-app
+```
+
+This is a packaging/deployment path, not a replacement for local dev — use `mvn liberty:dev` day-to-day for live reload.
+
 ## Project structure
+
+This repo currently holds **two separate apps** rather than one combined Maven project:
 
 ```
 .
 ├── src/
 │   ├── main/
-│   │   ├── java/        # Application source code (microservices)
+│   │   ├── java/        # Backend application source code (JAX-RS/microservices)
 │   │   ├── liberty/     # Open Liberty server config (server.xml, etc.)
-│   │   └── webapp/      # Static web content (HTML/JS/CSS), if applicable
+│   │   └── resources/   # MicroProfile config, etc.
 │   └── test/            # Unit and integration tests
-├── pom.xml              # Maven project config
+├── pom.xml              # Maven project config (backend)
+├── Dockerfile           # Packages the backend into an Open Liberty container image
+├── frontend/            # Separate Node/Vite project (Carbon Web Components + Storybook);
+│                         # its own package.json, dev server, and README - talks to the
+│                         # backend over REST, not served from src/main/webapp
 └── README.md
 ```
 
-_(Update this section once the actual module/service layout is finalized. This will likely grow into multiple services, e.g. user profiles, gift lists, wishlists.)_
+_(Update this section as the actual module/service layout evolves. The backend will likely grow into multiple services, e.g. user profiles, gift lists, wishlists.)_
 
 ## Testing
 
