@@ -18,8 +18,7 @@ public class DevResource {
 	@GET
 	public Response ping(){
 
-		return Response.ok(Json.createObjectBuilder().add("status","200 OK").build()).build();
-
-
+		return Response.ok(Json.createObjectBuilder()
+				.add("status","200 OK").build()).build();
 	}
 }
