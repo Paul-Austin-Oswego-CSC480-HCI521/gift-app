@@ -51,10 +51,11 @@
     <dataSource jndiName="jdbc/giftapp">
         <jdbcDriver libraryRef="PostgreSQL"/>
         <properties.postgresql
-                serverName="localhost"
+                serverName="ep-icy-silence-aywepsgr-pooler.c-5.us-east-2.aws.neon.tech"
                 portNumber="5432"
-                databaseName="giftapp"
-                user="postgres"
-                password="${env.POSTGRES_PASSWORD}"/>
+                databaseName="neondb"
+                user="neondb_owner"
+                password="${env.POSTGRES_PASSWORD}"
+                sslmode="require"/>
     </dataSource>
 </server>
