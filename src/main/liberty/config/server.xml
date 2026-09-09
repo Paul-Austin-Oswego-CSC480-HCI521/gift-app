@@ -59,10 +59,10 @@
                 sslmode="require"/>
     </dataSource>
     <cors
-            domain="/api"
+            domain="/gift-app"
             allowedOrigins="${cors.allowed.domain}"
             allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
-            allowedCredentials="true"
+            allowCredentials="true"
             allowedHeaders="Authorization, Content-Type"
     />
 </server>
