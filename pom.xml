@@ -19,6 +19,7 @@
         <liberty.var.http.port>9080</liberty.var.http.port>
         <liberty.var.https.port>9443</liberty.var.https.port>
         <liberty.var.app.context.root>gift-app</liberty.var.app.context.root>
+        <liberty.var.cors.allowed.domain>http:localhost:5173</liberty.var.cors.allowed.domain>
 
     </properties>
 

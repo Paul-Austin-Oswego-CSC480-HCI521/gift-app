@@ -58,4 +58,11 @@
                 password="${env.POSTGRES_PASSWORD}"
                 sslmode="require"/>
     </dataSource>
+    <cors
+            domain="/api"
+            allowedOrigins="${cors.allowed.domain}"
+            allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+            allowedCredentials="true"
+            allowedHeaders="Authorization, Content-Type"
+    />
 </server>
