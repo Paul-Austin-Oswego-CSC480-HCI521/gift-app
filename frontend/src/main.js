@@ -5,6 +5,10 @@ document.querySelector("#app").innerHTML = `
   <div style="padding: 2rem;">
     <h1>Gift Tracker</h1>
     <p>Frontend scaffold is running. See <code>/frontend/README.md</code> for next steps.</p>
+
+    <h2>Hellooo my fellow gift givers!</h2>
+    <p>Lets get started, shall we?.</p>
+
     <cds-button>Hello, Carbon</cds-button>
   </div>
 `;
