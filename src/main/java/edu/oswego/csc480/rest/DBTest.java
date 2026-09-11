@@ -4,10 +4,9 @@ import edu.oswego.csc480.entities.TestEntity;
 import edu.oswego.csc480.repositories.TestRepository;
 import jakarta.annotation.Resource;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -36,6 +35,43 @@ public class DBTest {
         }else{
             return entity.get();
         }
+    }
+
+    @Path("/test_create")
+    @POST
+    public TestEntity createEntity(){
+
+        trepo.save(new TestEntity("JPATEST", "ENTITY"));
+
+        Optional<TestEntity> opt = trepo.findByFirstName("JPATEST");
+        if (opt.isEmpty()){
+            return null;
+        }else{
+            return opt.get();
+        }
+    }
+
+    @Path("/test_delete")
+    @DELETE
+    public boolean deleteEntity(){
+        TestEntity t;
+        Optional<TestEntity> opt = trepo.findByFirstName("JPATEST");
+
+        if (opt.isEmpty()){
+            trepo.save(new TestEntity("JPATEST", "ENTITY"));
+            opt = trepo.findByFirstName("JPATEST");
+            if (opt.isEmpty()){
+                return false;
+            }else{
+                t = opt.get();
+            }
+        }else{
+            t = opt.get();
+        }
+
+        trepo.delete(t);
+        opt = trepo.findByFirstName("JPATEST");
+        return opt.isEmpty();
     }
 
     @GET
