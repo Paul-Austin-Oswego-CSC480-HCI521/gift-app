@@ -6,7 +6,7 @@ import jakarta.data.repository.Repository;
 
 import java.util.Optional;
 
-@Repository
+@Repository(dataStore = "jdbc/giftapp")
 public interface TestRepository extends CrudRepository<TestEntity, Integer> {
 
 
