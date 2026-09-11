@@ -1,11 +1,15 @@
 package edu.oswego.csc480.repositories;
 
-//https://openliberty.io/docs/latest/jakarta-data.html
+import edu.oswego.csc480.entities.TestEntity;
+import jakarta.data.repository.CrudRepository;
+import jakarta.data.repository.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface TestRepository extends CrudRepository<TestEntity, Integer> {
 
 
-public class TestRepository {
-
-
-
+	Optional<TestEntity> findById(Integer id);
 
 }
