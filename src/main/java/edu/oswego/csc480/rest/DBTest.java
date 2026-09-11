@@ -1,17 +1,78 @@
 package edu.oswego.csc480.rest;
 
+import edu.oswego.csc480.entities.TestEntity;
+import edu.oswego.csc480.repositories.TestRepository;
 import jakarta.annotation.Resource;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Optional;
 
 @Path("/db")
+@Produces(MediaType.APPLICATION_JSON)
 public class DBTest {
+
     @Resource(lookup = "jdbc/giftapp")
     DataSource dataSource;
+
+    @Inject
+    TestRepository trepo;
+
+    @Path("/persistence")
+    @GET
+    public TestEntity EclipseLinkTest(){
+
+        Optional<TestEntity> entity = trepo.findById(1);
+
+        if (entity.isEmpty()){
+            return null;
+        }else{
+            return entity.get();
+        }
+    }
+
+    @Path("/test_create")
+    @POST
+    public TestEntity createEntity(){
+
+        trepo.save(new TestEntity("JPATEST", "ENTITY"));
+
+        Optional<TestEntity> opt = trepo.findByFirstName("JPATEST");
+        if (opt.isEmpty()){
+            return null;
+        }else{
+            return opt.get();
+        }
+    }
+
+    @Path("/test_delete")
+    @DELETE
+    public boolean deleteEntity(){
+        TestEntity t;
+        Optional<TestEntity> opt = trepo.findByFirstName("JPATEST");
+
+        if (opt.isEmpty()){
+            trepo.save(new TestEntity("JPATEST", "ENTITY"));
+            opt = trepo.findByFirstName("JPATEST");
+            if (opt.isEmpty()){
+                return false;
+            }else{
+                t = opt.get();
+            }
+        }else{
+            t = opt.get();
+        }
+
+        trepo.delete(t);
+        opt = trepo.findByFirstName("JPATEST");
+        return opt.isEmpty();
+    }
 
     @GET
     public String test() throws Exception {
