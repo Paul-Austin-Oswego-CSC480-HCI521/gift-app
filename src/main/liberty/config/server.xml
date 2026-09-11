@@ -58,4 +58,11 @@
                 password="${env.POSTGRES_PASSWORD}"
                 sslmode="require"/>
     </dataSource>
+    <cors
+            domain="/gift-app"
+            allowedOrigins="${cors.allowed.domain}"
+            allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+            allowCredentials="true"
+            allowedHeaders="Authorization, Content-Type"
+    />
 </server>
