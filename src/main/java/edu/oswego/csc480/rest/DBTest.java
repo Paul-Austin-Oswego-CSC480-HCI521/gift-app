@@ -6,6 +6,8 @@ import jakarta.annotation.Resource;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import javax.sql.DataSource;
@@ -15,6 +17,7 @@ import java.sql.Statement;
 import java.util.Optional;
 
 @Path("/db")
+@Produces(MediaType.APPLICATION_JSON)
 public class DBTest {
 
     @Resource(lookup = "jdbc/giftapp")
