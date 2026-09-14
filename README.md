@@ -1,5 +1,13 @@
 For the Oswego Students of CSC480/HCI521 Fall 2026 (Software Design). See the [wiki](../../wiki) for course context, team rosters/workflow, branching & PR conventions, and in-progress architecture decisions.
 
+## Deployments
+
+### Frontend 
+Frontend continuously deploys to Netlify to https://gift-app-project.netlify.app/
+
+### Storybook
+Storybook is continuously deployed to github pages: https://paul-austin-oswego-csc480-hci521.github.io/gift-app/
+
 ## About this project
 
 We're building a **thoughtful gift-giving and tracking application**, a tool to replace the scattered mess of iPhone Notes, browser bookmarks, and email receipts people currently use to remember gift ideas, sizes/preferences, what's already been given, and what's still on a wishlist.
