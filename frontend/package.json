@@ -10,6 +10,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:a11y": "test-storybook",
+    "test:sync": "node --test ../test/sync-figma-dev-resources.test.js",
+    "sync:figma": "node ../scripts/sync-figma-dev-resources.js",
+    "sync:figma:dry": "node ../scripts/sync-figma-dev-resources.js --dry-run",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {

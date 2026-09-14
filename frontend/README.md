@@ -28,6 +28,9 @@ cp .env.example .env   # adjust VITE_API_BASE_URL if needed
 | `npm run build-storybook` | Static build of Storybook to `storybook-static/` (git-ignored) — what Chromatic publishes. |
 | `npm run test:a11y` | Runs every Storybook story headlessly and checks it renders + passes accessibility checks (via the Storybook a11y addon). Run this before opening a PR. |
 | `npm run chromatic` | Publishes a Storybook build to [Chromatic](https://www.chromatic.com/) for visual regression review. Requires a `CHROMATIC_PROJECT_TOKEN` — ask a Frontend lead. See [docs/visual-regression-review.md](docs/visual-regression-review.md). |
+| `npm run sync:figma` | Synchronizes Figma Dev Mode "Dev resources" links with Carbon Storybook pages. Requires `FIGMA_API_TOKEN`. |
+| `npm run sync:figma:dry` | Preview Figma dev resource changes without making write API calls. |
+| `npm run test:sync` | Runs unit tests for the Figma-Storybook synchronization script. |
 
 ## Where things live
 

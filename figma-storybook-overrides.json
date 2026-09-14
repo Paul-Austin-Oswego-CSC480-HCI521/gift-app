@@ -1,0 +1,20 @@
+{
+  "Data Table / Batch Actions": "components-datatable-batch-actions--default",
+  "Data Table / Toolbar": "components-datatable-toolbar--default",
+  "Data Table / Selection": "components-datatable-selection--default",
+  "Data Table / Expansion": "components-datatable-expansion--default",
+  "Data Table / Sorting": "components-datatable-sorting--default",
+  "Data Table / Filtering": "components-datatable-filtering--default",
+  "Data Table / Skeleton": "components-datatable-skeleton--default",
+  "Toast Notification": "components-notifications-toast--default",
+  "Inline Notification": "components-notifications-inline--default",
+  "Callout Notification": "components-notifications-callout--default",
+  "Actionable Notification": "components-notifications-actionable--default",
+  "UI Shell / Header": "components-ui-shell--header",
+  "UI Shell / SideNav": "components-ui-shell--side-nav",
+  "UI Shell / Header with Nav": "components-ui-shell--header-with-nav",
+  "UI Shell / Header with Actions": "components-ui-shell--header-with-actions",
+  "Skeleton / Text": "components-skeleton-skeleton-text--default",
+  "Skeleton / Icon": "components-skeleton-skeleton-icon--default",
+  "Skeleton / Placeholder": "components-skeleton-skeleton-placeholder--default"
+}

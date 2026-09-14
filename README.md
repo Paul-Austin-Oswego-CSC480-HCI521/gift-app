@@ -130,6 +130,62 @@ This repo currently holds **two separate apps** rather than one combined Maven p
 
 _(Update this section as the actual module/service layout evolves. The backend will likely grow into multiple services, e.g. user profiles, gift lists, wishlists.)_
 
+## Figma Dev Resources Sync
+
+We maintain a synchronization script that keeps Figma Dev Mode **Dev resources** links up to date for every component in our [Carbon Design System Figma library](https://www.figma.com/design/S7kuccbyXb0YzxXZWWkDxA/-v11--Carbon-Design-System--Community-?t=fEei4hUG6oNwVDog-0), pointing each component directly at its matching [Carbon Web Components Storybook](https://web-components.carbondesignsystem.com) story.
+
+### Environment variables
+
+Set the following environment variables (in `.env` or in your shell):
+
+| Variable | Description | Default |
+|---|---|---|
+| `FIGMA_API_TOKEN` | Figma Personal Access Token with read/write access to Dev Resources. | _Required_ |
+| `FIGMA_FILE_KEY` | Key of the Figma file to synchronize. | `S7kuccbyXb0YzxXZWWkDxA` (Carbon v11 Community file) |
+
+### Running locally
+
+```bash
+# Preview what would be created, updated, or skipped (no write API calls)
+node scripts/sync-figma-dev-resources.js --dry-run
+
+# Or run via npm from the frontend directory
+cd frontend
+npm run sync:figma:dry
+
+# Apply synchronization live
+node scripts/sync-figma-dev-resources.js
+# Or
+npm run sync:figma
+```
+
+### CLI options
+
+- `--dry-run`: Preview planned create, update, and skip actions without writing to Figma.
+- `--overrides <path>`: Path to a JSON override map (defaults to `figma-storybook-overrides.json`).
+- `--report <path>`: Path where unmatched components are saved (defaults to `unmatched-components.json`).
+- `--file-key <key>`: Override the target Figma file key.
+- `--token <token>`: Supply a Figma personal access token directly.
+- `--fail-on-unmatched`: Exit with non-zero code if any Figma components cannot be matched.
+- `--verbose`: Print detailed logs for every component processed.
+
+### Manual overrides (`figma-storybook-overrides.json`)
+
+The script automatically matches Figma components and component sets to Carbon Storybook stories by normalized name and hierarchy. For cases where names differ significantly or point to specific custom story IDs, add an entry to `figma-storybook-overrides.json`:
+
+```json
+{
+  "Data Table / Batch Actions": "components-datatable-batch-actions--default",
+  "UI Shell / Header": "components-ui-shell--header"
+}
+```
+
+Overrides take precedence over automatic matching.
+
+### Automated CI workflow
+
+A GitHub Actions workflow (`.github/workflows/sync-figma-dev-resources.yml`) runs the sync weekly and can also be triggered manually via `workflow_dispatch`. It uses repository secrets `FIGMA_API_TOKEN` and `FIGMA_FILE_KEY`, reports unmatched components as workflow artifacts, and files/updates a GitHub Issue if unmatched components need human review.
+
 ## Testing
 
 Testing isn't an afterthought. We're using Agile methodology and Test-Driven Development, and validating with System Verification Testing (SVT) before merging significant features:

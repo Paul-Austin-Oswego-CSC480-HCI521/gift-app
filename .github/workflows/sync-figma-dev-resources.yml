@@ -1,0 +1,107 @@
+name: Sync Figma Dev Resources
+
+on:
+  schedule:
+    # Run every Monday at 12:00 UTC
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (preview changes without writing to Figma)'
+        required: false
+        type: boolean
+        default: false
+      fail_on_unmatched:
+        description: 'Fail workflow if any components are unmatched'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  sync-figma:
+    name: Sync Figma Dev Resources
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run unit tests
+        run: node --test test/sync-figma-dev-resources.test.js
+
+      - name: Run Figma Dev Resources sync script
+        id: sync
+        env:
+          FIGMA_API_TOKEN: ${{ secrets.FIGMA_API_TOKEN }}
+          FIGMA_FILE_KEY: ${{ secrets.FIGMA_FILE_KEY }}
+        run: |
+          ARGS=()
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS+=("--dry-run")
+          fi
+          if [ "${{ github.event.inputs.fail_on_unmatched }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            ARGS+=("--fail-on-unmatched")
+          fi
+          ARGS+=("--report" "unmatched-components.json")
+          ARGS+=("--overrides" "figma-storybook-overrides.json")
+
+          node scripts/sync-figma-dev-resources.js "${ARGS[@]}"
+
+      - name: Upload unmatched components report
+        if: always() && hashFiles('unmatched-components.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: unmatched-components
+          path: unmatched-components.json
+          retention-days: 14
+
+      - name: Create issue for unmatched components
+        if: failure() && hashFiles('unmatched-components.json') != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('unmatched-components.json')) {
+              const raw = fs.readFileSync('unmatched-components.json', 'utf8');
+              const unmatched = JSON.parse(raw);
+              if (unmatched.length > 0) {
+                const list = unmatched.map(u => `- **${u.name}** (Node ID: \`${u.node_id}\`, Type: \`${u.type}\`${u.parentName ? `, Parent: \`${u.parentName}\`` : ''})`).join('\n');
+                const title = `[Figma Sync] ${unmatched.length} unmatched Figma components found`;
+                const body = `### Unmatched Figma Components\n\nThe weekly Figma ↔ Storybook Dev Resources sync workflow detected **${unmatched.length}** Figma component(s) without matching Storybook stories:\n\n${list}\n\n### How to resolve\nAdd overrides in \`figma-storybook-overrides.json\` mapping the Figma component name to the target Carbon Storybook story ID.\n\nWorkflow run: [${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+
+                // Search for existing open issue to avoid duplicates
+                const issues = await github.rest.issues.listForRepo({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  state: 'open',
+                  creator: 'github-actions[bot]',
+                });
+                const existing = issues.data.find(i => i.title.startsWith('[Figma Sync]'));
+
+                if (existing) {
+                  await github.rest.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: existing.number,
+                    title,
+                    body,
+                  });
+                } else {
+                  await github.rest.issues.create({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    title,
+                    body,
+                  });
+                }
+              }
+            }

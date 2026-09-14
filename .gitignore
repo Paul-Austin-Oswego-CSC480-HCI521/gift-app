@@ -43,7 +43,12 @@ Thumbs.db
 
 # Environment / secrets
 .env
-.env.local
+.env.*
+!.env.example
 *.pem
 *.key
+
+# Reports
+unmatched-components.json
+*-unmatched.json
 
