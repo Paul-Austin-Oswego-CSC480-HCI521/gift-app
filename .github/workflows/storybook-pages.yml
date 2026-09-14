@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/ui-start
+      - main
   workflow_dispatch:
 
 permissions:
