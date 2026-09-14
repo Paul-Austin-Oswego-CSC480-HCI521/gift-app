@@ -46,6 +46,7 @@ frontend/
 - [docs/accessibility-checklist.md](docs/accessibility-checklist.md) — what to check before opening a PR.
 - [docs/visual-regression-review.md](docs/visual-regression-review.md) — how Chromatic fits into review today (manual) and later (once CI adopts it).
 - [docs/api-expectations.md](docs/api-expectations.md) — what the frontend expects from the Open Liberty backend (CORS, auth header, env vars).
+- [docs/netlify-deployment.md](docs/netlify-deployment.md) — Netlify build settings, branch vs main deployments, and connecting backend/database later.
 
 ## Contributing
 
