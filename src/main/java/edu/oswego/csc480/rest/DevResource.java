@@ -1,8 +1,6 @@
 package edu.oswego.csc480.rest;
 
 import jakarta.json.Json;
-import jakarta.json.JsonString;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
