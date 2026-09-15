@@ -14,7 +14,7 @@ public interface TestRepository extends CrudRepository<TestEntity, Integer> {
 	@Save
 	TestEntity save(TestEntity e);
 
-	Optional<TestEntity> findById(int id);
+	Optional<TestEntity> findById(Integer id);
 
 	Optional<TestEntity> findByFirstName(String firstName);
 
