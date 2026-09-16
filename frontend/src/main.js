@@ -1,5 +1,6 @@
 import "@carbon/styles/css/styles.css";
 import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/link/index.js";
 
 document.querySelector("#app").innerHTML = `
   <style>
@@ -82,22 +83,6 @@ document.querySelector("#app").innerHTML = `
         gap: 10px;
         align-self: stretch;
    }
-   .footer button{
-        /*button stuff*/
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        text-align: left;
-        width: 160px;
-        /*text stuff*/
-        color: var(--Link-link-inverse, #78A9FF);
-        font-family: var(--Fixed-Body-Font-family, "IBM Plex Sans");
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 18px;
-        letter-spacing: 0.16px;
-   }
 
    .button-background{
         background: var(--Transparent, rgba(255, 255, 255, 0.00));
@@ -128,28 +113,27 @@ document.querySelector("#app").innerHTML = `
       </div>
 
       <footer class = "footer">
-      <button type = "button" class = "button-background">
-      <span>Accessibility Policy</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect width="16" height="16" fill="white" fill-opacity="0.01"/>
-          <path d="M9 3L8.285 3.6965L12.075 7.5H2V8.5H12.075L8.285 12.2865L9 13L14 8L9 3Z" fill="#78A9FF"/>
-      </svg></button>
+      <cds-link>
+        Accessibility Policy
+        <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
+        </svg>
+      </cds-link>
 
+      <cds-link>
+        About Us
+      <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
+      </svg>
+      </cds-link>
 
-      <button type = "button" class = "button-background">
-      <span>About Us</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect width="16" height="16" fill="white" fill-opacity="0.01"/>
-          <path d="M9 3L8.285 3.6965L12.075 7.5H2V8.5H12.075L8.285 12.2865L9 13L14 8L9 3Z" fill="#78A9FF"/>
-      </svg></button>
+      <cds-link>
+          Follow Online
+        <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
+        </svg>
+        </cds-link>
 
-
-      <button type = "button" class = "button-background">
-      <span>Follow Online</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect width="16" height="16" fill="white" fill-opacity="0.01"/>
-          <path d="M9 3L8.285 3.6965L12.075 7.5H2V8.5H12.075L8.285 12.2865L9 13L14 8L9 3Z" fill="#78A9FF"/>
-      </svg></button>
       </footer>
   </div>
 `;
