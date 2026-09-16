@@ -22,7 +22,7 @@ Browse available components and their attributes/slots at [carbondesignsystem.co
 
 ## Theming
 
-Global styles come from the prebuilt CSS: `@carbon/styles/css/styles.css`, imported once in `src/main.js` (and separately in `.storybook/preview.js` for Storybook). Don't hand-write colors, spacing, or typography — use Carbon's tokens and components so contrast/spacing stay WCAG-compliant automatically.
+Global styles come from the prebuilt CSS: `@carbon/styles/css/styles.css`, imported once in `src/index.js` (and separately in `.storybook/preview.js` for Storybook). Don't hand-write colors, spacing, or typography — use Carbon's tokens and components so contrast/spacing stay WCAG-compliant automatically.
 
 We're using the `white` theme (`class="cds--white"` on `<body>` / story wrapper) as the default. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
 
@@ -33,3 +33,26 @@ Per the ADR, we're starting with plain JavaScript since the team is new to JS it
 ## Stories
 
 Every component you build or customize should get a Storybook story, co-located in `/frontend/stories/` (or a subfolder if a feature area needs more than one, e.g. `stories/gift-list/`). Use `stories/ExampleCarbonButton.stories.js` as a template — it shows the CSF3 format we use with `@storybook/web-components-vite` and `lit`'s `html` tag.
+
+Two more worked examples:
+
+- `stories/CarbonHeader.stories.js` — the standard `<cds-header>` configuration used on every page.
+- `stories/GradientContainer.stories.js` — a story for a custom (non-Carbon) component; see [../docs/frontend-structure.md](frontend-structure.md) for where components like this live in `src/`.
+
+## Using components in pages
+
+Pages are ordinary HTML files, such as `index.html`. They assemble reusable components with
+custom element tags:
+
+```html
+<gift-nav-header product-name="Gift App"></gift-nav-header>
+<gift-gradient-container>
+	<h1>Page content</h1>
+</gift-gradient-container>
+```
+
+The page file should describe the structure and content a teammate can see. The component file
+should contain reusable behavior and styling. Use regular HTML for content that is only needed on
+one page. Use a Web Component when a section is reusable or has its own behavior, and add a
+Storybook story so it can be viewed on its own.
+

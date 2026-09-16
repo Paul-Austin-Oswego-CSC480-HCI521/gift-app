@@ -3,10 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gift Tracker</title>
+    <title>Gift App</title>
+    <meta name="description" content="A thoughtful gift-giving and tracking application." />
   </head>
   <body class="cds--white">
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <!-- cds--white selects Carbon's white theme. The page is assembled with ordinary HTML
+         and a few custom Web Components. -->
+    <!-- TODO: As you add more reusable sections, create a component for each one and place
+         its custom element in this page. Keep this outer layout easy to read. -->
+    <div class="no-scrolling">
+      <!-- This regular HTML div groups the page content on a white background. -->
+      <div class="gift-container-background">
+        <!-- CUSTOM WEB COMPONENT: gift-nav-header is defined in src/components/.
+             Its job is to provide the shared header shell. The HTML inside it is placed
+             into the component's slot, so navigation remains easy to edit here. -->
+        <gift-nav-header product-name="Gift App">
+          <!-- These are also Carbon Web Components. They are custom elements provided by
+               Carbon, and their attributes configure links and the active state. -->
+          <cds-header-nav menu-bar-label="Gift App navigation">
+            <cds-header-nav-item href="/" is-active>Gift App</cds-header-nav-item>
+            <cds-header-nav-item href="/gifts">Gifts</cds-header-nav-item>
+            <cds-header-nav-item href="/people">People</cds-header-nav-item>
+          </cds-header-nav>
+        </gift-nav-header>
+
+        <!-- CUSTOM WEB COMPONENT: gift-gradient-container is our own reusable component.
+             It supplies the gradient background. The regular HTML inside it is page content
+             passed through the component's default slot. -->
+        <gift-gradient-container>
+          <!-- These are regular HTML elements. Use them directly when content does not need
+               reusable behavior of its own. The class connects this header to app.css. -->
+          <header class="container-header">
+            <h1>Gift App</h1>
+            <p>A thoughtful gift-giving and tracking application</p>
+          </header>
+        </gift-gradient-container>
+
+        <!-- TODO: Add the next reusable section here. Decide whether it is regular HTML or
+             deserves its own Web Component, then add a Storybook story if it is reusable. -->
+      </div>
+
+      <!-- TODO: Add the footer here after extracting it into its own Web Component. -->
+    </div>
+    <!-- type="module" loads the small JavaScript file that registers the components above. -->
+    <script type="module" src="/src/index.js"></script>
   </body>
 </html>
