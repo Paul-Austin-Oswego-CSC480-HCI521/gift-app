@@ -21,8 +21,6 @@ document.querySelector("#app").innerHTML = `
         align-self: stretch;
         box-sizing: border-box;
         background: linear-gradient(90deg, #FFC6C6 0%, #FFD7A3 100%);
-  }
-  .gift-container{
         color: var(--Text-text-primary, #161616);
         font-family: var(--Font-family, "IBM Plex Sans");
         font-size: 14px;
