@@ -2,6 +2,10 @@ import "@carbon/styles/css/styles.css";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/link/index.js";
 
+// LEGACY REFERENCE: this file shows the original single-template implementation.
+// index.html is now the active page and src/index.js registers the Web Components it uses.
+// Keep this file only as a reference while the refactoring work is completed; do not add new
+// page markup here.
 document.querySelector("#app").innerHTML = `
   <style>
   .no-scrolling{
@@ -20,22 +24,22 @@ document.querySelector("#app").innerHTML = `
         width: 100%;
         flex: 1 0 0;
         align-self: stretch;
-        box-sizing: border-box;
-        background: linear-gradient(90deg, #FFC6C6 0%, #FFD7A3 100%);
-        color: var(--Text-text-primary, #161616);
-        font-family: var(--Font-family, "IBM Plex Sans");
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 20px;
+       box-sizing: border-box;
+       background: linear-gradient(90deg, #FFC6C6 0%, #FFD7A3 100%);
+       color: var(--Text-text-primary, #161616);
+       font-family: var(--Font-family, "IBM Plex Sans");
+       font-size: 14px;
+       font-style: normal;
+       font-weight: 400;
+       line-height: 20px;
   }
 
   /*The White backdrop for our gradiant background*/
    .gift-container-background{
-        display: flex;
-        padding: var(--End-margins, 16px) var(--Left-end-margin, 16px) var(--End-margins, 16px) var(--Right-end-margin, 16px);
-        flex-direction: column;
-        align-items: flex-start;
+       display: flex;
+       padding: var(--End-margins, 16px) var(--Left-end-margin, 16px) var(--End-margins, 16px) var(--Right-end-margin, 16px);
+       flex-direction: column;
+       align-items: flex-start;
         gap: 16px;
         flex: 1;
         align-self: stretch;
@@ -83,7 +87,6 @@ document.querySelector("#app").innerHTML = `
         gap: 10px;
         align-self: stretch;
    }
-
    .button-background{
         background: var(--Transparent, rgba(255, 255, 255, 0.00));
         border: none;
@@ -94,11 +97,18 @@ document.querySelector("#app").innerHTML = `
 
   <div class = "no-scrolling">
       <div class = "gift-container-background">
+        <!-- TODO: extract to src/components/nav-header.js and swap these plain buttons for
+             Carbon's <cds-header>/<cds-header-nav-item> so we get keyboard nav and focus
+             states for free — see stories/CarbonHeader.stories.js for the config we want. -->
         <header class = "background-header">
             <button type = "button" class = "button-background active">Gift App</button>
             <button type = "button" class = "button-background">Gifts</button>
             <button type = "button" class = "button-background">People</button>
         </header>
+        <!-- TODO: the gradient background + white "card" backdrop below is reused on every
+             page mockup in Figma. Extract to src/components/gradient-container.js so each
+             page just wraps its content in it instead of re-pasting this markup/CSS.
+             See stories/GradientContainer.stories.js for an example. -->
         <main class = "gift-container">
           <header class = "container-header">
              <h1>Gift App
@@ -112,6 +122,8 @@ document.querySelector("#app").innerHTML = `
         </main>
       </div>
 
+      <!-- TODO: extract to src/components/site-footer.js — same footer content/links will
+           repeat on every page. -->
       <footer class = "footer">
       <cds-link>
         Accessibility Policy
@@ -122,18 +134,19 @@ document.querySelector("#app").innerHTML = `
 
       <cds-link>
         About Us
-      <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
-      </svg>
-      </cds-link>
+                    <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                              <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
+                    </svg>
+               </cds-link>
 
-      <cds-link>
-          Follow Online
-        <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
-        </svg>
-        </cds-link>
-
+               <cds-link>
+                    Follow Online
+                    <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" slot="icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                              <path d="M9.3 3.7 13.1 7.5 1 7.5 1 8.5 13.1 8.5 9.3 12.3 10 13 15 8 10 3z"></path>
+                    </svg>
+               </cds-link>
       </footer>
   </div>
 `;
+
+// The remaining extraction work belongs in reusable components and in index.html, not here.
