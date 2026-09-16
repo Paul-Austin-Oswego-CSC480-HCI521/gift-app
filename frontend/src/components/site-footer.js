@@ -14,6 +14,7 @@ export class SiteFooter extends LitElement {
             align-self: stretch;
         }
 
+        //overide the color scheme of the cds link.
         cds-link {
           --cds-link-primary: #A6C8FF; /* 13.5:1 ratio against #262626 */
           --cds-link-primary-hover: #78a9ff;
