@@ -1,26 +1,36 @@
 # Visual regression review (Chromatic)
+# Visual Regression Review
 
-We use [Chromatic](https://www.chromatic.com/) (made by the Storybook maintainers) to catch unintended visual changes: it publishes every Storybook story as a snapshot and diffs it against the last accepted version, so a reviewer can see exactly what changed pixel-for-pixel, not just read the code diff.
+> **Wiki candidate:** The wiki should own the team's visual-regression policy and tool decisions.
+> This file records only the current repository commands and interim status until that move is
+> complete.
 
-It has a free tier (thousands of snapshots/month, no credit card, no self-hosted infrastructure to run) which is why we picked it over alternatives like Percy or Loki for a beginner student team.
+**We have not decided to adopt Chromatic.** `npm run chromatic` and the `chromatic` devDependency exist in `package.json` as tooling that's *ready to wire in*, not a tool the team has committed to using. The [Frontend CI Proposal](../../../../wiki/Frontend-CI-Proposal) on the wiki lays out Chromatic as one candidate for visual regression review, alongside open questions (free-tier snapshot limits, whether live Storybook hosting is included on the free plan, who owns the token) that haven't been resolved. Until those are answered and the team explicitly decides to use it, treat anything below as "how it would work if we adopt it," not current process.
 
-## How it works today (manual)
+[Chromatic](https://www.chromatic.com/) (made by the Storybook maintainers) publishes every Storybook story as a snapshot and diffs it against the last accepted version, so a reviewer can see exactly what changed pixel-for-pixel, not just read the code diff. It's a candidate over alternatives like Percy or Loki mainly because of its free tier (billed snapshots/month, no credit card) — see the Frontend CI Proposal for the full pros/cons writeup.
 
-CI/CD isn't decided yet for this repo (see the wiki's [ADR: CI/CD Pipeline](../../../../wiki/ADR-CI-CD-Pipeline) — it needs joint QA + Full Stack sign-off), so Chromatic isn't wired into pull requests automatically. Until it is:
+## What's actually true today
 
-1. Before opening a PR that changes any component/story, run:
-   ```bash
-   npm run chromatic
-   ```
-   (needs a `CHROMATIC_PROJECT_TOKEN` env var — ask a Frontend lead for it, don't commit it)
-2. Chromatic prints a build URL when it finishes. Paste that link into your PR description.
-3. If Chromatic flags visual changes, review the diffs it shows at that URL. If they're intentional, accept them there (this becomes the new baseline for future comparisons). If they're not, that's a bug — fix it before merging.
-4. Reviewers: check the linked Chromatic build for accepted/pending diffs as part of reviewing the PR, alongside the normal code review.
+- Storybook itself **is** published today, but via GitHub Pages (see [Storybook Guide](../../../../wiki/Storybook-Guide) and [.github/workflows/storybook-pages.yml](../../.github/workflows/storybook-pages.yml)), not Chromatic. That gives a shared, always-current Storybook for `main`, but no per-PR visual diffing.
+- Nothing in CI runs Chromatic automatically. There's no required check, and no PR is blocked on it.
+- No `CHROMATIC_PROJECT_TOKEN` is guaranteed to exist yet — if you want to try it, confirm with a Frontend lead whether a token/account exists before running `npm run chromatic`.
 
-## How it'll work later (once CI is decided)
+## If you want to try it manually anyway
 
-See the wiki's [Frontend CI Proposal](../../../../wiki/Frontend-CI-Proposal) — the plan is for this to run automatically on every PR once QA and Full Stack agree on a CI approach, so this manual step goes away.
+This isn't a required step, but if you have a token and want a visual diff while the team evaluates Chromatic:
+
+1. Run `npm run chromatic` (needs `CHROMATIC_PROJECT_TOKEN` — ask a Frontend lead, don't commit it).
+2. Chromatic prints a build URL when it finishes — paste that link into your PR description if you want reviewers to see it.
+3. Treat any diffs it shows as informational for now, not a merge gate.
+
+## Where the real decision lives
+
+- [ADR: CI/CD Pipeline](../../../../wiki/ADR-CI-CD-Pipeline) — status is still **Proposed, no decision yet**; needs joint QA + Full Stack sign-off before anything (Chromatic included) becomes a required check.
+- [Frontend CI Proposal](../../../../wiki/Frontend-CI-Proposal) — the frontend-specific input to that ADR, including the Chromatic cost/capability analysis and open questions. Not itself a decision.
+
+Once the team actually decides to adopt Chromatic (and wires it into CI), update this doc to describe the real, enforced process — including whether it's a blocking or advisory check, per the open question on that proposal page.
 
 ## Note for CODEOWNERS
 
-Once this is automated, [CODEOWNERS](../.github/CODEOWNERS) has a note that `/frontend/` review may trigger off changed visual snapshots specifically, rather than the whole folder — revisit that rule when Phase 4's CI proposal is adopted.
+Once/if this is automated, [CODEOWNERS](../.github/CODEOWNERS) has a note that `/frontend/` review may trigger off changed visual snapshots specifically, rather than the whole folder — revisit that rule when the CI/CD ADR is decided.
+

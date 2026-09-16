@@ -44,16 +44,17 @@ frontend/
 └── docs/            # frontend-specific docs (this folder)
 ```
 
-See [docs/frontend-structure.md](docs/frontend-structure.md) for what goes where.
+See [docs/README.md](docs/README.md) for the small set of documentation kept with the code.
 
-## More docs
+## Local documentation
 
-- [docs/frontend-structure.md](docs/frontend-structure.md) — how HTML pages, components, stories, and styles fit together.
-- [docs/carbon-conventions.md](docs/carbon-conventions.md) — how we use Carbon components, theming, and where new components/stories should go.
-- [docs/accessibility-checklist.md](docs/accessibility-checklist.md) — what to check before opening a PR.
-- [docs/visual-regression-review.md](docs/visual-regression-review.md) — what's actually true today (Storybook on GitHub Pages) vs. Chromatic, which is proposed tooling we haven't decided to adopt.
-- [docs/api-expectations.md](docs/api-expectations.md) — what the frontend expects from the Open Liberty backend (CORS, auth header, env vars).
-- [docs/netlify-deployment.md](docs/netlify-deployment.md) — Netlify build settings for the frontend app, and connecting backend/database later.
+- [docs/frontend-structure.md](docs/frontend-structure.md) — where HTML pages, components, stories, and styles live.
+- [docs/accessibility-checklist.md](docs/accessibility-checklist.md) — the checks to run before opening a PR.
+- [docs/api-expectations.md](docs/api-expectations.md) — the current frontend/backend contract.
+
+Architecture decisions, Carbon conventions, deployment policy, Storybook policy, and team workflow
+belong in the project wiki. Keeping those longer explanations there gives the team one place to
+update shared decisions instead of letting repository copies drift.
 
 ## Contributing
 
