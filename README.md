@@ -1,5 +1,7 @@
 For the Oswego Students of CSC480/HCI521 Fall 2026 (Software Design). See the [wiki](../../wiki) for course context, team rosters/workflow, branching & PR conventions, and in-progress architecture decisions.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7223dba5-aa94-4430-836f-e8a77bbce185/deploy-status)](https://app.netlify.com/projects/gift-app-project/deploys)
+
 ## Deployments
 
 ### Frontend 

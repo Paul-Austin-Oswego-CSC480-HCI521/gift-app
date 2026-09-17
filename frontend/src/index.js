@@ -1,5 +1,9 @@
 // Carbon's shared colors, spacing, fonts, and accessible defaults.
 import "@carbon/styles/css/styles.css";
+import Clarity from "@microsoft/clarity";
+
+Clarity.init("yjthhigok4");
+
 // Styles used by the page itself, such as the full-height layout.
 import "./styles/app.css";
 
