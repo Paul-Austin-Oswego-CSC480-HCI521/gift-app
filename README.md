@@ -6,6 +6,7 @@ For the Oswego Students of CSC480/HCI521 Fall 2026 (Software Design). See the [w
 
 ### Frontend 
 Frontend continuously deploys to Netlify to https://gift-app-project.netlify.app/
+
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7223dba5-aa94-4430-836f-e8a77bbce185/deploy-status)](https://app.netlify.com/projects/gift-app-project/deploys)
 
 ### Storybook
