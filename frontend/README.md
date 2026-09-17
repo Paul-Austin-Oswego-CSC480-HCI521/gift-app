@@ -54,6 +54,7 @@ See [docs/frontend-structure.md](docs/frontend-structure.md) for what goes where
 - [docs/visual-regression-review.md](docs/visual-regression-review.md) — what's actually true today (Storybook on GitHub Pages) vs. Chromatic, which is proposed tooling we haven't decided to adopt.
 - [docs/api-expectations.md](docs/api-expectations.md) — what the frontend expects from the Open Liberty backend (CORS, auth header, env vars).
 - [docs/netlify-deployment.md](docs/netlify-deployment.md) — Netlify build settings for the frontend app, and connecting backend/database later.
+- [docs/clarity-unmoderated-testing.md](docs/clarity-unmoderated-testing.md) — Microsoft Clarity setup, privacy boundaries, and the usability team's unmoderated testing workflow.
 
 ## Contributing
 
