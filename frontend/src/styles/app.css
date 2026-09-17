@@ -1,0 +1,30 @@
+/* The page wrapper grows to at least the height of the browser window. */
+.no-scrolling {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* This is the white area containing the header and the main page content. */
+.gift-container-background {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 16px;
+  padding: var(--End-margins, 16px) var(--Left-end-margin, 16px)
+    var(--End-margins, 16px) var(--Right-end-margin, 16px);
+  background: #fff;
+}
+
+/* Page-specific content inside gift-gradient-container. */
+.container-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 16px;
+  height: 88px;
+  padding: 0 var(--Typography-Fluid-Heading-Heading-03-Size, 20px);
+}
