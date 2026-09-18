@@ -6,7 +6,7 @@ This is a separate Node project from the Open Liberty backend (`/pom.xml`, `/src
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) 20+ and npm (comes with Node)
+- [Node.js](https://nodejs.org/) 22+ and npm (comes with Node)
 - New to JavaScript/Web Components/Carbon? Start with the [Front-End team onboarding page](../../../wiki/Team-Front-End) on the wiki before diving into this repo.
 - New to git/GitHub? See [Branching and Pull Requests](../../../wiki/Branching-and-Pull-Requests) on the wiki for how we work in this repo.
 
@@ -33,6 +33,7 @@ cp .env.example .env   # adjust VITE_API_BASE_URL if needed
 | `npm run test:ui` | Same tests, in a browser UI instead of a terminal — good starting point if new to testing. |
 | `npm run test:coverage` | Runs the tests once with a coverage report. |
 | `npm run test:a11y` | Runs every Storybook story headlessly and checks it renders + passes accessibility checks (via the Storybook a11y addon). QA and usability review guidance lives in the [project wiki](../../wiki/Decisions). |
+| `npm run test:happo` | Builds Storybook and runs Happo visual regression and accessibility snapshots. Requires `HAPPO_API_KEY` and `HAPPO_API_SECRET`. |
 | `npm run chromatic` | Publishes a Storybook build to [Chromatic](https://www.chromatic.com/) for visual regression review. **Not an adopted/required step yet**; see the [CI/CD Pipeline ADR](../../wiki/ADR-CI-CD-Pipeline). Requires a `CHROMATIC_PROJECT_TOKEN` if you do try it. |
 
 ## Where things live
