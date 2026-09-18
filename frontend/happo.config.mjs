@@ -12,10 +12,6 @@ export default defineConfig({
       type: "chrome",
       viewport: "1200x900",
     },
-    "chrome-small": {
-      type: "chrome",
-      viewport: "375x667",
-    },
     accessibility: {
       type: "accessibility",
       viewport: "1024x768",
