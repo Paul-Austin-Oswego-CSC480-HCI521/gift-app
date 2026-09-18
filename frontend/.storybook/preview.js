@@ -1,6 +1,5 @@
 import "@carbon/styles/css/styles.css";
 import "happo/storybook/register";
-import happoDecorator from "happo/storybook/decorator";
 import { html } from "lit";
 
 /** @type { import('@storybook/web-components-vite').Preview } */
@@ -14,7 +13,6 @@ const preview = {
     },
   },
   decorators: [
-    happoDecorator,
     (story) => html`<div class="cds--white" style="padding: 1rem;">${story()}</div>`,
   ],
 };
