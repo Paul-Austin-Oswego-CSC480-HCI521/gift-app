@@ -1,5 +1,10 @@
 For the Oswego Students of CSC480/HCI521 Fall 2026 (Software Design). See the [wiki](../../wiki) for course context, team rosters/workflow, branching & PR conventions, and in-progress architecture decisions.
 
+## Documentation
+
+- [Frontend documentation guide](frontend/docs/README.md) — what belongs in the repository versus the wiki, plus current documentation gaps.
+- [Project wiki](../../wiki) — shared decisions, team process, onboarding, and policy.
+
 
 
 ## Deployments
