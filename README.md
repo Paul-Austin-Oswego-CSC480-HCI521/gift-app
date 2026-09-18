@@ -1,9 +1,13 @@
 For the Oswego Students of CSC480/HCI521 Fall 2026 (Software Design). See the [wiki](../../wiki) for course context, team rosters/workflow, branching & PR conventions, and in-progress architecture decisions.
 
+
+
 ## Deployments
 
 ### Frontend 
 Frontend continuously deploys to Netlify to https://gift-app-project.netlify.app/
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7223dba5-aa94-4430-836f-e8a77bbce185/deploy-status)](https://app.netlify.com/projects/gift-app-project/deploys)
 
 ### Storybook
 Storybook is continuously deployed to github pages: https://paul-austin-oswego-csc480-hci521.github.io/gift-app/

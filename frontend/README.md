@@ -44,7 +44,8 @@ frontend/
 └── docs/            # frontend-specific docs (this folder)
 ```
 
-See [docs/README.md](docs/README.md) for the small set of documentation kept with the code.
+See [docs/README.md](docs/README.md) for the documentation kept with the code and the
+topics that belong in the project wiki.
 
 ## Local documentation
 
@@ -52,9 +53,9 @@ See [docs/README.md](docs/README.md) for the small set of documentation kept wit
 - [docs/accessibility-checklist.md](docs/accessibility-checklist.md) — the checks to run before opening a PR.
 - [docs/api-expectations.md](docs/api-expectations.md) — the current frontend/backend contract.
 
-Architecture decisions, Carbon conventions, deployment policy, Storybook policy, and team workflow
-belong in the project wiki. Keeping those longer explanations there gives the team one place to
-update shared decisions instead of letting repository copies drift.
+The longer explanations in `frontend/docs/` are implementation references or working drafts. Shared
+architecture decisions, deployment policy, Storybook policy, Carbon conventions, and team workflow
+belong in the project wiki; see [docs/README.md](docs/README.md) for the ownership map.
 
 ## Contributing
 
