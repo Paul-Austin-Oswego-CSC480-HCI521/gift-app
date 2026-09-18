@@ -10,6 +10,7 @@ deployment policy, or other team processes.
 - `carbon-conventions.md`: current Carbon Web Components usage and the coding conventions that follow from it.
 - `api-expectations.md`: the working contract between the frontend and backend.
 - `clarity-unmoderated-testing.md`: how the production Clarity integration works; using it for usability work is optional.
+- `frontend-testing.md`: how to write and run the frontend's local unit/component tests (Vitest + Testing Library) — Full Stack's unit/function testing responsibility, not QA's end-to-end/regression testing.
 
 These documents should change with the code they describe. The API document is explicitly a working
 contract until backend endpoints and error shapes are finalized.
@@ -23,6 +24,7 @@ Use the project wiki for decisions, policy, and team processes. Start with:
 - [CI/CD Pipeline ADR](../../../wiki/ADR-CI-CD-Pipeline): CI, Storybook, and visual regression policy.
 - [Deployment Target ADR](../../../wiki/ADR-Deployment-Target): hosting and environment policy.
 - [Front-End team onboarding](../../../wiki/Team-Front-End): frontend setup and conventions.
+- [Frontend Unit Testing Guide](../../../wiki/Frontend-Unit-Testing): the local Vitest/Testing Library TDD workflow this directory's `frontend-testing.md` summarizes.
 - [Branching and Pull Requests](../../../wiki/Branching-and-Pull-Requests): shared contribution workflow.
 
 The wiki is the source of truth for shared decisions and process. Add a dedicated wiki page when a

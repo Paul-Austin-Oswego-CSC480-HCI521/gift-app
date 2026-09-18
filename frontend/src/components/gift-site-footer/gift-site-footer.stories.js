@@ -1,6 +1,6 @@
 import { html } from "lit";
 // Import the component so customElements.define() registers <gift-site-footer>
-import "../src/components/site-footer.js";
+import "./gift-site-footer.js";
 
 export default {
   title: "Components/Site Footer",
