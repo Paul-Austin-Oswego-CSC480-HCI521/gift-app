@@ -18,6 +18,7 @@ Closes #
 ## How was this tested?
 
 - [ ] Unit tests added or updated (`mvn test`)
+- [ ] Frontend checks passed (`cd frontend && npm run test:a11y`), when frontend code changed
 - [ ] Verified manually against a full end-to-end flow (SVT style: front end through REST layer to database and back), including auth/token propagation where relevant
 - [ ] Not applicable, explain why:
 
@@ -27,6 +28,8 @@ Closes #
 - [ ] I have requested review from the relevant CODEOWNERS group(s)
 - [ ] I have updated documentation (README/wiki) if this changes how the project is built, run, or tested
 - [ ] I have added or updated tests for the change
+- [ ] For frontend UI changes, I checked keyboard access and accessible names for new or changed controls
+- [ ] For frontend component changes, I added or updated the relevant Storybook story
 
 ## AI tool use
 
