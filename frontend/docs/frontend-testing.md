@@ -2,8 +2,8 @@
 
 How to write and run the frontend's local unit/component tests. This covers what Full Stack owns:
 logic in `src/api/` and behavior of the Web Components in `src/components/`. It does not cover
-QA's end-to-end, smoke, or regression testing. Storybook's `npm run test:a11y` / Chromatic remain
-the accessibility/visual-regression layer; the Vitest "storybook" project below is a third,
+QA's end-to-end, smoke, or regression testing. Storybook's `npm run test:a11y` / whichever visual
+regression tool the team adopts remain the accessibility/visual-regression layer; the Vitest "storybook" project below is a third,
 narrower thing — it just confirms every story still renders — see [carbon-conventions.md](carbon-conventions.md)
 and the wiki's [Frontend CI Proposal](../../../wiki/Frontend-CI-Proposal).
 
@@ -156,4 +156,5 @@ system workflows, smoke testing, and regression testing (see the wiki's
 [Team-QA](../../../wiki/Team-QA)). The `storybook` project's use of Playwright is scoped narrowly to
 running our own stories in a browser (a frontend-owned, component-level concern) — it is not a
 general license to add Playwright-based end-to-end app testing, load testing, or visual regression
-tooling here; those stay with QA's own tooling and Chromatic, respectively.
+tooling here; those stay with QA's own tooling and whichever visual regression tool the team
+adopts, respectively (see the wiki's [Frontend CI Proposal](../../../wiki/Frontend-CI-Proposal)).
