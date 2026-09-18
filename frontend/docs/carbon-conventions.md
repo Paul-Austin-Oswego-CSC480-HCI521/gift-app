@@ -1,5 +1,9 @@
 # Carbon conventions
 
+> **Wiki candidate:** This is a longer team convention guide. Keep the wiki as the source of truth
+> for the rationale and shared Carbon decisions; keep this file focused on details needed while
+> editing frontend code.
+
 How we use [Carbon Design System](https://carbondesignsystem.com/) in this project. See the wiki's [ADR: Frontend Framework](../../../../wiki/ADR-Frontend-Framework) for why we picked this over React+Carbon or a framework.
 
 ## Package

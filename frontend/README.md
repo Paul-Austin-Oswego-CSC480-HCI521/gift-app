@@ -26,8 +26,8 @@ cp .env.example .env   # adjust VITE_API_BASE_URL if needed
 | `npm run storybook` | Starts Storybook (`http://localhost:6006`) — the component explorer/playground. Use this while building or reviewing individual components. |
 | `npm run build` | Production build of the app to `dist/` (git-ignored). |
 | `npm run build-storybook` | Static build of Storybook to `storybook-static/` (git-ignored) — this is what gets published to GitHub Pages by CI, and what `npm run chromatic` would publish to Chromatic if/when we adopt it. |
-| `npm run test:a11y` | Runs every Storybook story headlessly and checks it renders + passes accessibility checks (via the Storybook a11y addon). Run this before opening a PR. |
-| `npm run chromatic` | Publishes a Storybook build to [Chromatic](https://www.chromatic.com/) for visual regression review. **Not an adopted/required step yet** — see [docs/visual-regression-review.md](docs/visual-regression-review.md). Requires a `CHROMATIC_PROJECT_TOKEN` if you do try it. |
+| `npm run test:a11y` | Runs every Storybook story headlessly and checks it renders + passes accessibility checks (via the Storybook a11y addon). QA and usability review guidance lives in the [project wiki](../../wiki/Decisions). |
+| `npm run chromatic` | Publishes a Storybook build to [Chromatic](https://www.chromatic.com/) for visual regression review. **Not an adopted/required step yet**; see the [CI/CD Pipeline ADR](../../wiki/ADR-CI-CD-Pipeline). Requires a `CHROMATIC_PROJECT_TOKEN` if you do try it. |
 
 ## Where things live
 
@@ -44,17 +44,17 @@ frontend/
 └── docs/            # frontend-specific docs (this folder)
 ```
 
-See [docs/frontend-structure.md](docs/frontend-structure.md) for what goes where.
+See [docs/README.md](docs/README.md) for the code references kept with the frontend and links to
+topics that belong in the project wiki.
 
-## More docs
+## Local documentation
 
-- [docs/frontend-structure.md](docs/frontend-structure.md) — how HTML pages, components, stories, and styles fit together.
-- [docs/carbon-conventions.md](docs/carbon-conventions.md) — how we use Carbon components, theming, and where new components/stories should go.
-- [docs/accessibility-checklist.md](docs/accessibility-checklist.md) — what to check before opening a PR.
-- [docs/visual-regression-review.md](docs/visual-regression-review.md) — what's actually true today (Storybook on GitHub Pages) vs. Chromatic, which is proposed tooling we haven't decided to adopt.
-- [docs/api-expectations.md](docs/api-expectations.md) — what the frontend expects from the Open Liberty backend (CORS, auth header, env vars).
-- [docs/netlify-deployment.md](docs/netlify-deployment.md) — Netlify build settings for the frontend app, and connecting backend/database later.
-- [docs/clarity-unmoderated-testing.md](docs/clarity-unmoderated-testing.md) — Microsoft Clarity setup, privacy boundaries, and the usability team's unmoderated testing workflow.
+- [docs/frontend-structure.md](docs/frontend-structure.md) — where HTML pages, components, stories, and styles live.
+- [docs/api-expectations.md](docs/api-expectations.md) — the current frontend/backend contract.
+- [docs/clarity-unmoderated-testing.md](docs/clarity-unmoderated-testing.md) — the production analytics integration available to usability.
+
+Shared architecture decisions, QA and usability guidance, deployment policy, Storybook policy, and
+team workflow belong in the project wiki; see [docs/README.md](docs/README.md) for the ownership map.
 
 ## Contributing
 
