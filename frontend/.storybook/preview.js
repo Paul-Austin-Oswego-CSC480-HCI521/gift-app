@@ -1,4 +1,5 @@
 import "@carbon/styles/css/styles.css";
+import "happo/storybook/register";
 import happoDecorator from "happo/storybook/decorator";
 import { html } from "lit";
 
