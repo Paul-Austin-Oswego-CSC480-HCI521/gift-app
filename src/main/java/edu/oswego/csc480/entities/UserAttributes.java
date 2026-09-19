@@ -14,7 +14,7 @@ public class UserAttributes implements Serializable {
     private Integer id;
 
     @OneToOne
-    @Column(name="user_id")
+    @JoinColumn(name="user_id")
     private User user;
 
     @Column(name="shirt_size")
