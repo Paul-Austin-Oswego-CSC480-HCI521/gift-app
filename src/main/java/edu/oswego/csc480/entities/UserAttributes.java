@@ -26,16 +26,45 @@ public class UserAttributes implements Serializable {
     @Column(name="favorite_color")
     private String favoriteColor;
 
-    
+    public UserAttributes(){}
 
+    public void setFavoriteColor(String favoriteColor) {
+        this.favoriteColor = favoriteColor;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    public void setShirtSize(String shirtSize) {
+        this.shirtSize = shirtSize;
+    }
 
+    public void setShoeSize(int shoeSize) {
+        this.shoeSize = shoeSize;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
+    public int getShoeSize() {
+        return shoeSize;
+    }
 
+    public Integer getId() {
+        return id;
+    }
 
+    public String getFavoriteColor() {
+        return favoriteColor;
+    }
 
+    public String getShirtSize() {
+        return shirtSize;
+    }
 
-
+    public User getUser() {
+        return user;
+    }
 }
