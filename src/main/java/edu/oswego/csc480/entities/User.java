@@ -13,7 +13,7 @@ public class User implements Serializable {
     @Id
     @Column(name="user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer uid;
+    private Integer id;
 
     @Column(name="first_name")
     private String firstName;
@@ -29,8 +29,8 @@ public class User implements Serializable {
 
     public User(){} // we can use setters anyway.
 
-    public void setUid(Integer uid){
-        this.uid = uid;
+    public void setId(Integer id){
+        this.id = id;
     }
 
     public void setFirstName(String firstName){
@@ -45,8 +45,8 @@ public class User implements Serializable {
         this.fullName =fullName;
     }
 
-    public Integer getUid() {
-        return uid;
+    public Integer getId() {
+        return id;
     }
 
     public String getFirstName() {
