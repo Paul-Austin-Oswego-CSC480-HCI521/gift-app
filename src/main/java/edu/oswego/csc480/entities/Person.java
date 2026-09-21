@@ -21,6 +21,9 @@ public class Person {
     @Column(name="full_name")
     private String fullName;
 
+    @OneToOne(mappedBy="person",cascade=CascadeType.ALL)
+    private PersonAttributes attributes;
+
     public Person(){}
 
     public void setUser(User user) {
@@ -61,5 +64,12 @@ public class Person {
 
     public String getLastName() {
         return lastName;
+    }
+    public PersonAttributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(PersonAttributes attributes) {
+        this.attributes = attributes;
     }
 }
