@@ -20,6 +20,7 @@ public class Gift {
     private String name;
     //TODO: price, but i ain't touching it as database defined with MONEY type.
     private String type;
+    private GiftCycle cycle;
 
     public Gift(){}
 
