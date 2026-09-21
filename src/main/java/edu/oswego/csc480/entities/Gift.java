@@ -21,14 +21,56 @@ public class Gift {
     //TODO: price, but i ain't touching it as database defined with MONEY type.
     private String type;
 
-    public Gift(){
-
-    }
+    public Gift(){}
 
     //TODO: add setters and getters
 
 
+    public Integer getId() {
+        return id;
+    }
 
+    public Person getPerson() {
+        return person;
+    }
 
+    public String getName() {
+        return name;
+    }
 
+    public Occasion getOccasion() {
+        return occasion;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public void setOccasion(Occasion occasion) {
+        this.occasion = occasion;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
