@@ -32,6 +32,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     private List<Person> people;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserWishedItem> wishlist;
+
     // Make sure there is a dummy constructor for persistence to work
     // also getters and setters for everything.
 
