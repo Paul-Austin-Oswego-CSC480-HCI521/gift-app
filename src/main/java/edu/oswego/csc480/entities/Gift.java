@@ -1,7 +1,6 @@
 package edu.oswego.csc480.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -11,15 +10,28 @@ public class Gift {
 
     // TODO : finish this class and its relation to: Person && Occasion.
 
+    @Id  @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="gift_id")
     private Integer id;
 
+
     private Person person;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="occasion_id")
     private Occasion occasion;
-    //TODO : gift_cycle && relation to it
+
+    @Column(name="purchase_date")
     private LocalDate purchaseDate;
+
+    @Column(name="gift_name")
     private String name;
     //TODO: price, but i ain't touching it as database defined with MONEY type.
+    @Column(name="gift_type")
     private String type;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="cycle_id")
     private GiftCycle cycle;
 
     public Gift(){}
@@ -73,5 +85,13 @@ public class Gift {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setCycle(GiftCycle cycle) {
+        this.cycle = cycle;
+    }
+
+    public GiftCycle getCycle() {
+        return cycle;
     }
 }
