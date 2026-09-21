@@ -24,6 +24,9 @@ public class User implements Serializable {
     @Column(name="full_name")
     private String fullName; // could instead be managed by a function?
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    UserAttributes attributes;
+
     // Make sure there is a dummy constructor for persistence to work
     // also getters and setters for everything.
 
