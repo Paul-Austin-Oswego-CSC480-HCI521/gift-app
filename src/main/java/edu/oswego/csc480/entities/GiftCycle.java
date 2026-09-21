@@ -4,5 +4,7 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class GiftCycle {
-    // TODO
+    private Integer id;
+    private String stage;
+    private Gift gift;
 }
