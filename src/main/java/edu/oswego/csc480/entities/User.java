@@ -3,6 +3,8 @@ package edu.oswego.csc480.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -27,10 +29,14 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     UserAttributes attributes;
 
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+    private List<Person> people;
+
     // Make sure there is a dummy constructor for persistence to work
     // also getters and setters for everything.
 
-    public User(){} // we can use setters anyway.
+    public User(){
+    } // we can use setters anyway.
 
     public void setId(Integer id){
         this.id = id;
@@ -62,5 +68,21 @@ public class User implements Serializable {
 
     public String getSurname() {
         return surname;
+    }
+
+    public void setAttributes(UserAttributes attributes) {
+        this.attributes = attributes;
+    }
+
+    public void setPeople(List<Person> people) {
+        this.people = people;
+    }
+
+    public UserAttributes getAttributes() {
+        return attributes;
+    }
+
+    public List<Person> getPeople() {
+        return people;
     }
 }
