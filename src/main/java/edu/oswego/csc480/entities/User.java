@@ -88,4 +88,12 @@ public class User implements Serializable {
     public List<Person> getPeople() {
         return people;
     }
+
+    public List<UserWishedItem> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(List<UserWishedItem> wishlist) {
+        this.wishlist = wishlist;
+    }
 }
