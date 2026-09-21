@@ -12,6 +12,7 @@ import "./styles/app.css";
 import "./components/nav-header.js";
 import "./components/gradient-container.js";
 import "./components/site-footer.js";
+import "./components/gift-backend-status/gift-backend-status.js";
 
 // This entry point registers the components used by index.html. Page authors can work in
 // HTML while component implementations keep their behavior and state in JavaScript.
