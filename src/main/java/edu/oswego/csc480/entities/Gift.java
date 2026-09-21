@@ -14,9 +14,6 @@ public class Gift {
     @Column(name="gift_id")
     private Integer id;
 
-
-    private Person person;
-
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="occasion_id")
     private Occasion occasion;
@@ -26,7 +23,7 @@ public class Gift {
 
     @Column(name="gift_name")
     private String name;
-    //TODO: price, but i ain't touching it as database defined with MONEY type.
+
     @Column(name="gift_type")
     private String type;
 
@@ -34,9 +31,11 @@ public class Gift {
     @JoinColumn(name="cycle_id")
     private GiftCycle cycle;
 
-    public Gift(){}
+    private Person person;
 
-    //TODO: add setters and getters
+    //TODO: price, but i ain't touching it as database defined with MONEY type.
+
+    public Gift(){}
 
 
     public Integer getId() {
