@@ -35,6 +35,9 @@ public class Gift {
 
     //TODO: price, but i ain't touching it as database defined with MONEY type.
 
+    @Column(name="gift_price")
+    private double price;
+
     public Gift(){}
 
 
