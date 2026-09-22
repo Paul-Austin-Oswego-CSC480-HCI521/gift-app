@@ -46,6 +46,3 @@ Thumbs.db
 .env.local
 *.pem
 *.key
-
-# Custom scripts
-db_launch.sh
