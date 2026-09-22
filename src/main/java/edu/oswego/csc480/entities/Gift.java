@@ -8,8 +8,6 @@ import java.time.LocalDate;
 @Table(name = "gifts")
 public class Gift {
 
-    // TODO : finish this class and its relation to: Person && Occasion.
-
     @Id  @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="gift_id")
     private Integer id;
@@ -31,6 +29,8 @@ public class Gift {
     @JoinColumn(name="cycle_id")
     private GiftStatus cycle;
 
+    @ManyToOne
+    @JoinColumn(name="person_id")
     private Person person;
 
     //TODO: price, but i ain't touching it as database defined with MONEY type.

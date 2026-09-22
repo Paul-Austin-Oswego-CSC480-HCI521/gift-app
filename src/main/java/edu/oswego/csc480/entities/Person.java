@@ -1,6 +1,7 @@
 package edu.oswego.csc480.entities;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="people")
@@ -23,6 +24,9 @@ public class Person {
 
     @OneToOne(mappedBy="person",cascade=CascadeType.ALL)
     private PersonAttributes attributes;
+
+    @OneToMany(mappedBy="person", cascade=CascadeType.ALL)
+    private List<Gift> gifts;
 
     public Person(){}
 
@@ -71,5 +75,13 @@ public class Person {
 
     public void setAttributes(PersonAttributes attributes) {
         this.attributes = attributes;
+    }
+
+    public List<Gift> getGifts() {
+        return gifts;
+    }
+
+    public void setGifts(List<Gift> gifts) {
+        this.gifts = gifts;
     }
 }
