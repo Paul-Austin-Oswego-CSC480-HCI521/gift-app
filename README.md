@@ -66,7 +66,7 @@ cd OZ-CSC-480-HCI-521-Fall-2026-Public
 The application reads the PostgreSQL password from the
 POSTGRES_PASSWORD environment variable.
 
-in a file named 'server.env', witting right next to server.xml:
+in a file named 'server.env', sitting right next to server.xml:
   -add a new line --> POSTGRES_PASSWORD="passwd" 
     without the quotes, enter the database password for the database user configured in server.xml
 
