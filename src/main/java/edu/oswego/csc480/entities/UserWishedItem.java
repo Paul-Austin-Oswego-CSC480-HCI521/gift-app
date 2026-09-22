@@ -20,7 +20,8 @@ public class UserWishedItem {
     @Column(name="gift_type")
     private String giftType;
 
-    // TODO: price, however that is iffy right now, database type for price ins MONEY which is not good.
+    @Column(name="gift_price")
+    private double price;
 
     public UserWishedItem(){}
 
@@ -56,4 +57,11 @@ public class UserWishedItem {
         this.giftType = giftType;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }
