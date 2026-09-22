@@ -33,13 +33,10 @@ public class Gift {
     @JoinColumn(name="person_id")
     private Person person;
 
-    //TODO: price, but i ain't touching it as database defined with MONEY type.
-
     @Column(name="gift_price")
     private double price;
 
     public Gift(){}
-
 
     public Integer getId() {
         return id;
