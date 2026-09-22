@@ -22,7 +22,7 @@
         <liberty.var.cors.allowed.domain>http://localhost:5173</liberty.var.cors.allowed.domain>
 
         <!--            TESTING                 -->
-        <arquillian.war.name>arquillian-managed</arquillian.war.name>
+        <arquillian.war.name>arquillian-managed.war</arquillian.war.name>
 
     </properties>
 
@@ -102,6 +102,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <wlp.home>${project.basedir}/target/liberty/wlp</wlp.home>
+                        <arquillian.war.name>${arquillian.war.name}</arquillian.war.name>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
