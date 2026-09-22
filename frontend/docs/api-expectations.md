@@ -7,7 +7,7 @@ This is what the Frontend expects from the Open Liberty backend, written down ea
 The frontend runs on its own Node/Vite dev server (`npm run dev`, default `http://localhost:5173`), completely separate from Open Liberty (`mvn liberty:dev`, default `http://localhost:9080`). This is normal for a decoupled SPA, but it means:
 
 - **CORS:** Open Liberty's local config needs to allow requests from the Vite dev origin (`http://localhost:5173`). Without this, the browser will block API calls with a CORS error even though both servers are running fine. This only matters for local dev — production CORS config is a separate, later discussion tied to the [ADR: Deployment Target](../../../../wiki/ADR-Deployment-Target).
-- **Base URL is configurable, not hardcoded:** the frontend reads the backend's URL from an env var, `VITE_API_BASE_URL` (see `/frontend/.env.example`), defaulting to `http://localhost:9080`. Backend doesn't need to match a hardcoded frontend assumption about ports/host.
+- **Base URL is configurable, not hardcoded:** the frontend reads the backend's URL from an env var, `VITE_API_BASE_URL` (see `/frontend/.env.example`), defaulting to `http://localhost:9080/gift-app`. Backend doesn't need to match a hardcoded frontend assumption about ports/host.
 
 ## Auth
 
