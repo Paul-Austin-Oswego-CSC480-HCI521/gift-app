@@ -3,8 +3,8 @@ package edu.oswego.csc480.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="gift_cycle") // the database has the table defined as "gifting_cycle" but gift_cycle sounds better
-public class GiftCycle {
+@Table(name="gift_status")
+public class GiftStatus {
 
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="cycle_id")
@@ -16,7 +16,7 @@ public class GiftCycle {
     @OneToOne(mappedBy = "cycle")
     private Gift gift;
 
-    public GiftCycle(){}
+    public GiftStatus(){}
 
     public void setId(Integer id) {
         this.id = id;

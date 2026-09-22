@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "gift")
+@Table(name = "gifts")
 public class Gift {
 
     // TODO : finish this class and its relation to: Person && Occasion.
@@ -29,7 +29,7 @@ public class Gift {
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="cycle_id")
-    private GiftCycle cycle;
+    private GiftStatus cycle;
 
     private Person person;
 
@@ -86,11 +86,11 @@ public class Gift {
         this.type = type;
     }
 
-    public void setCycle(GiftCycle cycle) {
+    public void setCycle(GiftStatus cycle) {
         this.cycle = cycle;
     }
 
-    public GiftCycle getCycle() {
+    public GiftStatus getCycle() {
         return cycle;
     }
 }

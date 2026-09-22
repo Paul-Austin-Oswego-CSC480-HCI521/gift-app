@@ -3,7 +3,7 @@ package edu.oswego.csc480.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="person")
+@Table(name="people")
 public class Person {
 
     @Column(name="person_id")
