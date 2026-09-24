@@ -35,6 +35,12 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserWishedItem> wishlist;
 
+    @Column(name="email_address")
+    private String email;
+
+    @Column(name="username")
+    private String username;
+
     // Make sure there is a dummy constructor for persistence to work
     // also getters and setters for everything.
 
@@ -95,5 +101,21 @@ public class User implements Serializable {
 
     public void setWishlist(List<UserWishedItem> wishlist) {
         this.wishlist = wishlist;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
