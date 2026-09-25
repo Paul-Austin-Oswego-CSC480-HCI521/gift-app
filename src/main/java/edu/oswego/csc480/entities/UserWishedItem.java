@@ -1,5 +1,6 @@
 package edu.oswego.csc480.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class UserWishedItem {
 
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonbTransient
     private User user;
 
     @Column(name="gift_name")

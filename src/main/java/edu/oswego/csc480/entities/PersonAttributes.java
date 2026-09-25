@@ -1,5 +1,6 @@
 package edu.oswego.csc480.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class PersonAttributes {
 
     @OneToOne
     @JoinColumn(name="person_id")
+    @JsonbTransient
     private Person person;
 
     @Column(name="shirt_size")

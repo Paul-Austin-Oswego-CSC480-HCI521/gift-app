@@ -1,5 +1,6 @@
 package edu.oswego.csc480.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class Gift {
 
     @ManyToOne
     @JoinColumn(name="person_id")
+    @JsonbTransient
     private Person person;
 
     @Column(name="gift_price")

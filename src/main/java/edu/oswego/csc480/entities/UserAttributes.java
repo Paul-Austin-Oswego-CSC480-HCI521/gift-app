@@ -1,5 +1,6 @@
 package edu.oswego.csc480.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ public class UserAttributes implements Serializable {
 
     @OneToOne
     @JoinColumn(name="user_id")
+    @JsonbTransient
     private User user;
 
     @Column(name="shirt_size")
