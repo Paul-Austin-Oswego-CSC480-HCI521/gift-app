@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,9 +27,14 @@ public class UserResource {
     }
 
     @GET
-    @Path("{id}")
-    public Response getUser(@PathParam("id") Integer user_id){
-
+    @Path("/{id}")
+    public Response getUser(@PathParam("id") Integer uid){
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }else{
+            return Response.ok(user.get()).build();
+        }
     }
 
 
