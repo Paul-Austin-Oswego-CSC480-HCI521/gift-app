@@ -13,7 +13,7 @@ public class Gift {
     @Column(name="gift_id")
     private Integer id;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="occasion_id")
     private Occasion occasion;
 
@@ -26,7 +26,7 @@ public class Gift {
     @Column(name="gift_type")
     private String type;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="cycle_id")
     private GiftStatus cycle;
 

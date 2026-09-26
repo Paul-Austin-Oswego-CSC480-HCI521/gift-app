@@ -26,13 +26,13 @@ public class User implements Serializable {
     @Column(name="full_name")
     private String fullName; // could instead be managed by a function?
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     UserAttributes attributes;
 
-    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Person> people;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserWishedItem> wishlist;
 
     @Column(name="email_address")

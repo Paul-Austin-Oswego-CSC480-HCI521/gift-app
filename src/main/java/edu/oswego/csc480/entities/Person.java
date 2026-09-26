@@ -24,10 +24,10 @@ public class Person {
     @Column(name="full_name")
     private String fullName;
 
-    @OneToOne(mappedBy="person",cascade=CascadeType.ALL)
+    @OneToOne(mappedBy="person",cascade=CascadeType.ALL, orphanRemoval = true)
     private PersonAttributes attributes;
 
-    @OneToMany(mappedBy="person", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="person", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Gift> gifts;
 
     public Person(){}
