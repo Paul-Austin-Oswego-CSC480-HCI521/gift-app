@@ -36,7 +36,7 @@ public class GiftResource {
 
         if (user.isEmpty()){
             return Response.status(Response.Status.NOT_FOUND).build();
-        }else{
+        }
             ArrayList<Gift> gifts = new ArrayList<>();
 
             // i want to try to learn to like streams (I hate it!)
@@ -48,18 +48,21 @@ public class GiftResource {
 
             if (gift == null){
                 return Response.status(Response.Status.NOT_FOUND).build();
-            }else{
-                return Response.ok(gift).build();
             }
-        }
+                return Response.ok(gift).build();
+
+
     }
 
-    public Response getGiftThroughPerson(@PathParam("user_id") Integer uid){
-        return null;
-    }
-
+    @Path("gift")
     public Response getEveryGiftFromUser(@PathParam("user_id") Integer uid){
-        return null;
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        ArrayList<Gift> gifts = new ArrayList<>();
+        user.get().getPeople().forEach(p->p.getGifts().forEach(g->gifts.add(g)));
+        return Response.ok(gifts).build();
     }
 
     public Response getEveryGiftFromSpecificPerson(@PathParam("user_id") Integer uid){
