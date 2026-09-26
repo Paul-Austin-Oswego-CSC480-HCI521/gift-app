@@ -9,7 +9,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -128,7 +127,7 @@ public class GiftResource {
     }
 
     @Path("gift/{gid}")
-    @POST
+    @PUT
     public Response updateGiftDirect(@PathParam("user_id") Integer uid, @PathParam("gid") Integer gid, Gift gift){
 
         Optional<User> user = uRepo.findById(uid);
@@ -175,8 +174,26 @@ public class GiftResource {
     public Response deleteGift(@PathParam("user_id") Integer uid){
         return null;
     }
-    public Response charcoal(@PathParam("user_id") Integer uid){
-        return null;
+    @Path("person/{pid}")
+    @DELETE
+    public Response charcoal(@PathParam("user_id") Integer uid, @PathParam("pid") Integer pid){
+
+        Optional<User> user = uRepo.findById(uid);
+
+        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+
+        Person person = user.get().getPeople().stream()
+                .filter(p->p.getId().equals(pid))
+                .findFirst()
+                .orElse(null);
+
+        if (person == null) return Response.status(Status.NOT_FOUND).build();
+
+        person.getGifts().clear();
+        uRepo.save(user.get());
+
+        return Response.noContent().build();
+
     }
 
 
