@@ -5,10 +5,7 @@ import edu.oswego.csc480.entities.Person;
 import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -85,8 +82,8 @@ public class GiftResource {
 
     }
 
-    //TODO POST
     @Path("person/{pid}/gift")
+    @POST
     public Response postNewGiftToPerson(
             @PathParam("user_id") Integer uid,
             @PathParam("pid") Integer pid,
@@ -131,13 +128,37 @@ public class GiftResource {
     }
 
     //TODO UPDATE
-    public Response updateGiftDirect(@PathParam("user_id") Integer uid){
-        return null;
+    @Path("gift/{gid}")
+    @POST
+    public Response updateGiftDirect(@PathParam("user_id") Integer uid, @PathParam("gid") Integer gid, Gift gift){
+
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+
+        Person person = null;
+        Gift  currentGift = null;
+
+        for (Person p : user.get().getPeople()){
+            if (p.getGifts().isEmpty()) continue;
+            for (Gift g : p.getGifts()){
+                if (!g.getId().equals(gid)) continue;
+                person = p;
+                currentGift = g;
+                 // 204 success but no body
+            }
+        }
+
+        if (person != null && currentGift != null){
+            person.getGifts().remove(currentGift);
+            person.getGifts().add(gift);
+            uRepo.save(user.get());
+            return Response.noContent().build();
+        }
+
+        return Response.status(Status.NOT_FOUND).build(); // because it did not find the specific gift to update.
+
     }
 
-    public Response updateGiftFromUser(@PathParam("user_id") Integer uid){
-        return null;
-    }
     //TODO DELETE
 
     public Response nukeItAll(@PathParam("user_id") Integer uid){
