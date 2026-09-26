@@ -1,12 +1,22 @@
 package edu.oswego.csc480.rest.gift_service;
 
+import edu.oswego.csc480.entities.Gift;
+import edu.oswego.csc480.entities.Person;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 @Path("user/{user_id}")
+@Produces(MediaType.APPLICATION_JSON)
 public class GiftResource {
 
     @Inject
@@ -18,8 +28,30 @@ public class GiftResource {
 
     //TODO: GET
 
-    public Response getGiftDirect(@PathParam("user_id") Integer uid){
-        return null;
+    @Path("gift/{id}")
+    @GET
+    public Response getGiftDirect(@PathParam("user_id") Integer uid, @PathParam("id") Integer gid){
+
+        Optional<User> user = uRepo.findById(uid);
+
+        if (user.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }else{
+            ArrayList<Gift> gifts = new ArrayList<>();
+
+            // i want to try to learn to like streams (I hate it!)
+
+            Gift gift = user.get().getPeople().stream()
+                    .flatMap(p->p.getGifts().stream())
+                    .filter(g -> g.getId().equals(gid))
+                    .findFirst().orElse(null);
+
+            if (gift == null){
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }else{
+                return Response.ok(gift).build();
+            }
+        }
     }
 
     public Response getGiftThroughPerson(@PathParam("user_id") Integer uid){
