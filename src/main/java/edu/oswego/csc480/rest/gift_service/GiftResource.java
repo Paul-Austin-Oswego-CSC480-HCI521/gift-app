@@ -127,7 +127,6 @@ public class GiftResource {
 
     }
 
-    //TODO UPDATE
     @Path("gift/{gid}")
     @POST
     public Response updateGiftDirect(@PathParam("user_id") Integer uid, @PathParam("gid") Integer gid, Gift gift){
@@ -161,8 +160,17 @@ public class GiftResource {
 
     //TODO DELETE
 
+    @Path("gift")
+    @DELETE
     public Response nukeItAll(@PathParam("user_id") Integer uid){
-        return null;
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+
+        user.get().getPeople().forEach(p -> p.getGifts().clear());
+        uRepo.save(user.get());
+
+        return Response.noContent().build();
+
     }
     public Response deleteGift(@PathParam("user_id") Integer uid){
         return null;
