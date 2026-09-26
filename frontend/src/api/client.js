@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:9080";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:9080/gift-app";
 
 /**
  * Thin fetch wrapper for talking to the Open Liberty backend.
