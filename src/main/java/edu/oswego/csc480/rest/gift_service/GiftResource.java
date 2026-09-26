@@ -15,6 +15,8 @@ import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static jakarta.ws.rs.core.Response.Status;
+
 @Path("user/{user_id}")
 @Produces(MediaType.APPLICATION_JSON)
 public class GiftResource {
@@ -35,21 +37,21 @@ public class GiftResource {
         Optional<User> user = uRepo.findById(uid);
 
         if (user.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).build();
         }
-            ArrayList<Gift> gifts = new ArrayList<>();
+        ArrayList<Gift> gifts = new ArrayList<>();
 
-            // i want to try to learn to like streams (I hate it!)
+        // i want to try to learn to like streams (I hate it!)
 
-            Gift gift = user.get().getPeople().stream()
-                    .flatMap(p->p.getGifts().stream())
-                    .filter(g -> g.getId().equals(gid))
-                    .findFirst().orElse(null);
+        Gift gift = user.get().getPeople().stream()
+                .flatMap(p->p.getGifts().stream())
+                .filter(g -> g.getId().equals(gid))
+                .findFirst().orElse(null);
 
-            if (gift == null){
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-                return Response.ok(gift).build();
+        if (gift == null){
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        return Response.ok(gift).build();
 
 
     }
@@ -58,15 +60,27 @@ public class GiftResource {
     public Response getEveryGiftFromUser(@PathParam("user_id") Integer uid){
         Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).build();
         }
         ArrayList<Gift> gifts = new ArrayList<>();
         user.get().getPeople().forEach(p->p.getGifts().forEach(g->gifts.add(g)));
         return Response.ok(gifts).build();
     }
 
-    public Response getEveryGiftFromSpecificPerson(@PathParam("user_id") Integer uid){
-        return null;
+    @Path("person/{pid}/gift")
+    public Response getEveryGiftFromSpecificPerson(@PathParam("user_id") Integer uid, @PathParam("pid") Integer pid){
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()){
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        Person person = user.get().getPeople().stream()
+                .filter(p->p.getId().equals(pid))
+                .findFirst()
+                .orElse(null);
+        if (person==null) return Response.status(Status.NOT_FOUND).build();
+
+        return Response.ok(person.getGifts()).build();
+
     }
 
     //TODO POST
