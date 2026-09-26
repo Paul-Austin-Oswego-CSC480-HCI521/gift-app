@@ -28,8 +28,6 @@ public class GiftResource {
      *  TODO: CRUD endpoints for user/{id}/gift/{id}, user/{id}/person/{id}/gift/{id}
      */
 
-    //TODO: GET
-
     @Path("gift/{id}")
     @GET
     public Response getGiftDirect(@PathParam("user_id") Integer uid, @PathParam("id") Integer gid){
@@ -57,6 +55,7 @@ public class GiftResource {
     }
 
     @Path("gift")
+    @GET
     public Response getEveryGiftFromUser(@PathParam("user_id") Integer uid){
         Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
@@ -68,6 +67,7 @@ public class GiftResource {
     }
 
     @Path("person/{pid}/gift")
+    @GET
     public Response getEveryGiftFromSpecificPerson(@PathParam("user_id") Integer uid, @PathParam("pid") Integer pid){
         Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
@@ -84,9 +84,12 @@ public class GiftResource {
     }
 
     //TODO POST
-
     public Response postNewGiftToPerson(@PathParam("user_id") Integer uid){
-        return null;
+
+
+
+
+
     }
 
     //TODO UPDATE
