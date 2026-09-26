@@ -11,6 +11,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -84,7 +85,26 @@ public class GiftResource {
     }
 
     //TODO POST
-    public Response postNewGiftToPerson(@PathParam("user_id") Integer uid){
+    @Path("person/{pid}/gift")
+    public Response postNewGiftToPerson(
+            @PathParam("user_id") Integer uid,
+            @PathParam("pid") Integer pid,
+            Gift gift
+            ){
+
+        if (gift==null || gift.getName().isBlank() || gift.getType().isBlank() || gift.getCycle() == null){
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        Optional<User> user = uRepo.findById(uid);
+
+        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+
+        Person person = user.get().getPeople().stream()
+                .filter(p->p.getId().equals(pid))
+                .findFirst()
+                .orElse(null);
+        if (person==null) return Response.status(Status.NOT_FOUND).build();
 
 
 
