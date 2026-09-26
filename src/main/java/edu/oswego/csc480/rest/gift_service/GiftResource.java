@@ -11,6 +11,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.ArrayList;
@@ -96,19 +97,36 @@ public class GiftResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        Optional<User> user = uRepo.findById(uid);
+        Optional<User> optUser = uRepo.findById(uid);
 
-        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+        if (optUser.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
-        Person person = user.get().getPeople().stream()
+        Person person = optUser.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
         if (person==null) return Response.status(Status.NOT_FOUND).build();
 
+        person.getGifts().add(gift);
+        gift.setPerson(person);
+
+        User user = uRepo.save(optUser.get());
+
+        final String giftName = gift.getName();
+
+        gift = user.getPeople().stream()
+                .filter(p->p.getId().equals(pid))
+                .findFirst()
+                .orElse(null).getGifts()
+                .stream()
+                .filter(g -> g.getName().equalsIgnoreCase(giftName))
+                .findFirst()
+                .orElse(null);
 
 
+        Integer gid = gift.getId();
 
+        return Response.created(UriBuilder.fromPath("api/user/{uid}/gift/{gid}").build(uid, gid)).build();
 
     }
 
@@ -131,5 +149,6 @@ public class GiftResource {
     public Response charcoal(@PathParam("user_id") Integer uid){
         return null;
     }
+
 
 }
