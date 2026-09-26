@@ -14,45 +14,45 @@ public class GiftResource {
     //TODO: GET
 
     public Response getGiftDirect(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
     public Response getGiftThroughPerson(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
     public Response getEveryGiftFromUser(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
     public Response getEveryGiftFromSpecificPerson(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
     //TODO POST
 
     public Response postNewGiftToPerson(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
     //TODO UPDATE
     public Response updateGiftDirect(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
     public Response updateGiftFromUser(@PathParam("user_id") Integer uid){
-
+        return null;
     }
     //TODO DELETE
 
     public Response nukeItAll(@PathParam("user_id") Integer uid){
-
+        return null;
     }
     public Response deleteGift(@PathParam("user_id") Integer uid){
-
+        return null;
     }
     public Response charcoal(@PathParam("user_id") Integer uid){
-
+        return null;
     }
 
 }
