@@ -1,5 +1,5 @@
 import { html } from "lit";
-import "../src/components/nav-header.js";
+import "./gift-nav-header.js";
 
 // Demonstrates the standard <cds-header> configuration used by the HTML page.
 // Swap in real routes for the `href`s once routing exists.

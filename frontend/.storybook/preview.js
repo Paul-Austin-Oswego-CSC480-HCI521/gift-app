@@ -1,4 +1,5 @@
 import "@carbon/styles/css/styles.css";
+import "happo/storybook/register";
 import { html } from "lit";
 
 /** @type { import('@storybook/web-components-vite').Preview } */

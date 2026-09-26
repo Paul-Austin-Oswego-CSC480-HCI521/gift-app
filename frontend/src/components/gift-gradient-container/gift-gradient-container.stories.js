@@ -1,6 +1,6 @@
 import { html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import "../src/components/gradient-container.js";
+import "./gift-gradient-container.js";
 
 // Example story for a custom (non-Carbon) web component. components/ export custom elements
 // (see src/components/gradient-container.js) - import for the customElements.define() side

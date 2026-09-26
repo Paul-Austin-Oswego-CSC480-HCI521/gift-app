@@ -5,8 +5,10 @@ import "@carbon/web-components/es/components/ui-shell/index.js";
 // slot, keeping page composition in HTML instead of a JavaScript data structure.
 export class NavHeader extends LitElement {
   // This makes product-name="..." available to the component as this.productName.
+  // Lit's default attribute name lowercases the property (productname); the explicit
+  // `attribute` maps it back to the kebab-case name used in HTML.
   static properties = {
-    productName: { type: String },
+    productName: { type: String, attribute: "product-name" },
   };
 
   constructor() {
