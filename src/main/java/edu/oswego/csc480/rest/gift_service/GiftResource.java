@@ -1,11 +1,16 @@
 package edu.oswego.csc480.rest.gift_service;
 
+import edu.oswego.csc480.repositories.UserRepository;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
 @Path("user/{user_id}")
 public class GiftResource {
+
+    @Inject
+    private UserRepository uRepo;
 
     /*
      *  TODO: CRUD endpoints for user/{id}/gift/{id}, user/{id}/person/{id}/gift/{id}
