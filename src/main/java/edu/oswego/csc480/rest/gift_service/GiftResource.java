@@ -171,15 +171,40 @@ public class GiftResource {
         return Response.noContent().build();
 
     }
-    public Response deleteGift(@PathParam("user_id") Integer uid){
-        return null;
+    @Path("gift/{gid}")
+    public Response deleteGift(@PathParam("user_id") Integer uid, @PathParam("gid") Integer gid){
+
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+
+        Person person = null;
+        Gift  target = null;
+
+        for (Person p : user.get().getPeople()){
+            if (p.getGifts().isEmpty()) continue;
+            for (Gift g : p.getGifts()){
+                if (!g.getId().equals(gid)) continue;
+                person = p;
+                target = g;
+                // 204 success but no body
+            }
+        }
+
+        if (person != null && target != null){
+            person.getGifts().remove(target);
+            target.setPerson(null); // just in case
+            uRepo.save(user.get());
+            return Response.noContent().build();
+        }
+
+        return Response.status(Status.NOT_FOUND).build();
+
     }
     @Path("person/{pid}")
     @DELETE
     public Response charcoal(@PathParam("user_id") Integer uid, @PathParam("pid") Integer pid){
 
         Optional<User> user = uRepo.findById(uid);
-
         if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
         Person person = user.get().getPeople().stream()
