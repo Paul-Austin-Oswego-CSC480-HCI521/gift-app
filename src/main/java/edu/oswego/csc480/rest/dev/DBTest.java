@@ -1,7 +1,6 @@
-package edu.oswego.csc480.rest;
+package edu.oswego.csc480.rest.dev;
 
 import jakarta.annotation.Resource;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
@@ -9,7 +8,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Optional;
 
 @Path("/db")
 @Produces(MediaType.APPLICATION_JSON)

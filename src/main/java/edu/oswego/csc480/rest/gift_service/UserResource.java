@@ -1,4 +1,4 @@
-package edu.oswego.csc480.rest;
+package edu.oswego.csc480.rest.gift_service;
 
 import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
