@@ -9,7 +9,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,10 +21,6 @@ public class GiftResource {
     @Inject
     private UserRepository uRepo;
 
-    /*
-     *  TODO: CRUD endpoints for user/{id}/gift/{id}, user/{id}/person/{id}/gift/{id}
-     */
-
     @Path("gift/{id}")
     @GET
     public Response getGiftDirect(@PathParam("user_id") Integer uid, @PathParam("id") Integer gid){
@@ -37,8 +32,6 @@ public class GiftResource {
         }
         ArrayList<Gift> gifts = new ArrayList<>();
 
-        // i want to try to learn to like streams (I hate it!)
-
         Gift gift = user.get().getPeople().stream()
                 .flatMap(p->p.getGifts().stream())
                 .filter(g -> g.getId().equals(gid))
@@ -48,8 +41,6 @@ public class GiftResource {
             return Response.status(Status.NOT_FOUND).build();
         }
         return Response.ok(gift).build();
-
-
     }
 
     @Path("gift")
@@ -78,7 +69,6 @@ public class GiftResource {
         if (person==null) return Response.status(Status.NOT_FOUND).build();
 
         return Response.ok(person.getGifts()).build();
-
     }
 
     @Path("person/{pid}/gift")
@@ -105,9 +95,7 @@ public class GiftResource {
 
         person.getGifts().add(gift);
         gift.setPerson(person);
-
         User user = uRepo.save(optUser.get());
-
         final String giftName = gift.getName();
 
         gift = user.getPeople().stream()
@@ -129,7 +117,6 @@ public class GiftResource {
     @Path("gift/{gid}")
     @PUT
     public Response updateGiftDirect(@PathParam("user_id") Integer uid, @PathParam("gid") Integer gid, Gift gift){
-
         Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
@@ -145,16 +132,13 @@ public class GiftResource {
                  // 204 success but no body
             }
         }
-
         if (person != null && currentGift != null){
             person.getGifts().remove(currentGift);
             person.getGifts().add(gift);
             uRepo.save(user.get());
             return Response.noContent().build();
         }
-
-        return Response.status(Status.NOT_FOUND).build(); // because it did not find the specific gift to update.
-
+        return Response.status(Status.NOT_FOUND).build();
     }
 
     //TODO DELETE
@@ -169,7 +153,6 @@ public class GiftResource {
         uRepo.save(user.get());
 
         return Response.noContent().build();
-
     }
     @Path("gift/{gid}")
     public Response deleteGift(@PathParam("user_id") Integer uid, @PathParam("gid") Integer gid){
@@ -186,13 +169,11 @@ public class GiftResource {
                 if (!g.getId().equals(gid)) continue;
                 person = p;
                 target = g;
-                // 204 success but no body
             }
         }
 
         if (person != null && target != null){
             person.getGifts().remove(target);
-            target.setPerson(null); // just in case
             uRepo.save(user.get());
             return Response.noContent().build();
         }
@@ -220,6 +201,4 @@ public class GiftResource {
         return Response.noContent().build();
 
     }
-
-
 }
