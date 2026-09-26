@@ -1,10 +1,12 @@
 # CI/CD workflows
 
-This folder is intentionally empty for now. The team hasn't finalized what we're using for CI/CD yet.
+Two workflows are wired up and running today:
 
-There's a [wiki page](../../wiki/SVT-CI-CD-Flow-with-GitOps-(Student-%26-Free-Tier-Alternative)) with a running list of free/open-source and GitHub Student Developer Pack tooling options (GitHub Actions, Argo CD, JMeter, etc.) worth a look, but that page is just a collection of ideas for what's available at no cost, **not** a decision. Nothing there is finalized or wired up.
+- `storybook-pages.yml` — builds Storybook and deploys it to GitHub Pages, on pushes to `feature/ui-start`/`main` or a manual run.
+- `happo.yml` — runs Happo visual/accessibility regression against the Storybook build, on pushes to `main` and on pull requests targeting `main`. Needs the `HAPPO_API_KEY`/`HAPPO_API_SECRET` repo secrets.
 
-**The QA team and Full Stack team need to coordinate and decide on this together** before anything gets added here. CI/CD touches both how QA runs tests and how Full Stack builds/deploys, so it shouldn't be picked unilaterally by either side, or by whoever gets here first. Once there's an agreed-on approach, workflow YAML files (e.g. `ci.yml`) will live here and this note can go away.
+See the wiki's [GitHub Actions Guide](../../wiki/GitHub-Actions-Guide) for how to read a run's status and re-run a failed job, and [ADR: CI/CD Pipeline](../../wiki/ADR-CI-CD-Pipeline) for the decision record.
 
-If you're picking this up, loop in QA, Full Stack, the build coordinator, and the GitHub admin before adding a workflow, so we don't end up with two different pipelines.
+**The repository-wide CI/CD policy is still open.** These two workflows are the current working implementation of the frontend portion of the pipeline (see [Frontend CI Proposal](../../wiki/Frontend-CI-Proposal)), not a finalized decision for the whole repo — in particular, whether backend/SVT testing runs here too, and whether any checks are required (blocking) rather than advisory, is still undecided. See [ADR: CI/CD Pipeline](../../wiki/ADR-CI-CD-Pipeline) for what's settled and what isn't.
 
+**The QA team and Full Stack team need to coordinate and decide on the rest of this together.** CI/CD touches both how QA runs tests and how Full Stack builds/deploys, so it shouldn't be picked unilaterally by either side. If you're adding a new workflow, loop in QA, Full Stack, the build coordinator, and the GitHub admin first, so we don't end up with two different pipelines.
