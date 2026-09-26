@@ -1,6 +1,6 @@
 # API expectations (Frontend → Backend)
 
-This is what the Frontend expects from the Open Liberty backend, written down early so Backend (Andrew and the rest of the Backend sub-team) can build against it as they stand up services. It's **expectations, not a finalized contract** — Backend hasn't built anything yet, so treat this as a starting point to discuss/adjust together, not a spec being imposed. Update this doc as real endpoints land and shapes solidify.
+This is what the Frontend expects from the Open Liberty backend, written down early so Backend (Andrew and the rest of the Backend sub-team) can build against it as they stand up services. It's **expectations, not a finalized contract** — Backend only has dev/scaffolding endpoints so far (a `/api/ping` health check, JPA test entity/repository wiring), no real gift/person/wishlist resource endpoints yet — so treat this as a starting point to discuss/adjust together, not a spec being imposed. Update this doc as real endpoints land and shapes solidify.
 
 ## Local dev: two separate servers
 

@@ -1,5 +1,9 @@
 # Carbon conventions
 
+> **Wiki candidate:** This is a longer team convention guide. Keep the wiki as the source of truth
+> for the rationale and shared Carbon decisions; keep this file focused on details needed while
+> editing frontend code.
+
 How we use [Carbon Design System](https://carbondesignsystem.com/) in this project. See the wiki's [ADR: Frontend Framework](../../../../wiki/ADR-Frontend-Framework) for why we picked this over React+Carbon or a framework.
 
 ## Package
@@ -32,12 +36,35 @@ Per the ADR, we're starting with plain JavaScript since the team is new to JS it
 
 ## Stories
 
-Every component you build or customize should get a Storybook story, co-located in `/frontend/stories/` (or a subfolder if a feature area needs more than one, e.g. `stories/gift-list/`). Use `stories/ExampleCarbonButton.stories.js` as a template — it shows the CSF3 format we use with `@storybook/web-components-vite` and `lit`'s `html` tag.
+Every component you build or customize should get a Storybook story, co-located in its own folder
+under `src/components/<tag-name>/` alongside the component and its test — see
+[frontend-structure.md](frontend-structure.md#componentsyour-tag-name) for the full layout. Use
+`stories/ExampleCarbonButton.stories.js` as a template for the CSF3 format we use with
+`@storybook/web-components-vite` and `lit`'s `html` tag — that file stays in the top-level
+`stories/` folder because it demonstrates a raw Carbon component (`<cds-button>`), not one of our
+own components.
 
-Two more worked examples:
+Two worked examples of our own components, each co-located with its component and test:
 
-- `stories/CarbonHeader.stories.js` — the standard `<cds-header>` configuration used on every page.
-- `stories/GradientContainer.stories.js` — a story for a custom (non-Carbon) component; see [../docs/frontend-structure.md](frontend-structure.md) for where components like this live in `src/`.
+- `src/components/gift-nav-header/gift-nav-header.stories.js` — the standard `<cds-header>` configuration used on every page.
+- `src/components/gift-gradient-container/gift-gradient-container.stories.js` — a story for a custom (non-Carbon) component.
+
+## Styling
+
+Use Lit's `static styles = css\`...\`` (see `gift-site-footer.js`), not a literal `<style>` tag
+inside `render()`. `static styles` lets Lit share one constructed stylesheet across every instance
+of the component; a `<style>` written into the template gets re-parsed per instance instead.
+
+Don't add CSS Modules. Shadow DOM already gives each component its own style scope — CSS Modules
+exist to solve global class-name collisions in regular (light) DOM, which isn't a problem we have
+here, and it would mean introducing a second, competing styling convention plus a Vite plugin for
+no real benefit.
+
+Keep styles inline in the component file while they're small (as `gift-site-footer.js` and
+`gift-gradient-container.js` do today). If a component's styles grow large enough to make the file
+hard to read, extract them into a co-located `<tag-name>.styles.js` that exports the `css` tagged
+template, and import it into the component file — still in the same `src/components/<tag-name>/`
+folder, not a separate top-level styles directory.
 
 ## Using components in pages
 

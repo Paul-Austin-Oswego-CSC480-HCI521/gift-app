@@ -21,7 +21,22 @@
         <liberty.var.app.context.root>gift-app</liberty.var.app.context.root>
         <liberty.var.cors.allowed.domain>http://localhost:5173</liberty.var.cors.allowed.domain>
 
+        <!--            TESTING                 -->
+        <arquillian.war.name>arquillian-managed.war</arquillian.war.name>
+
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.10.0.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -48,6 +63,25 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.8</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.openliberty.arquillian</groupId>
+            <artifactId>arquillian-liberty-managed-jakarta-junit</artifactId>
+            <version>2.1.4</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -63,10 +97,39 @@
                     <groupId>io.openliberty.tools</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
                     <version>3.12.0</version>
+                    <executions>
+                        <execution>
+                            <id>liberty-create</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>create</goal>
+                                <goal>install-feature</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <wlp.home>${project.basedir}/target/liberty/wlp</wlp.home>
+                        <arquillian.war.name>${arquillian.war.name}</arquillian.war.name>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>

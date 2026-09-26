@@ -9,9 +9,9 @@ import "./styles/app.css";
 
 // Importing a component runs its registration code. After these imports, the browser
 // knows what the two gift-* custom elements in index.html mean.
-import "./components/nav-header.js";
-import "./components/gradient-container.js";
-import "./components/site-footer.js";
+import "./components/gift-nav-header/gift-nav-header.js";
+import "./components/gift-gradient-container/gift-gradient-container.js";
+import "./components/gift-site-footer/gift-site-footer.js";
 
 // Vite removes this diagnostic control and its import from production builds.
 if (import.meta.env.DEV) {
