@@ -5,12 +5,21 @@
  * Apply by adding data-carbon-theme="brand" to a wrapping element, e.g.
  * <div data-carbon-theme="brand"> ... Carbon components ... </div>
  *
- * KNOWN ISSUE (do not "fix" here — see usability team):
+ * KNOWN ISSUE (do not "fix" here without checking every consumer — see usability team):
  * background-inverse is specced as #BBE4DF (light), but text-inverse/icon-inverse
  * are still white, so anywhere Carbon pairs those together (e.g. inverse buttons,
  * dark-theme panels) would render at a 1.37:1 contrast ratio — far below WCAG AA.
  * Until the usability team resolves the pairing, --cds-background-inverse below is
  * pinned to Carbon's default (#393939) so it keeps working with white text/icons.
+ *
+ * Tried redefining text-inverse/icon-inverse to a dark color instead (to pair with
+ * the light background-inverse spec) and reverted it: Carbon reuses icon-inverse
+ * internally as "icon color for a dark cds-icon-primary-colored surface" wherever it
+ * needs white-on-dark — e.g. the checked cds-checkbox tick sits on an icon-primary
+ * background and is colored with icon-inverse. Making icon-inverse dark broke that
+ * checkmark (dark-on-dark) even though background-inverse was never involved. Any
+ * fix here needs to happen per-component (or by introducing a new token), not by
+ * redefining these two globally.
  */
 
 [data-carbon-theme="brand"] {
