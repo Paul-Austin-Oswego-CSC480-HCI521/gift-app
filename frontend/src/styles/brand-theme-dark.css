@@ -18,6 +18,12 @@
  * with white text regardless of page theme) or already tuned to work on both
  * backgrounds (link-primary, support-info).
  *
+ * A few neutrals (text-secondary/helper, icon-secondary, border-strong, button-
+ * secondary) were still g100's plain cool gray and read as out of place next to
+ * the warm tones elsewhere in the theme; each is nudged to this theme's red-family
+ * hue (the same one border-interactive/focus use), keeping g100's own lightness so
+ * contrast is unaffected — see brand-theme.css for the same treatment in light.
+ *
  * KNOWN ISSUE PRECEDENT (see brand-theme.css): --cds-icon-interactive and
  * --cds-focus are pinned to Carbon's own g100 defaults (#ffffff) rather than
  * hue-shifted to brand red/teal. Unlike border-interactive, Carbon's g100 makes
@@ -34,28 +40,36 @@
   --cds-background: #191813; /* subtle warm-cream tint of g100 #161616, same lightness */
   --cds-background-inverse: #f4f4f4; /* Carbon default — pairs correctly with dark text-inverse below, see note above */
   --cds-layer-01: #222A26; /* subtle brand-green tint of g100 #262626, same lightness */
-  --cds-layer-02: #393939; /* Carbon default, unchanged — brand-theme.css leaves layer-02 unchanged too */
-  --cds-field-01: #262626; /* Carbon default, unchanged */
+  --cds-layer-02: #343E39; /* was g100 default #393939 - a whisper of layer-01's sage tint (same lightness); see brand-theme.css for the same fix in light */
+  --cds-field-01: #262626; /* Carbon default, unchanged - tried matching layer-01's sage tint and reverted: text-input/textarea/etc. read as editable fields, not cards, so they stay plain like field-02, not tinted like the tile-facing layers (see brand-theme.css) */
   --cds-field-02: #393939; /* Carbon default, unchanged */
+
+  /* Layer hover state - Carbon's own accordion/tile :hover rules read --cds-layer-hover,
+     which defaults to plain Carbon gray unrelated to layer-01/02 above, so hovering a
+     sage-tinted surface flashed cool gray (see brand-theme.css for the same fix in light).
+     field-hover is left at Carbon's default since field-01/02 above are plain too. */
+  --cds-layer-hover-01: #2E3833;
+  --cds-layer-hover-02: #404E47;
+  --cds-layer-hover-03: #596D63;
 
   /* Text */
   --cds-text-primary: #F9F9F9;
-  --cds-text-secondary: #c6c6c6; /* Carbon default, unchanged */
-  --cds-text-helper: #a8a8a8; /* Carbon default, unchanged */
+  --cds-text-secondary: #CCC0C0; /* was g100 default #c6c6c6 - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-text-helper: #B19F9F; /* was g100 default #a8a8a8 - warmed toward the border-interactive/focus red hue (same lightness) */
   --cds-text-error: #ff8389; /* Carbon default, unchanged */
   --cds-text-inverse: #161616; /* Carbon default, unchanged */
 
   /* Icons */
   --cds-icon-primary: #f4f4f4; /* Carbon default, unchanged */
-  --cds-icon-secondary: #c6c6c6; /* Carbon default, unchanged */
+  --cds-icon-secondary: #CCC0C0; /* was g100 default #c6c6c6 - warmed toward the border-interactive/focus red hue (same lightness) */
   --cds-icon-inverse: #161616; /* Carbon default, unchanged */
   --cds-icon-interactive: #ffffff; /* Carbon default, pinned — see KNOWN ISSUE PRECEDENT above */
 
   /* Borders & focus */
   --cds-border-subtle: #44312E; /* brand red-family tint of g100 #393939, same lightness */
   --cds-border-subtle-00: #44312E;
-  --cds-border-strong: #6f6f6f; /* Carbon default, unchanged */
-  --cds-border-strong-01: #6f6f6f; /* Carbon default, unchanged */
+  --cds-border-strong: #7A6464; /* was g100 default #6f6f6f - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-border-strong-01: #7A6464;
   --cds-border-interactive: #FF4645; /* brand red-family hue of g100 #4589ff, same saturation/lightness */
   --cds-focus: #ffffff; /* Carbon default, pinned — see KNOWN ISSUE PRECEDENT above */
 
@@ -64,9 +78,9 @@
   --cds-button-primary-hover: #3C6C63;
   --cds-button-primary-active: #72958F;
 
-  --cds-button-secondary: #6f6f6f; /* Carbon g100 default — brand doesn't hue-shift the neutral secondary button */
-  --cds-button-secondary-hover: #5e5e5e;
-  --cds-button-secondary-active: #393939;
+  --cds-button-secondary: #7A6464; /* was g100 default #6f6f6f - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-button-secondary-hover: #675555; /* was g100 default #5e5e5e - same warm treatment */
+  --cds-button-secondary-active: #3F3333; /* was g100 default #393939 - same warm treatment */
 
   --cds-button-danger-primary: #da1e28; /* same as brand-theme.css — Carbon keeps danger buttons invariant across themes */
   --cds-button-danger-primary-hover: #DF3E46;

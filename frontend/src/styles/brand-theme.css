@@ -5,6 +5,14 @@
  * Apply by adding data-carbon-theme="brand" to a wrapping element, e.g.
  * <div data-carbon-theme="brand"> ... Carbon components ... </div>
  *
+ * Tokens marked "warmed" below are a hand-tweak on top of that generated map: a few
+ * neutrals (text-secondary/helper, icon-secondary, border-strong, button-secondary)
+ * were still Carbon's plain cool gray and read as out of place next to the warm/rose
+ * tones the rest of the palette already leans on. Each was nudged to the same rose
+ * hue as border-subtle, keeping its original lightness so contrast is unaffected
+ * (verified against the WCAG contrast formula - see brand-theme-dark.css for the
+ * same treatment applied to the dark theme's equivalent tokens).
+ *
  * KNOWN ISSUE (do not "fix" here without checking every consumer — see usability team):
  * background-inverse is specced as #BBE4DF (light), but text-inverse/icon-inverse
  * are still white, so anywhere Carbon pairs those together (e.g. inverse buttons,
@@ -26,29 +34,40 @@
   /* Backgrounds & layers */
   --cds-background: #FCFBF4;
   --cds-background-inverse: #393939; /* Carbon default, not brandHex #BBE4DF — see note above */
-  --cds-layer-01: #F3F5F4;
-  --cds-layer-02: #ffffff;
-  --cds-field-01: #f4f4f4;
-  --cds-field-02: #ffffff;
+  --cds-layer-01: #EAF5F0; /* was #F3F5F4 - the original sage tint was too low-saturation to read as anything but gray next to the warm/rose palette elsewhere; boosted saturation, same lightness so contrast is unaffected */
+  --cds-layer-02: #F1F8F5; /* was Carbon default #ffffff - same sage tint as layer-01, one step lighter to keep it visibly "elevated" above layer-01 */
+  --cds-field-01: #F3F2ED; /* was Carbon default #f4f4f4, then white per earlier feedback, now a shade darker than --cds-background per design feedback - same warm-neutral family as the page background, not the sage tile tint */
+  --cds-field-02: #F1F0EA; /* same warm-neutral family as field-01, one step darker to stay a shade below --cds-layer-02 the way field-01 sits below the page background */
+
+  /* Layer/field hover states - Carbon's own accordion/tile/field :hover rules read these
+     (e.g. .cds--accordion__heading:hover uses --cds-layer-hover), and they default to a
+     plain Carbon gray (#e8e8e8) unrelated to layer-01/field-01 above, so hovering a warm
+     surface flashed cool gray. Same hue families as their non-hover counterparts, same
+     lightness as Carbon's own default so the "darken on hover" feedback is unchanged. */
+  --cds-layer-hover-01: #E0F0E8;
+  --cds-layer-hover-02: #E0F0E8;
+  --cds-layer-hover-03: #E0F0E8;
+  --cds-field-hover-01: #EDEBE3;
+  --cds-field-hover-02: #EDEBE3;
 
   /* Text */
   --cds-text-primary: #0A0A0A;
-  --cds-text-secondary: #525252;
-  --cds-text-helper: #6f6f6f;
+  --cds-text-secondary: #5A4D4A; /* was Carbon default #525252 - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-text-helper: #7A6864; /* was Carbon default #6f6f6f - warmed toward the border-subtle rose hue (same lightness) */
   --cds-text-error: #da1e28;
   --cds-text-inverse: #ffffff;
 
   /* Icons */
   --cds-icon-primary: #161616;
-  --cds-icon-secondary: #525252;
+  --cds-icon-secondary: #5A4D4A; /* was Carbon default #525252 - warmed toward the border-subtle rose hue (same lightness) */
   --cds-icon-inverse: #ffffff;
   --cds-icon-interactive: #1C544A;
 
   /* Borders & focus */
   --cds-border-subtle: #e9dad7;
   --cds-border-subtle-00: #e9dad7;
-  --cds-border-strong: #8d8d8d;
-  --cds-border-strong-01: #8d8d8d;
+  --cds-border-strong: #9B847F; /* was Carbon default #8d8d8d - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-border-strong-01: #9B847F;
   --cds-border-interactive: #7F0302;
   --cds-focus: #7F0302;
 
@@ -57,9 +76,9 @@
   --cds-button-primary-hover: #3C6C63;
   --cds-button-primary-active: #72958F;
 
-  --cds-button-secondary: #393939;
-  --cds-button-secondary-hover: #555555;
-  --cds-button-secondary-active: #848484;
+  --cds-button-secondary: #3E3634; /* was Carbon default #393939 - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-button-secondary-hover: #5E4F4C; /* was #555555 (a plain, unbranded gray) - same warm treatment */
+  --cds-button-secondary-active: #937A75; /* was #848484 (a plain, unbranded gray) - same warm treatment */
 
   --cds-button-danger-primary: #da1e28;
   --cds-button-danger-primary-hover: #DF3E46;
