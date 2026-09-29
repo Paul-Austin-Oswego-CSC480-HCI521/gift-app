@@ -1,0 +1,70 @@
+/*
+ * Brand re-theme for Carbon Design System (@carbon/web-components).
+ * Generated from carbon-token-map.json (Usability-Team-Figma-File, node 895:248).
+ *
+ * Apply by adding data-carbon-theme="brand" to a wrapping element, e.g.
+ * <div data-carbon-theme="brand"> ... Carbon components ... </div>
+ *
+ * KNOWN ISSUE (do not "fix" here — see usability team):
+ * background-inverse is specced as #BBE4DF (light), but text-inverse/icon-inverse
+ * are still white, so anywhere Carbon pairs those together (e.g. inverse buttons,
+ * dark-theme panels) would render at a 1.37:1 contrast ratio — far below WCAG AA.
+ * Until the usability team resolves the pairing, --cds-background-inverse below is
+ * pinned to Carbon's default (#393939) so it keeps working with white text/icons.
+ */
+
+[data-carbon-theme="brand"] {
+  /* Backgrounds & layers */
+  --cds-background: #FCFBF4;
+  --cds-background-inverse: #393939; /* Carbon default, not brandHex #BBE4DF — see note above */
+  --cds-layer-01: #F3F5F4;
+  --cds-layer-02: #ffffff;
+  --cds-field-01: #f4f4f4;
+  --cds-field-02: #ffffff;
+
+  /* Text */
+  --cds-text-primary: #0A0A0A;
+  --cds-text-secondary: #525252;
+  --cds-text-helper: #6f6f6f;
+  --cds-text-error: #da1e28;
+  --cds-text-inverse: #ffffff;
+
+  /* Icons */
+  --cds-icon-primary: #161616;
+  --cds-icon-secondary: #525252;
+  --cds-icon-inverse: #ffffff;
+  --cds-icon-interactive: #1C544A;
+
+  /* Borders & focus */
+  --cds-border-subtle: #e9dad7;
+  --cds-border-subtle-00: #e9dad7;
+  --cds-border-strong: #8d8d8d;
+  --cds-border-strong-01: #8d8d8d;
+  --cds-border-interactive: #7F0302;
+  --cds-focus: #7F0302;
+
+  /* Buttons & links */
+  --cds-button-primary: #1C544A;
+  --cds-button-primary-hover: #3C6C63;
+  --cds-button-primary-active: #72958F;
+
+  --cds-button-secondary: #393939;
+  --cds-button-secondary-hover: #555555;
+  --cds-button-secondary-active: #848484;
+
+  --cds-button-danger-primary: #da1e28;
+  --cds-button-danger-primary-hover: #DF3E46;
+  --cds-button-danger-primary-active: #E8747A;
+  /* cds-button kind="danger" reads --cds-button-danger-hover/-active (not the
+     -primary-hover/-active names above), so they're mirrored here too. */
+  --cds-button-danger-hover: #DF3E46;
+  --cds-button-danger-active: #E8747A;
+
+  --cds-link-primary: #0f62fe;
+
+  /* Status / support */
+  --cds-support-error: #f8000d;
+  --cds-support-success: #23a227;
+  --cds-support-warning: #ab8c61;
+  --cds-support-info: #0043ce;
+}
