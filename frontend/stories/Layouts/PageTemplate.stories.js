@@ -10,6 +10,12 @@ import "@carbon/web-components/es/components/tile/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import "../../src/components/gift-nav-header/gift-nav-header.js";
 import "../../src/styles/brand-theme.css";
+import "../../src/styles/brand-theme-dark.css";
+
+const THEMES = {
+  light: { carbonClass: "cds--white", brandTheme: "brand" },
+  dark: { carbonClass: "cds--g100", brandTheme: "brand-dark" },
+};
 
 // Backgrounds & layers group duplicated from Foundations/Colors so the reference
 // accordion below stays a self-contained swatch sheet. Keep in sync with that file
@@ -40,8 +46,10 @@ const tokenSwatch = ([token, value]) => html`
 // purpose. See PR/issue discussion for the prototype this reproduces.
 export default {
   title: "Layouts/Page Template",
-  render: () => html`
-    <div data-carbon-theme="brand" class="no-scrolling">
+  render: (_args, context) => {
+    const { carbonClass, brandTheme } = THEMES[context.globals.theme] ?? THEMES.light;
+    return html`
+    <div data-carbon-theme="${brandTheme}" class="${carbonClass} no-scrolling">
       <gift-nav-header product-name="Gift App">
         <cds-header-nav menu-bar-label="Gift App navigation">
           <cds-header-nav-item href="/gifts" is-active>Gifts</cds-header-nav-item>
@@ -94,11 +102,16 @@ export default {
             </span>
           </cds-callout-notification>
 
+          <!-- low-contrast: without it, cds-inline-notification uses --cds-background-inverse,
+               which is Carbon's *opposite-of-page* polarity by design (dark card on a light
+               page, light card on a dark page) - correct for a toast-style notification, but
+               wrong for a banner that should blend with the page like the callout above it. -->
           <cds-inline-notification
             kind="info"
             title="Lorem ipsum dolor sit amet"
             subtitle="Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
             hide-close-button
+            low-contrast
           ></cds-inline-notification>
 
           <section style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -200,7 +213,8 @@ export default {
         </main>
       </div>
     </div>
-  `,
+  `;
+  },
 };
 
 export const Default = {};
