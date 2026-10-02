@@ -7,7 +7,11 @@
     <meta name="description" content="Create your Gift App account." />
     <!-- Linked (not JS-imported) so these load as real stylesheets that block first paint,
          avoiding a flash of unstyled content while the JS module graph loads. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/src/styles/fonts.css" />
     <link rel="stylesheet" href="/src/styles/app.css" />
+    <link rel="stylesheet" href="/src/styles/brand-theme.css" />
     <link rel="stylesheet" href="/src/styles/login.css" />
     <!-- Hide custom elements until their JS defines them, avoiding a flash of unstyled
          <gift-*>/<cds-*> elements before they upgrade. -->
@@ -17,7 +21,7 @@
       }
     </style>
   </head>
-  <body class="cds--white">
+  <body class="cds--white" data-carbon-theme="brand">
     <div class="no-scrolling login-page">
       <gift-nav-header product-name="Gift App">
         <cds-header-nav menu-bar-label="Gift App navigation">

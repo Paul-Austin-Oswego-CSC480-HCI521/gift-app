@@ -1,0 +1,188 @@
+/*
+ * Brand re-theme for Carbon Design System (@carbon/web-components).
+ * Generated from carbon-token-map.json (Usability-Team-Figma-File, node 895:248).
+ *
+ * Apply by adding data-carbon-theme="brand" to a wrapping element, e.g.
+ * <div data-carbon-theme="brand"> ... Carbon components ... </div>
+ *
+ * Tokens marked "warmed" below are a hand-tweak on top of that generated map: a few
+ * neutrals (text-secondary/helper, icon-secondary, border-strong, button-secondary)
+ * were still Carbon's plain cool gray and read as out of place next to the warm/rose
+ * tones the rest of the palette already leans on. Each was nudged to the same rose
+ * hue as border-subtle, keeping its original lightness so contrast is unaffected
+ * (verified against the WCAG contrast formula - see brand-theme-dark.css for the
+ * same treatment applied to the dark theme's equivalent tokens).
+ *
+ * KNOWN ISSUE (do not "fix" here without checking every consumer — see usability team):
+ * background-inverse is specced as #BBE4DF (light), but text-inverse/icon-inverse
+ * are still white, so anywhere Carbon pairs those together (e.g. inverse buttons,
+ * dark-theme panels) would render at a 1.37:1 contrast ratio — far below WCAG AA.
+ * Until the usability team resolves the pairing, --cds-background-inverse below is
+ * pinned to Carbon's default (#393939) so it keeps working with white text/icons.
+ *
+ * Tried redefining text-inverse/icon-inverse to a dark color instead (to pair with
+ * the light background-inverse spec) and reverted it: Carbon reuses icon-inverse
+ * internally as "icon color for a dark cds-icon-primary-colored surface" wherever it
+ * needs white-on-dark — e.g. the checked cds-checkbox tick sits on an icon-primary
+ * background and is colored with icon-inverse. Making icon-inverse dark broke that
+ * checkmark (dark-on-dark) even though background-inverse was never involved. Any
+ * fix here needs to happen per-component (or by introducing a new token), not by
+ * redefining these two globally.
+ */
+
+/*
+ * Shape override: rounded corners for buttons.
+ *
+ * Carbon's own components hardcode border-radius (mostly 0, i.e. square corners)
+ * rather than reading it from a CSS custom property or Sass variable at the
+ * component level, so there's no token to redefine here the way the colors above
+ * redefine --cds-*. The only way to reach the actual rendered edge from outside
+ * the component is a shadow-DOM ::part() selector, and Carbon only exposes one on
+ * cds-button (part="button") and cds-dropdown's trigger (part="trigger-button").
+ *
+ * cds-text-input, cds-textarea, cds-number-input and cds-select do NOT expose any
+ * part on their inner <input>/<textarea>/<select> element, so their border-radius
+ * can't be reached from this file at all. See carbon-shape-overrides.js (imported
+ * alongside this file) for how those get rounded instead — by injecting a
+ * stylesheet straight into each component's shadow root.
+ *
+ * Not scoped to [data-carbon-theme="brand"]/"brand-dark": shape isn't a light/dark
+ * concern, so this applies whenever this stylesheet is loaded, same as brand-dark.
+ */
+cds-button::part(button),
+cds-dropdown::part(trigger-button) {
+  border-radius: 0.25rem; /* $border-radius-04 from @carbon/layout */
+}
+
+/*
+ * Typography: Outfit for headings, Roboto for body/caption text (see fonts.css for the
+ * Google Fonts import). Like the shape override above, this isn't a light/dark concern,
+ * so it applies whenever this stylesheet is loaded, same as brand-dark.
+ *
+ * Carbon has no font-family custom property anywhere - every component hardcodes
+ * 'IBM Plex Sans'/'IBM Plex Mono' directly in its own CSS or shadow-DOM styles (confirmed:
+ * no --cds-font-* token exists in @carbon/styles or @carbon/web-components). So the two
+ * custom properties below are project-defined, not Carbon tokens. They reach plain
+ * light-DOM text - real heading elements, paragraphs, and Carbon's compiled
+ * cds--type-* helper classes - but can't reach text rendered inside a Carbon web
+ * component's own shadow DOM (e.g. the label inside cds-button), the same shadow-DOM
+ * limitation documented in carbon-shape-overrides.js for input border-radius.
+ */
+:root {
+  --font-family-heading: "Outfit", "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular", sans-serif;
+  --font-family-body: "Roboto", "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.cds--type-heading-01,
+.cds--type-heading-02,
+.cds--type-heading-03,
+.cds--type-heading-04,
+.cds--type-heading-05,
+.cds--type-heading-06,
+.cds--type-heading-07,
+.cds--type-heading-compact-01,
+.cds--type-heading-compact-02,
+.cds--type-fluid-heading-03,
+.cds--type-fluid-heading-04,
+.cds--type-fluid-heading-05,
+.cds--type-fluid-heading-06,
+.cds--type-productive-heading-01,
+.cds--type-productive-heading-02,
+.cds--type-productive-heading-03,
+.cds--type-productive-heading-04,
+.cds--type-productive-heading-05,
+.cds--type-productive-heading-06,
+.cds--type-productive-heading-07,
+.cds--type-expressive-heading-01,
+.cds--type-expressive-heading-02,
+.cds--type-expressive-heading-03,
+.cds--type-expressive-heading-04,
+.cds--type-expressive-heading-05,
+.cds--type-expressive-heading-06 {
+  font-family: var(--font-family-heading);
+}
+
+body,
+.cds--type-body-01,
+.cds--type-body-02,
+.cds--type-body-compact-01,
+.cds--type-body-compact-02,
+.cds--type-caption-01,
+.cds--type-caption-02,
+.cds--type-label-01,
+.cds--type-label-02,
+.cds--type-helper-text-01,
+.cds--type-helper-text-02,
+.cds--type-legal-01,
+.cds--type-legal-02 {
+  font-family: var(--font-family-body);
+}
+
+[data-carbon-theme="brand"] {
+  /* Backgrounds & layers */
+  --cds-background: #FCFBF4;
+  --cds-background-inverse: #393939; /* Carbon default, not brandHex #BBE4DF — see note above */
+  --cds-layer-01: #EAF5F0; /* was #F3F5F4 - the original sage tint was too low-saturation to read as anything but gray next to the warm/rose palette elsewhere; boosted saturation, same lightness so contrast is unaffected */
+  --cds-layer-02: #F1F8F5; /* was Carbon default #ffffff - same sage tint as layer-01, one step lighter to keep it visibly "elevated" above layer-01 */
+  --cds-field-01: #F3F2ED; /* was Carbon default #f4f4f4, then white per earlier feedback, now a shade darker than --cds-background per design feedback - same warm-neutral family as the page background, not the sage tile tint */
+  --cds-field-02: #F1F0EA; /* same warm-neutral family as field-01, one step darker to stay a shade below --cds-layer-02 the way field-01 sits below the page background */
+
+  /* Layer/field hover states - Carbon's own accordion/tile/field :hover rules read these
+     (e.g. .cds--accordion__heading:hover uses --cds-layer-hover), and they default to a
+     plain Carbon gray (#e8e8e8) unrelated to layer-01/field-01 above, so hovering a warm
+     surface flashed cool gray. Same hue families as their non-hover counterparts, same
+     lightness as Carbon's own default so the "darken on hover" feedback is unchanged. */
+  --cds-layer-hover-01: #E0F0E8;
+  --cds-layer-hover-02: #E0F0E8;
+  --cds-layer-hover-03: #E0F0E8;
+  --cds-field-hover-01: #EDEBE3;
+  --cds-field-hover-02: #EDEBE3;
+
+  /* Text */
+  --cds-text-primary: #0A0A0A;
+  --cds-text-secondary: #5A4D4A; /* was Carbon default #525252 - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-text-helper: #7A6864; /* was Carbon default #6f6f6f - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-text-placeholder: #B1A29F; /* was Carbon default rgba(22,22,22,0.4) - from finalized login design (Figma node 1287:1374), a solid warm neutral instead of a black/alpha mix so placeholder text reads the same over --cds-field-01/02 regardless of what's beneath it */
+  --cds-text-error: #da1e28;
+  --cds-text-inverse: #ffffff;
+
+  /* Icons */
+  --cds-icon-primary: #161616;
+  --cds-icon-secondary: #5A4D4A; /* was Carbon default #525252 - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-icon-inverse: #ffffff;
+  --cds-icon-interactive: #1C544A;
+
+  /* Borders & focus */
+  --cds-border-subtle: #e9dad7;
+  --cds-border-subtle-00: #e9dad7;
+  --cds-border-strong: #9B847F; /* was Carbon default #8d8d8d - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-border-strong-01: #9B847F;
+  --cds-border-interactive: #7F0302;
+  --cds-focus: #7F0302;
+
+  /* Buttons & links */
+  --cds-button-primary: #1C544A;
+  --cds-button-primary-hover: #3C6C63;
+  --cds-button-primary-active: #72958F;
+
+  --cds-button-secondary: #3E3634; /* was Carbon default #393939 - warmed toward the border-subtle rose hue (same lightness) */
+  --cds-button-secondary-hover: #5E4F4C; /* was #555555 (a plain, unbranded gray) - same warm treatment */
+  --cds-button-secondary-active: #937A75; /* was #848484 (a plain, unbranded gray) - same warm treatment */
+
+  --cds-button-danger-primary: #da1e28;
+  --cds-button-danger-primary-hover: #DF3E46;
+  --cds-button-danger-primary-active: #E8747A;
+  /* cds-button kind="danger" reads --cds-button-danger-hover/-active (not the
+     -primary-hover/-active names above), so they're mirrored here too. */
+  --cds-button-danger-hover: #DF3E46;
+  --cds-button-danger-active: #E8747A;
+
+  --cds-link-primary: #0f62fe;
+
+  /* Status / support */
+  --cds-support-error: #f8000d;
+  --cds-support-success: #23a227;
+  --cds-support-warning: #ab8c61;
+  --cds-support-info: #0043ce;
+}

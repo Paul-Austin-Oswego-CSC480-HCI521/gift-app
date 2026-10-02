@@ -1,6 +1,7 @@
 import { LitElement, html, css, nothing } from "lit";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/password-input/index.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 
@@ -43,6 +44,7 @@ export class LoginForm extends LitElement {
 
     const emailInput = this.renderRoot.querySelector("cds-text-input");
     const passwordInput = this.renderRoot.querySelector("cds-password-input");
+    const rememberMe = this.renderRoot.querySelector("cds-checkbox").checked;
     const email = emailInput.value.trim();
     const password = passwordInput.value;
     this._emailError = !email
@@ -59,7 +61,7 @@ export class LoginForm extends LitElement {
     // The page owns authentication; this component only validates and emits data.
     this.dispatchEvent(
       new CustomEvent("login-submit", {
-        detail: { email, password },
+        detail: { email, password, rememberMe },
         bubbles: true,
         composed: true,
       }),
@@ -119,6 +121,8 @@ export class LoginForm extends LitElement {
           invalid-text=${this._passwordError}
         >
         </cds-password-input>
+        <cds-checkbox name="remember-me" label-text="Remember me" ?disabled=${this.loading}>
+        </cds-checkbox>
         ${this.errorMessage
           ? html`
               <cds-inline-notification

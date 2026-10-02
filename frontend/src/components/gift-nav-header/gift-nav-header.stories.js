@@ -4,7 +4,7 @@ import "./gift-nav-header.js";
 // Demonstrates the standard <cds-header> configuration used by the HTML page.
 // Swap in real routes for the `href`s once routing exists.
 export default {
-  title: "Example/Carbon Header",
+  title: "Custom Components/Nav Header",
   render: ({ productName }) => html`
     <gift-nav-header product-name=${productName}>
       <cds-header-nav menu-bar-label="Gift App navigation">

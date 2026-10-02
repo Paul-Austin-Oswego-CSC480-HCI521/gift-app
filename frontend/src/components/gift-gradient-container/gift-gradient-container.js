@@ -23,8 +23,7 @@ export class GradientContainer extends LitElement {
       box-sizing: border-box;
       /*background: linear-gradient(90deg, #ffc6c6 0%, #ffd7a3 100%);*/
       background: url("${unsafeCSS(bgImage)}") lightgray 50% / cover no-repeat;
-      color: var(--Text-text-primary, #161616);
-      font-family: var(--Font-family, "IBM Plex Sans");
+      color: var(--cds-text-primary, #161616);
       font-size: 14px;
       font-style: normal;
       font-weight: 400;

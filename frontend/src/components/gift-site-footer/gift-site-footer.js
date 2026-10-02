@@ -6,7 +6,7 @@ export class SiteFooter extends LitElement {
     footer {
       display: flex;
       flex-direction: column;
-      background: var(--Layer-layer-selected-inverse, #161616);
+      background: var(--cds-layer-selected-inverse, #161616);
       padding: 32px 32px;
       align-items: flex-end;
       gap: 10px;

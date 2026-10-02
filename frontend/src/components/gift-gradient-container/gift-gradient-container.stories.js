@@ -6,7 +6,7 @@ import "./gift-gradient-container.js";
 // (see src/components/gradient-container.js) - import for the customElements.define() side
 // effect, then use the tag directly; content is projected in via its default slot.
 export default {
-  title: "Example/Gradient Container",
+  title: "Custom Components/Gradient Container",
   render: ({ content }) => html`
     <gift-gradient-container>${unsafeHTML(content)}</gift-gradient-container>
   `,

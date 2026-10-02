@@ -1,0 +1,100 @@
+/*
+ * Brand re-theme for Carbon Design System (@carbon/web-components) — dark mode.
+ * Companion to brand-theme.css, based on Carbon's g100 (dark) theme instead of
+ * white. Same brand hues (teal interactive/#1C544A family, red-maroon accent/
+ * #7F0302 family) as the light theme, but each token is derived by rotating the
+ * HUE of Carbon's own g100 default to the brand hue while keeping g100's
+ * saturation/lightness — so any token Carbon already contrast-tested for dark
+ * backgrounds keeps essentially the same contrast ratio after rebranding.
+ *
+ * Apply by adding data-carbon-theme="brand-dark" to a wrapping element that also
+ * carries Carbon's own cds--g100 class, e.g.
+ * <div class="cds--g100" data-carbon-theme="brand-dark"> ... Carbon components ... </div>
+ *
+ * Tokens Carbon does NOT vary between its own themes (button-primary, button-
+ * danger-*, link-primary, support-info) are copied verbatim from brand-theme.css
+ * rather than re-derived, since Carbon's own light/dark values are identical for
+ * these — they're either self-contained filled surfaces (buttons, always paired
+ * with white text regardless of page theme) or already tuned to work on both
+ * backgrounds (link-primary, support-info).
+ *
+ * A few neutrals (text-secondary/helper, icon-secondary, border-strong, button-
+ * secondary) were still g100's plain cool gray and read as out of place next to
+ * the warm tones elsewhere in the theme; each is nudged to this theme's red-family
+ * hue (the same one border-interactive/focus use), keeping g100's own lightness so
+ * contrast is unaffected — see brand-theme.css for the same treatment in light.
+ *
+ * KNOWN ISSUE PRECEDENT (see brand-theme.css): --cds-icon-interactive and
+ * --cds-focus are pinned to Carbon's own g100 defaults (#ffffff) rather than
+ * hue-shifted to brand red/teal. Unlike border-interactive, Carbon's g100 makes
+ * these two tokens achromatic (no hue to preserve) — a deliberate departure from
+ * its own white-theme values, presumably because they need to read against
+ * arbitrary/colored surfaces, not just the page background. Forcing a brand hue
+ * onto them isn't derivable from Carbon's own data the way the rest of this file
+ * is, so — same call as background-inverse in the light theme — they're left at
+ * Carbon's default until checked against every consumer.
+ */
+
+[data-carbon-theme="brand-dark"] {
+  /* Backgrounds & layers */
+  --cds-background: #191813; /* subtle warm-cream tint of g100 #161616, same lightness */
+  --cds-background-inverse: #f4f4f4; /* Carbon default — pairs correctly with dark text-inverse below, see note above */
+  --cds-layer-01: #222A26; /* subtle brand-green tint of g100 #262626, same lightness */
+  --cds-layer-02: #343E39; /* was g100 default #393939 - a whisper of layer-01's sage tint (same lightness); see brand-theme.css for the same fix in light */
+  --cds-field-01: #262626; /* Carbon default, unchanged - tried matching layer-01's sage tint and reverted: text-input/textarea/etc. read as editable fields, not cards, so they stay plain like field-02, not tinted like the tile-facing layers (see brand-theme.css) */
+  --cds-field-02: #393939; /* Carbon default, unchanged */
+
+  /* Layer hover state - Carbon's own accordion/tile :hover rules read --cds-layer-hover,
+     which defaults to plain Carbon gray unrelated to layer-01/02 above, so hovering a
+     sage-tinted surface flashed cool gray (see brand-theme.css for the same fix in light).
+     field-hover is left at Carbon's default since field-01/02 above are plain too. */
+  --cds-layer-hover-01: #2E3833;
+  --cds-layer-hover-02: #404E47;
+  --cds-layer-hover-03: #596D63;
+
+  /* Text */
+  --cds-text-primary: #F9F9F9;
+  --cds-text-secondary: #CCC0C0; /* was g100 default #c6c6c6 - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-text-helper: #B19F9F; /* was g100 default #a8a8a8 - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-text-error: #ff8389; /* Carbon default, unchanged */
+  --cds-text-inverse: #161616; /* Carbon default, unchanged */
+
+  /* Icons */
+  --cds-icon-primary: #f4f4f4; /* Carbon default, unchanged */
+  --cds-icon-secondary: #CCC0C0; /* was g100 default #c6c6c6 - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-icon-inverse: #161616; /* Carbon default, unchanged */
+  --cds-icon-interactive: #ffffff; /* Carbon default, pinned — see KNOWN ISSUE PRECEDENT above */
+
+  /* Borders & focus */
+  --cds-border-subtle: #44312E; /* brand red-family tint of g100 #393939, same lightness */
+  --cds-border-subtle-00: #44312E;
+  --cds-border-strong: #7A6464; /* was g100 default #6f6f6f - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-border-strong-01: #7A6464;
+  --cds-border-interactive: #FF4645; /* brand red-family hue of g100 #4589ff, same saturation/lightness */
+  --cds-focus: #ffffff; /* Carbon default, pinned — see KNOWN ISSUE PRECEDENT above */
+
+  /* Buttons & links */
+  --cds-button-primary: #1C544A; /* same as brand-theme.css — Carbon keeps button-primary invariant across themes */
+  --cds-button-primary-hover: #3C6C63;
+  --cds-button-primary-active: #72958F;
+
+  --cds-button-secondary: #7A6464; /* was g100 default #6f6f6f - warmed toward the border-interactive/focus red hue (same lightness) */
+  --cds-button-secondary-hover: #675555; /* was g100 default #5e5e5e - same warm treatment */
+  --cds-button-secondary-active: #3F3333; /* was g100 default #393939 - same warm treatment */
+
+  --cds-button-danger-primary: #da1e28; /* same as brand-theme.css — Carbon keeps danger buttons invariant across themes */
+  --cds-button-danger-primary-hover: #DF3E46;
+  --cds-button-danger-primary-active: #E8747A;
+  /* cds-button kind="danger" reads --cds-button-danger-hover/-active (not the
+     -primary-hover/-active names above), so they're mirrored here too. */
+  --cds-button-danger-hover: #DF3E46;
+  --cds-button-danger-active: #E8747A;
+
+  --cds-link-primary: #78a9ff; /* Carbon g100 default, unchanged — brand-theme.css leaves link-primary unchanged too */
+
+  /* Status / support */
+  --cds-support-error: #FA4D56; /* brand red-family hue of g100 default, same saturation/lightness */
+  --cds-support-success: #42BE46;
+  --cds-support-warning: #F1971B;
+  --cds-support-info: #4589ff; /* Carbon g100 default, unchanged — brand-theme.css leaves support-info unchanged too */
+}
