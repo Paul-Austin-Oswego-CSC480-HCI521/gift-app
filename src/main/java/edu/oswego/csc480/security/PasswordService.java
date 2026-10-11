@@ -16,4 +16,14 @@ public class PasswordService {
 
     }
 
+    public boolean verify (String plainText,  String storedHash){
+
+        char[] plainTextChar = plainText.toCharArray();
+
+        BCrypt.Result result = BCrypt.verifyer().verify(plainTextChar, storedHash);
+
+        return result.verified;
+
+    }
+
 }
