@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.json.bind.annotation.JsonbTransient;
 
 @Entity
 @Table(name="users")
@@ -43,6 +44,10 @@ public class User implements Serializable {
 
     // Make sure there is a dummy constructor for persistence to work
     // also getters and setters for everything.
+
+    @JsonbTransient     //makes sure the pw hash isn't visible when api calls GET for user
+    @Column(name="password")
+    private String passwordHash;
 
     public User(){
     } // we can use setters anyway.
@@ -117,5 +122,13 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    // Two new getter and setter methods for the password hashes
+    public String getPasswordHash() {
+        return this.passwordHash;
+    }
+    public void setPasswordHash(String passwordHash){
+        this.passwordHash = passwordHash;
     }
 }
