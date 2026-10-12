@@ -2,6 +2,8 @@ import "@carbon/web-components/es/components/modal/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import { html } from "lit";
+import { expect, userEvent, waitFor } from "storybook/test";
+import { nativeInput } from "../helpers/shadow.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/carbon-page-layout.css";
 
@@ -30,6 +32,25 @@ const modal = ({ title, fields, action }) => html`
 
 export default { title: "Carbon Components/Modal", parameters: { layout: "fullscreen" } };
 
+const fillAndClose = async ({ canvasElement, step }, values) => {
+  const modalEl = canvasElement.querySelector("cds-modal");
+  const inputs = [...canvasElement.querySelectorAll("cds-text-input")];
+  await step("Type into every field", async () => {
+    for (const [i, input] of inputs.entries()) {
+      const field = await nativeInput(input);
+      await userEvent.type(field, values[i]);
+      await waitFor(() => expect(field).toHaveValue(values[i]));
+    }
+  });
+  await step("Close with the X button", async () => {
+    expect(modalEl.open).toBe(true);
+    const closeButton = canvasElement.querySelector("cds-modal-close-button");
+    await closeButton.updateComplete;
+    await userEvent.click(closeButton);
+    await waitFor(() => expect(modalEl.open).toBe(false));
+  });
+};
+
 export const AddGift = {
   render: () =>
     modal({
@@ -37,6 +58,7 @@ export const AddGift = {
       fields: [["Gift 1", "Gift, gift, gift..."], ["Gift 2", "Gift, gift, gift..."], ["Gift 3", "Gift, gift, gift..."]],
       action: "Input Gift",
     }),
+  play: (ctx) => fillAndClose(ctx, ["Lego set", "Scarf", "Book"]),
 };
 
 export const AddRecipient = {
@@ -46,4 +68,5 @@ export const AddRecipient = {
       fields: [["Full Name", "Jane Cooper"], ["Email", "Jane@gmail.com"], ["Phone Number", "123-456-7890"]],
       action: "Input Recipient",
     }),
+  play: (ctx) => fillAndClose(ctx, ["Jane Cooper", "jane@example.com", "123-456-7890"]),
 };
