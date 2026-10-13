@@ -6,7 +6,7 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  margin-block-start: var(--cds-spacing-09, 3rem);
+  margin-block-start: var(--cds-spacing-09, 6rem);
 }
 
 .page-auth .page-auth__panel {
@@ -31,7 +31,7 @@
     min-height: 100vh;
   }
   .page-auth .page-auth__panel {
-    max-width: 50rem;
+    max-width: 30rem;
   }
 }
 
