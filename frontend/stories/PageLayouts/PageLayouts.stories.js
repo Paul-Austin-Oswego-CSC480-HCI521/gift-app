@@ -16,7 +16,7 @@ import "../../src/styles/carbon-page-layout.css";
 // composed only from the configured Carbon components and the gift-* wrappers, so they stay in
 // step with the brand theme (brand-theme.css) rather than carrying page-specific styling.
 
-// app.css's .no-scrolling (a flex column at least window-height) is reproduced inline rather
+// app.css's .fill-height (a flex column at least window-height) is reproduced inline rather
 // than imported: app.css re-imports Carbon's stylesheet, and loading that after
 // brand-theme.css lets Carbon's .cds--white tokens override the brand ones.
 const pageColumn = "display: flex; flex-direction: column; min-height: 100vh; flex: 1;";

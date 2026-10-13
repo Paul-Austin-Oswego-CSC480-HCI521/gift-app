@@ -4,11 +4,10 @@
 @import "@carbon/styles/css/styles.css";
 
 /* The page wrapper grows to at least the height of the browser window. */
-.no-scrolling {
+.fill-height {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 /* This is the white area containing the header and the main page content. */
