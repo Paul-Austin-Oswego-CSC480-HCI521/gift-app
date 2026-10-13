@@ -10,6 +10,7 @@ Clarity.init("yjthhigok4");
 import "./components/gift-nav-header/gift-nav-header.js";
 import "./components/gift-gradient-container/gift-gradient-container.js";
 import "./components/gift-side-nav/gift-side-nav.js";
+import "@carbon/web-components/es/components/link/index.js";
 
 // This entry point registers the components used by index.html. Page authors can work in
 // HTML while component implementations keep their behavior and state in JavaScript.
