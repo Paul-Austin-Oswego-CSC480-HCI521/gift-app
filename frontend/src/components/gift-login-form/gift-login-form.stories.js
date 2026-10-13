@@ -21,7 +21,13 @@ export default {
 };
 export const Default = {};
 export const Error = { args: { errorMessage: "Wrong email or password" } };
-export const Loading = { args: { loading: true } };
+// WCAG 1.4.3 exempts inactive (disabled) components from contrast requirements,
+// but axe can't tell that Carbon's disabled password label belongs to a disabled input.
+const disabledContrastExempt = {
+  a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } },
+};
+
+export const Loading = { args: { loading: true }, parameters: disabledContrastExempt };
 
 export const EmptySubmit = {
   play: async ({ canvasElement, args, step }) => {
@@ -99,6 +105,7 @@ export const SubmitOnEnter = {
 
 export const LoadingBlocksSubmit = {
   args: { loading: true },
+  parameters: disabledContrastExempt,
   play: async ({ canvasElement, args, step }) => {
     const form = await renderedForm(canvasElement, "gift-login-form");
     await step("Controls are disabled while loading", async () => {

@@ -23,7 +23,12 @@ export const Default = {};
 export const Error = {
   args: { errorMessage: "Unable to create your account. Please try again." },
 };
-export const Loading = { args: { loading: true } };
+// WCAG 1.4.3 exempts inactive (disabled) components from contrast requirements,
+// but axe can't tell that Carbon's disabled password labels belong to disabled inputs.
+export const Loading = {
+  args: { loading: true },
+  parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } },
+};
 
 const fillIn = async (form, values) => {
   for (const [name, text] of Object.entries(values)) {

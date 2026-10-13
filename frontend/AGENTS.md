@@ -133,6 +133,14 @@ npm run test:storybook  # runs every story in a browser, includes accessibility 
 npm run build
 ```
 
+### Accessibility test exceptions
+
+Color-contrast rules do not apply to disabled elements (WCAG 1.4.3 exempts inactive components), so
+never "fix" a contrast failure on a disabled control by restyling it. If axe still flags one (for
+example Carbon's disabled password label, which isn't linked to its input), disable only the
+`color-contrast` rule on that disabled-state story via `parameters.a11y.config.rules`, with a comment
+saying why. See `gift-login-form.stories.js`. Don't turn off other rules or exempt enabled states.
+
 `npm run lint:carbon` fails if a component imports no Carbon component or renders a raw
 `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. Fix the
 design rather than adding an exemption. Exemptions are reviewed, and a vague reason will be

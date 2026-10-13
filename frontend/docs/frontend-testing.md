@@ -141,6 +141,20 @@ Three things to always cover, following the existing tests as examples
 - attribute-driven rendering (e.g. `product-name="..."`)
 - slotted content projection (`slot.assignedElements()` / `assignedNodes()`)
 
+## Accessibility test exceptions (disabled states)
+
+`npm run test:a11y` runs axe on every story. Color-contrast rules do not apply to disabled elements
+(WCAG 1.4.3 exempts inactive components), so don't restyle disabled controls to satisfy axe. When axe
+flags a disabled element anyway (e.g. Carbon's disabled password label, which isn't associated with
+its input), turn off only `color-contrast` for that disabled-state story and explain why:
+
+```js
+parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } },
+```
+
+See `src/components/gift-login-form/gift-login-form.stories.js` (`Loading`, `LoadingBlocksSubmit`).
+Keep the exception off enabled states and other rules.
+
 ## Coverage
 
 `npm run test:coverage` reports coverage for `src/**/*.js`, excluding `src/index.js` (wiring/entry
