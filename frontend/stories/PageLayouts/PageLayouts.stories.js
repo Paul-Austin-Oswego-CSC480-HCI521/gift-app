@@ -4,10 +4,11 @@ import "@carbon/web-components/es/components/link/index.js";
 import "@carbon/web-components/es/components/ui-shell/index.js";
 import "../../src/components/gift-nav-header/gift-nav-header.js";
 import "../../src/components/gift-image-container/gift-image-container.js";
+import "../../src/components/gift-brand/gift-brand.js";
 import "../../src/components/gift-login-form/gift-login-form.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/brand-theme-dark.css";
-import "../../src/styles/login.css";
+import "../../src/styles/page-templates.css";
 import "../../src/styles/carbon-page-layout.css";
 
 // The two page structures the app has: what a visitor sees before logging in, and what a
@@ -43,21 +44,15 @@ export default {
 export const Unauthenticated = {
   render: () =>
     frame(html`
-      <div class="login-page" style="${pageColumn}">
+      <div class="page-auth" style="${pageColumn}">
         <gift-nav-header product-name="Gift App">
           <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
         </gift-nav-header>
         <gift-image-container>
-          <main class="login-main">
-            <section class="login-panel" aria-labelledby="login-heading">
-              <div class="login-brand" aria-label="Gift App">
-                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-                  <path d="M5 14h22v16H5zM3 8h26v6H3zM16 8v22" />
-                  <path d="M16 8h-4a3.5 3.5 0 1 1 3.5-3.5L16 8Zm0 0h4a3.5 3.5 0 1 0-3.5-3.5L16 8Z" />
-                </svg>
-                <span>Gift App</span>
-              </div>
-              <header class="login-intro">
+          <main class="page-auth__main">
+            <section class="page-auth__panel" aria-labelledby="login-heading">
+              <gift-brand></gift-brand>
+              <header class="page-auth__intro">
                 <h1 id="login-heading" class="cds--type-heading-05">Welcome back</h1>
                 <p class="cds--type-body-01">Log in for more thoughtful gift-giving.</p>
               </header>

@@ -4,6 +4,7 @@ import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/tile/index.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/carbon-page-layout.css";
+import "../../src/styles/page-templates.css";
 
 // Documents the shape tokens in brand-theme.css (--radius-small/--radius-large). They mirror
 // the Radius collection in the Carbon Design System Figma library (Radius/Small = 4,

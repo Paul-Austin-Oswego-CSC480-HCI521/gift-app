@@ -1,5 +1,5 @@
-/* Match the home page background image without changing shared components. */
-.login-page .login-main {
+/* Shared page templates. Auth template (login, create account): centered panel over the image background. */
+.page-auth .page-auth__main {
   display: flex;
   flex: 1;
   justify-content: center;
@@ -10,13 +10,13 @@
 }
 
 @media (min-width: 768px) {
-  .login-page .login-main {
+  .page-auth .page-auth__main {
     justify-content: flex-start;
     padding-left: clamp(1.5rem, 5vw, 3rem);
   }
 }
 
-.login-page .login-panel {
+.page-auth .page-auth__panel {
   display: flex;
   flex-direction: column;
   gap: var(--cds-spacing-07, 2rem);
@@ -31,26 +31,73 @@
   box-shadow: 0 1rem 3rem rgba(92, 48, 32, 0.1);
 }
 
-.login-page .login-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--cds-spacing-03, 0.5rem);
-  font-size: 1.125rem;
-  font-weight: 500;
-}
 
-.login-page .login-intro {
+.page-auth .page-auth__intro {
   display: flex;
   flex-direction: column;
   gap: var(--cds-spacing-03, 0.5rem);
   text-align: center;
 }
 
-.login-page .login-intro p {
+.page-auth .page-auth__intro p {
   color: var(--cds-text-secondary, #525252);
 }
 
-.login-page .login-panel > p {
+.page-auth .page-auth__panel > p {
   text-align: center;
+}
+
+/* Authenticated template: header + side nav + main content. */
+/* Bottom group of the authenticated side nav (Navigation frame 1323:4981): primary actions
+   and Settings pinned below the links. margin-top:auto works because cds-side-nav's panel
+   is a flex column. */
+.page-sidenav-footer {
+  margin-block-start: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 0 1rem;
+}
+
+.page-sidenav-footer cds-button {
+  inline-size: 100%;
+  max-inline-size: none;
+  padding-inline: 1.5625rem;
+  box-sizing: border-box;
+}
+
+.page-sidenav-footer cds-button::part(button) {
+  inline-size: 100%;
+  max-inline-size: none;
+}
+
+/* Settings is a heading-03-sized (24/28) link, smaller than the 32/40 primary links. */
+.page-sidenav-settings::part(link) {
+  padding-block: 0.625rem;
+  font-size: 1.5rem;
+  line-height: 1.16667;
+}
+
+.page-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: stretch;
+  /* Matches cds-side-nav's panel width (--side-nav-width, applied inside its shadow
+     root by carbon-shape-overrides.js). The side nav draws its own right border. */
+  margin-inline-start: var(--side-nav-width, 16rem);
+  padding: 2rem;
+  background: var(--cds-background);
+  box-sizing: border-box;
+  min-height: calc(100vh - 3rem);
+}
+
+.page-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-section-heading {
+  margin: 0;
 }

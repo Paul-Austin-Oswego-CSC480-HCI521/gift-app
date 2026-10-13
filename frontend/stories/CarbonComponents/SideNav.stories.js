@@ -3,6 +3,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import { html } from "lit";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/carbon-page-layout.css";
+import "../../src/styles/page-templates.css";
 
 // cds-side-nav / cds-side-nav-items / cds-side-nav-link are the Carbon primitives used
 // for the left navigation in Page Layouts/App Pages/Authenticated. Documented here on their own so the

@@ -2,6 +2,7 @@ import { html } from "lit";
 import "../../src/styles/fonts.css";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/carbon-page-layout.css";
+import "../../src/styles/page-templates.css";
 
 // Carbon's type scale (font-size/line-height/weight/letter-spacing), read straight from
 // @carbon/type (`require("@carbon/type").heading01` etc.) rather than guessed - Carbon
