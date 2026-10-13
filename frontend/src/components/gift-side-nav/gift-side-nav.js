@@ -1,4 +1,5 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
+import "@carbon/web-components/es/components/ui-shell/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 
 const links = [
@@ -8,64 +9,28 @@ const links = [
   ["dates", "Upcoming Dates", "M3 5h18v17H3zM7 2v6M17 2v6M3 10h18M7 14h2M15 14h2M7 18h2M15 18h2"],
   ["gifts", "All Gifts", "M3 8h18v5H3zM5 13v9h14v-9M12 8v14M12 8H8a3 3 0 1 1 3-3l1 3ZM12 8h4a3 3 0 1 0-3-3l-1 3Z"],
 ];
+const settingsPath = "M10 2h4l1 4 4-1 2 4-3 3 3 3-2 4-4-1-1 4h-4l-1-4-4 1-2-4 3-3-3-3 2-4 4 1 1-4ZM16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z";
 
+// The app's side navigation, composed from Carbon's cds-side-nav so it keeps Carbon's
+// landmark/aria roles, keyboard handling and focus styles. The look comes from the
+// cds-side-nav rules in brand-theme.css and the .page-sidenav-footer rules in
+// page-templates.css.
+//
+// It renders into the light DOM (no shadow root) on purpose: those page-level rules, and
+// carbon-shape-overrides.js, can only reach cds-side-nav when it is in the document tree.
 export class SideNav extends LitElement {
-  static styles = css`
-    :host {
-        display: block;
-        width: 12rem;
-        height: 100%;
-        color: var(--gift-side-nav-color, #1c5147);
-        --cds-button-primary: var(--gift-side-nav-color, #1c5147);
-        --cds-button-primary-hover: #153e36;
-        --cds-button-primary-active: #103129;
-        --cds-focus: var(--gift-side-nav-color, #1c5147);
-    }
-    nav {
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        padding: var(--cds-spacing-06, 1.5rem) var(--cds-spacing-03, 0.5rem);
-        border-radius: 0.25rem;
-        background: var(--gift-side-nav-background, #fbfaf3);
-        font-family: "IBM Plex Sans", sans-serif;
-    }
-    ul { list-style: none; padding: 0; margin: 0; }
-    a {
-        display: flex;
-        align-items: center;
-        gap: var(--cds-spacing-03, 0.5rem);
-        min-height: 3.5rem;
-        padding-inline: var(--cds-spacing-03, 0.5rem);
-        color: inherit;
-        text-decoration: none;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        border-radius: 0.125rem;
-    }
-    a:hover { background: #e9eee6; text-decoration: underline; }
-    a:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
-    svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+  static properties = {
+    active: { type: String },
+  };
 
-    .bottom {
-        margin-top: auto;
-        padding-top: var(--cds-spacing-09, 3rem);
-    }
+  constructor() {
+    super();
+    this.active = "dashboard";
+  }
 
-    .actions {
-        display: flex;
-        flex-direction: column;
-        gap: var(--cds-spacing-04, 0.75rem);
-        padding: var(--cds-spacing-05, 1rem);
-    }
-    cds-button { width: 100%; }
-    cds-button::part(button) {
-        width: 100%;
-        padding-inline: 0.75rem;
-        font-size: 0.75rem;
-    }
-  `;
+  createRenderRoot() {
+    return this;
+  }
 
   // Destinations do not exist yet. The page assembler can listen for side-nav-select
   // (detail: { item }) to connect routes/actions without changing this component.
@@ -76,37 +41,37 @@ export class SideNav extends LitElement {
     }));
   }
 
-  _icon(path) {
-    return html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"
+  _icon(path, slot = "title-icon") {
+    return html`<svg slot=${slot} viewBox="0 0 24 24" width="20" height="20" fill="none"
+      stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"
       aria-hidden="true" focusable="false"><path d=${path}></path></svg>`;
+  }
+
+  _link(item, label, path) {
+    return html`
+      <cds-side-nav-link href="#${item}" ?is-active=${this.active === item}
+        @click=${event => this._select(event, item)}>
+        ${this._icon(path)}${label}
+      </cds-side-nav-link>
+    `;
   }
 
   render() {
     return html`
-      <nav aria-label="Gift App sidebar">
-        <ul>
-          ${links.map(([item, label, path]) => html`
-            <li><a href="#${item}" @click=${event => this._select(event, item)}>
-              ${this._icon(path)}${label}
-            </a></li>
-          `)}
-        </ul>
-        <div class="bottom">
-          <div class="actions">
-            <cds-button size="sm" @click=${event => this._select(event, "add-gift")}>
-              Add Gift <span slot="icon" aria-hidden="true">+</span>
-            </cds-button>
-            <cds-button size="sm" @click=${event => this._select(event, "add-recipient")}>
-              Add Recipient <span slot="icon" aria-hidden="true">+</span>
-            </cds-button>
-          </div>
-          <a href="#settings" @click=${event => this._select(event, "settings")}>
-            ${this._icon("M10 2h4l1 4 4-1 2 4-3 3 3 3-2 4-4-1-1 4h-4l-1-4-4 1-2-4 3-3-3-3 2-4 4 1 1-4ZM16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z")}
-            Settings
-          </a>
+      <cds-side-nav expanded collapse-mode="fixed" aria-label="Gift App sidebar">
+        <cds-side-nav-items>
+          ${links.map(([item, label, path]) => this._link(item, label, path))}
+        </cds-side-nav-items>
+        <div class="page-sidenav-footer">
+          <cds-button kind="primary" size="sm" @click=${event => this._select(event, "add-gift")}>
+            Add Gift ${this._icon("M12 5v14M5 12h14", "icon")}
+          </cds-button>
+          <cds-button kind="primary" size="sm" @click=${event => this._select(event, "add-recipient")}>
+            Add Recipient ${this._icon("M12 5v14M5 12h14", "icon")}
+          </cds-button>
+          ${this._link("settings", "Settings", settingsPath)}
         </div>
-      </nav>
+      </cds-side-nav>
     `;
   }
 }

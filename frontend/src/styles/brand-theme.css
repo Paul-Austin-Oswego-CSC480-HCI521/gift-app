@@ -52,9 +52,8 @@
      (Radius/Small = 4, Radius/Large = 12). See Foundations/Border Radius. */
   --radius-small: 0.25rem; /* $border-radius-04 from @carbon/layout */
   --radius-large: 0.75rem;
-  /* Navigation frame (Usability-Team-Figma-File 1323:4981): 300px side nav including its
-     1px right border. Applied to cds-side-nav's inner panel by carbon-shape-overrides.js. */
-  --side-nav-width: 18.75rem;
+  /* Compact side nav (12rem, including its 1px right border). Applied to cds-side-nav's inner panel by carbon-shape-overrides.js. */
+  --side-nav-width: 12rem;
 
   /* Page title (Dashboard "Welcome!" 1476:6138, heading-07): Light 54/64. Carbon's own
      heading-07 line height is 1.199 (64.75px); Figma pins it at exactly 64px. */
@@ -124,11 +123,11 @@ cds-dropdown::part(trigger-button) {
 }
 
 /*
- * Side nav (Navigation frame 1323:4981): text-only links at heading-05 (32/40) in the brand
- * green, on its own tint. cds-side-nav paints its panel with --cds-background and reads no
- * dedicated token, so the tint is set by scoping --cds-background on the host (custom
- * properties inherit into the shadow root). Width and the right border live on the panel
- * inside the shadow root, see carbon-shape-overrides.js. Links expose part="link"/"title".
+ * Side nav: compact icon + label links (14/21) in the brand green, on its own tint.
+ * cds-side-nav paints its panel with --cds-background and reads no dedicated token, so the
+ * tint is set by scoping --cds-background on the host (custom properties inherit into the
+ * shadow root). Width and the right border live on the panel inside the shadow root, see
+ * carbon-shape-overrides.js. Links expose part="link"/"title"/"title-icon-container".
  */
 cds-side-nav {
   --cds-background: var(--side-nav-background);
@@ -138,21 +137,22 @@ cds-side-nav {
    `font-family: inherit !important` on everything in each shadow root, which beats a
    ::part() declaration, so the font has to arrive by inheritance from the host. */
 cds-side-nav-link {
-  font-family: var(--font-family-heading);
+  font-family: var(--font-family-body);
 }
 
 cds-side-nav-link::part(link) {
   block-size: auto;
-  padding-block: 1.25rem;
-  padding-inline: 1.5625rem;
-  font-size: 2rem;
-  line-height: 1.25;
+  min-block-size: 3.5rem;
+  padding-block: 0;
+  padding-inline: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
   font-weight: 400;
   letter-spacing: 0;
 }
 
-/* The title span carries Carbon's own 14px heading-compact type, so it has to take the
-   link's size instead. */
+/* The title span carries Carbon's own heading-compact type, so it has to take the link's
+   size instead. */
 cds-side-nav-link::part(title) {
   font: inherit;
   letter-spacing: inherit;
@@ -161,6 +161,7 @@ cds-side-nav-link::part(title) {
 
 cds-side-nav-link::part(title-icon-container) {
   color: var(--cds-button-primary);
+  margin-inline-end: 0.5rem;
 }
 
 /*

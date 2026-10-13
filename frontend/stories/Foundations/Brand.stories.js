@@ -1,8 +1,9 @@
 import { html } from "lit";
-import "./gift-brand.js";
+import "../../src/components/gift-brand/gift-brand.js";
 
+// The Gift App logo and wordmark: a brand foundation, not an app feature.
 export default {
-  title: "Custom Components/Brand",
+  title: "Foundations/Brand",
   render: () => html`<gift-brand></gift-brand>`,
 };
 

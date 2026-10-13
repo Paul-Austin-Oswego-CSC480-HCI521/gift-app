@@ -1,3 +1,4 @@
+// carbon-exempt: Carbon has no background-image page panel; this only provides a styled slot for page content.
 import { LitElement, html, css, unsafeCSS} from "lit";
 
 import bgImage from "../../assets/background.jpg";

@@ -1,29 +1,45 @@
 import { afterEach, expect, it, vi } from "vitest";
-import { within } from "@testing-library/dom";
 import "./gift-side-nav.js";
 
 afterEach(() => document.body.replaceChildren());
-async function renderNav() {
-  const nav = document.createElement("gift-side-nav");
-  document.body.append(nav);
+async function renderNav(attrs = "") {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = `<gift-side-nav ${attrs}></gift-side-nav>`;
+  document.body.append(wrapper);
+  const nav = wrapper.querySelector("gift-side-nav");
   await nav.updateComplete;
   return nav;
 }
 
-it("provides a named navigation landmark and all six links", async () => {
+const labels = (nav) =>
+  [...nav.querySelectorAll("cds-side-nav-link")].map((link) => link.textContent.trim());
+
+it("is built on Carbon's side nav with an accessible name and all six links", async () => {
   const nav = await renderNav();
-  const ui = within(nav.shadowRoot);
-  expect(ui.getByRole("navigation", { name: "Gift App sidebar" })).toBeInTheDocument();
-  expect(ui.getAllByRole("link").map(link => link.textContent.trim())).toEqual([
+  expect(nav.querySelector("cds-side-nav")).toHaveAttribute("aria-label", "Gift App sidebar");
+  expect(labels(nav)).toEqual([
     "Dashboard", "My Wish List", "People", "Upcoming Dates", "All Gifts", "Settings",
   ]);
+});
+
+it("marks the active link", async () => {
+  const nav = await renderNav('active="people"');
+  const active = [...nav.querySelectorAll("cds-side-nav-link")].filter((link) => link.hasAttribute("is-active"));
+  expect(active.map((link) => link.textContent.trim())).toEqual(["People"]);
+});
+
+it("keeps decorative icons out of the accessibility tree", async () => {
+  const nav = await renderNav();
+  const icons = nav.querySelectorAll("svg");
+  expect(icons.length).toBeGreaterThan(0);
+  icons.forEach((icon) => expect(icon).toHaveAttribute("aria-hidden", "true"));
 });
 
 it("emits each selection without navigating to an unfinished page", async () => {
   const nav = await renderNav();
   const selected = vi.fn();
   document.body.addEventListener("side-nav-select", selected);
-  const controls = [...nav.shadowRoot.querySelectorAll("a, cds-button")];
+  const controls = [...nav.querySelectorAll("cds-side-nav-link, cds-button")];
   for (const control of controls) {
     const click = new MouseEvent("click", { bubbles: true, cancelable: true });
     control.dispatchEvent(click);

@@ -1,3 +1,4 @@
+// carbon-exempt: Carbon ships no logo/wordmark component; this is the app brand mark.
 import { LitElement, html, css } from "lit";
 
 export class GiftBrand extends LitElement {
