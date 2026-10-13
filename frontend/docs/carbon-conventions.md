@@ -28,6 +28,16 @@ Browse available components and their attributes/slots at [carbondesignsystem.co
 
 Global styles come from the prebuilt CSS: `@carbon/styles/css/styles.css`, imported once in `src/index.js` (and separately in `.storybook/preview.js` for Storybook). Don't hand-write colors, spacing, or typography — use Carbon's tokens and components so contrast/spacing stay WCAG-compliant automatically.
 
+### Applying the brand theme
+
+The project's brand re-theme lives in `src/styles/brand-theme.css` (light) and `src/styles/brand-theme-dark.css` (dark). It only takes effect when the matching attribute is present, so **every page's HTML must put `data-carbon-theme="brand"` on the `<body>` tag**, alongside the Carbon base theme class:
+
+```html
+<body class="cds--white" data-carbon-theme="brand">
+```
+
+For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).
+
 We're using the `white` theme (`class="cds--white"` on `<body>` / story wrapper) as the default. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
 
 ## JavaScript, not TypeScript (for now)
