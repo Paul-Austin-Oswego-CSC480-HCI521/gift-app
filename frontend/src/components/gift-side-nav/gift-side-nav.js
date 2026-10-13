@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import "@carbon/web-components/es/components/ui-shell/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 
@@ -49,7 +49,8 @@ export class SideNav extends LitElement {
 
   _link(item, label, path) {
     return html`
-      <cds-side-nav-link href="#${item}" ?is-active=${this.active === item}
+      <cds-side-nav-link href="#${item}" ?active=${this.active === item}
+        aria-current=${this.active === item ? "page" : nothing}
         @click=${event => this._select(event, item)}>
         ${this._icon(path)}${label}
       </cds-side-nav-link>

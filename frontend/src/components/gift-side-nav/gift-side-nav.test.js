@@ -24,7 +24,7 @@ it("is built on Carbon's side nav with an accessible name and all six links", as
 
 it("marks the active link", async () => {
   const nav = await renderNav('active="people"');
-  const active = [...nav.querySelectorAll("cds-side-nav-link")].filter((link) => link.hasAttribute("is-active"));
+  const active = [...nav.querySelectorAll("cds-side-nav-link")].filter((link) => link.hasAttribute("active"));
   expect(active.map((link) => link.textContent.trim())).toEqual(["People"]);
 });
 
