@@ -1,0 +1,9 @@
+/*
+ * Google Fonts used by the brand theme's typography override (see the "Typography"
+ * section of brand-theme.css): Outfit for headings, Roboto for body/caption text.
+ *
+ * Loaded as its own stylesheet (via a <link> tag in index.html/create-account.html, or
+ * this same file imported in Storybook's preview.js) so the font request kicks off
+ * alongside the other theme stylesheets instead of being discovered later.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");

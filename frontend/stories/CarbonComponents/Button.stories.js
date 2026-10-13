@@ -2,7 +2,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import { html } from "lit";
 
 export default {
-  title: "Example/Carbon Button",
+  title: "Carbon Components/Button",
   render: ({ kind, disabled, label }) =>
     html`<cds-button kind=${kind} ?disabled=${disabled}>${label}</cds-button>`,
   argTypes: {

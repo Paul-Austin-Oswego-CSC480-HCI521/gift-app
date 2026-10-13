@@ -1,14 +1,14 @@
 import { html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import "./gift-gradient-container.js";
+import "./gift-image-container.js";
 
 // Example story for a custom (non-Carbon) web component. components/ export custom elements
-// (see src/components/gradient-container.js) - import for the customElements.define() side
+// (see src/components/gift-image-container/gift-image-container.js) - import for the customElements.define() side
 // effect, then use the tag directly; content is projected in via its default slot.
 export default {
-  title: "Example/Gradient Container",
+  title: "Custom Components/Image Container",
   render: ({ content }) => html`
-    <gift-gradient-container>${unsafeHTML(content)}</gift-gradient-container>
+    <gift-image-container>${unsafeHTML(content)}</gift-image-container>
   `,
   argTypes: {
     content: { control: "text" },
