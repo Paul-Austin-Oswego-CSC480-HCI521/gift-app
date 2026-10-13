@@ -127,7 +127,7 @@ Also: plain JavaScript (no TypeScript), keyboard operable, and every control has
 Run from `frontend/`:
 
 ```sh
-npm run lint:carbon     # Carbon-first check, also runs in CI and must pass to merge
+npm run lint:carbon     # Carbon-first + Carbon attribute checks, also runs in CI and must pass to merge
 npm run test:unit
 npm run test:storybook  # runs every story in a browser, includes accessibility checks
 npm run build
@@ -137,6 +137,14 @@ npm run build
 `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. Fix the
 design rather than adding an exemption. Exemptions are reviewed, and a vague reason will be
 rejected.
+
+It also fails if a `<cds-*>` element in a template uses an attribute Carbon does not declare for
+it, or omits a required accessibility label (for example `aria-label` on `cds-side-nav`).
+Attribute names differ per element: `cds-side-nav-link` uses `active`, `cds-header-nav-item` uses
+`is-active`. Do not guess or copy the React prop name. Look the element up in
+`node_modules/@carbon/web-components/custom-elements.json` (or the Web Components tab of the
+Carbon docs), and mark the current page link with `aria-current="page"` as well as its active
+attribute. The check is `scripts/check-carbon-attributes.mjs`.
 
 ## More context
 

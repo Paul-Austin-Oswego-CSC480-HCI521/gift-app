@@ -15,3 +15,9 @@ jobs:
       - name: Check components compose Carbon
         working-directory: frontend
         run: node scripts/check-carbon-first.mjs
+
+      - name: Check Carbon attributes
+        working-directory: frontend
+        run: |
+          npm ci
+          node scripts/check-carbon-attributes.mjs

@@ -10,7 +10,7 @@ export default {
   render: ({ expanded }) => html`
     <cds-side-nav ?expanded=${expanded} collapse-mode="fixed" aria-label="Example side nav">
       <cds-side-nav-items>
-        <cds-side-nav-link href="#" is-active>Lorem</cds-side-nav-link>
+        <cds-side-nav-link href="#" active aria-current="page">Lorem</cds-side-nav-link>
         <cds-side-nav-link href="#">Ipsum</cds-side-nav-link>
         <cds-side-nav-link href="#">Dolor</cds-side-nav-link>
       </cds-side-nav-items>
