@@ -30,6 +30,7 @@ Closes #
 - [ ] I have added or updated tests for the change
 - [ ] For frontend UI changes, I checked keyboard access and accessible names for new or changed controls
 - [ ] For frontend component changes, I added or updated the relevant Storybook story
+- [ ] For new frontend components, I built them from Carbon components (`npm run lint:carbon` passes), or explained any `carbon-exempt` in the summary
 
 ## AI tool use
 

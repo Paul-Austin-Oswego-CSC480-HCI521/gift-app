@@ -40,6 +40,18 @@ For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on 
 
 We're using the `white` theme (`class="cds--white"` on `<body>` / story wrapper) as the default. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
 
+## Carbon first
+
+Our `gift-*` components are compositions of Carbon components, not replacements for them. Order of
+preference: use a Carbon component as-is, then configure it (attributes, slots, `::part()`, brand
+tokens), then compose several into a `gift-*` component, and only then write a custom element for
+something Carbon lacks. Custom elements must start with `// carbon-exempt: <reason>`.
+
+`npm run lint:carbon` (also a CI check, `.github/workflows/carbon-first.yml`) fails when a
+component imports no Carbon component or uses a raw `<button>`, `<input>`, `<select>`,
+`<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. The full guide, including the Carbon
+component lookup table used by AI tools, is [`../AGENTS.md`](../AGENTS.md).
+
 ## JavaScript, not TypeScript (for now)
 
 Per the ADR, we're starting with plain JavaScript since the team is new to JS itself. `@carbon/web-components` works fine from JS — you just don't get compile-time type checking on component props. If in doubt about a component's expected attribute values, check its `.d.ts` file in `node_modules/@carbon/web-components` or the component's page on carbondesignsystem.com.
@@ -49,10 +61,10 @@ Per the ADR, we're starting with plain JavaScript since the team is new to JS it
 Every component you build or customize should get a Storybook story, co-located in its own folder
 under `src/components/<tag-name>/` alongside the component and its test — see
 [frontend-structure.md](frontend-structure.md#componentsyour-tag-name) for the full layout. Use
-`stories/ExampleCarbonButton.stories.js` as a template for the CSF3 format we use with
-`@storybook/web-components-vite` and `lit`'s `html` tag — that file stays in the top-level
-`stories/` folder because it demonstrates a raw Carbon component (`<cds-button>`), not one of our
-own components.
+`stories/CarbonComponents/Button.stories.js` as a template for the CSF3 format we use with
+`@storybook/web-components-vite` and `lit`'s `html` tag. Stories for stock Carbon components and
+token changes stay in the top-level `stories/` folder (`CarbonComponents/`, `Foundations/`); which
+Storybook group a story belongs in is defined in [`../AGENTS.md`](../AGENTS.md#where-stories-go-storybook-organization).
 
 Two worked examples of our own components, each co-located with its component and test:
 

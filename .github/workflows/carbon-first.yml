@@ -1,0 +1,17 @@
+name: Carbon First
+
+on:
+  pull_request:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/carbon-first.yml"
+
+jobs:
+  carbon-first:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check components compose Carbon
+        working-directory: frontend
+        run: node scripts/check-carbon-first.mjs

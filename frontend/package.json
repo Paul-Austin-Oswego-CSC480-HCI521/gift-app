@@ -17,6 +17,7 @@
     "test:coverage": "vitest run --coverage",
     "test:a11y": "test-storybook",
     "test:happo": "happo",
+    "lint:carbon": "node scripts/check-carbon-first.mjs",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {
