@@ -4,7 +4,7 @@ import { html } from "lit";
 export default {
   title: "Carbon Components/Inline Notification",
   render: ({ kind, title, subtitle }) =>
-    html`<cds-inline-notification kind=${kind} title=${title} subtitle=${subtitle}></cds-inline-notification>`,
+    html`<cds-inline-notification kind=${kind} title=${title} subtitle=${subtitle} aria-label="Close"></cds-inline-notification>`,
   argTypes: {
     kind: {
       control: "select",
