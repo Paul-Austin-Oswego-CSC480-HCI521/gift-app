@@ -73,7 +73,7 @@ Two worked examples of our own components, each co-located with its component an
 
 ## Styling
 
-Use Lit's `static styles = css\`...\`` (see `gift-site-footer.js`), not a literal `<style>` tag
+Use Lit's `static styles = css\`...\`` (see `gift-image-container.js`), not a literal `<style>` tag
 inside `render()`. `static styles` lets Lit share one constructed stylesheet across every instance
 of the component; a `<style>` written into the template gets re-parsed per instance instead.
 
@@ -82,8 +82,8 @@ exist to solve global class-name collisions in regular (light) DOM, which isn't 
 here, and it would mean introducing a second, competing styling convention plus a Vite plugin for
 no real benefit.
 
-Keep styles inline in the component file while they're small (as `gift-site-footer.js` and
-`gift-image-container.js` do today). If a component's styles grow large enough to make the file
+Keep styles inline in the component file while they're small (as `gift-image-container.js` and
+`gift-brand.js` do today). If a component's styles grow large enough to make the file
 hard to read, extract them into a co-located `<tag-name>.styles.js` that exports the `css` tagged
 template, and import it into the component file — still in the same `src/components/<tag-name>/`
 folder, not a separate top-level styles directory.
