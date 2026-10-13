@@ -7,7 +7,8 @@
 .no-scrolling {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* This is the white area containing the header and the main page content. */
@@ -32,4 +33,9 @@
   gap: 16px;
   height: 88px;
   padding: 0 var(--Typography-Fluid-Heading-Heading-03-Size, 20px);
+}
+/* This will be a prep step to put the sidebar into all pages because the component does not
+account for the header*/
+.sideBar {
+  padding-top: 1.5rem;
 }

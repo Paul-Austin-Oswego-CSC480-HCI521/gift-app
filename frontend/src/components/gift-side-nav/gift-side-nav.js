@@ -12,50 +12,59 @@ const links = [
 export class SideNav extends LitElement {
   static styles = css`
     :host {
-      display: block;
-      width: 12rem;
-      max-width: 100%;
-      color: var(--gift-side-nav-color, #1c5147);
-      --cds-button-primary: var(--gift-side-nav-color, #1c5147);
-      --cds-button-primary-hover: #153e36;
-      --cds-button-primary-active: #103129;
-      --cds-focus: var(--gift-side-nav-color, #1c5147);
+        display: block;
+        width: 12rem;
+        height: 100%;
+        color: var(--gift-side-nav-color, #1c5147);
+        --cds-button-primary: var(--gift-side-nav-color, #1c5147);
+        --cds-button-primary-hover: #153e36;
+        --cds-button-primary-active: #103129;
+        --cds-focus: var(--gift-side-nav-color, #1c5147);
     }
     nav {
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      min-height: var(--gift-side-nav-height, 42rem);
-      padding: var(--cds-spacing-06, 1.5rem) var(--cds-spacing-03, 0.5rem);
-      border-radius: 0.25rem;
-      background: var(--gift-side-nav-background, #fbfaf3);
-      font-family: "IBM Plex Sans", sans-serif;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: var(--cds-spacing-06, 1.5rem) var(--cds-spacing-03, 0.5rem);
+        border-radius: 0.25rem;
+        background: var(--gift-side-nav-background, #fbfaf3);
+        font-family: "IBM Plex Sans", sans-serif;
     }
     ul { list-style: none; padding: 0; margin: 0; }
     a {
-      display: flex;
-      align-items: center;
-      gap: var(--cds-spacing-03, 0.5rem);
-      min-height: 3.5rem;
-      padding-inline: var(--cds-spacing-03, 0.5rem);
-      color: inherit;
-      text-decoration: none;
-      font-size: 0.875rem;
-      line-height: 1.5;
-      border-radius: 0.125rem;
+        display: flex;
+        align-items: center;
+        gap: var(--cds-spacing-03, 0.5rem);
+        min-height: 3.5rem;
+        padding-inline: var(--cds-spacing-03, 0.5rem);
+        color: inherit;
+        text-decoration: none;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.125rem;
     }
     a:hover { background: #e9eee6; text-decoration: underline; }
     a:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
     svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
-    .bottom { margin-top: auto; padding-top: var(--cds-spacing-09, 3rem); }
+
+    .bottom {
+        margin-top: auto;
+        padding-top: var(--cds-spacing-09, 3rem);
+    }
+
     .actions {
-      display: flex;
-      flex-direction: column;
-      gap: var(--cds-spacing-04, 0.75rem);
-      padding: var(--cds-spacing-05, 1rem);
+        display: flex;
+        flex-direction: column;
+        gap: var(--cds-spacing-04, 0.75rem);
+        padding: var(--cds-spacing-05, 1rem);
     }
     cds-button { width: 100%; }
-    cds-button::part(button) { width: 100%; padding-inline: 0.75rem; font-size: 0.75rem; }
+    cds-button::part(button) {
+        width: 100%;
+        padding-inline: 0.75rem;
+        font-size: 0.75rem;
+    }
   `;
 
   // Destinations do not exist yet. The page assembler can listen for side-nav-select
