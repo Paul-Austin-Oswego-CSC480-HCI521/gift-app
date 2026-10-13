@@ -70,7 +70,7 @@ export class SideNav extends LitElement {
           <cds-button kind="primary" size="sm" @click=${event => this._select(event, "add-recipient")}>
             Add Recipient ${this._icon("M12 5v14M5 12h14", "icon")}
           </cds-button>
-          ${this._link("settings", "Settings", settingsPath)}
+          <cds-side-nav-items>${this._link("settings", "Settings", settingsPath)}</cds-side-nav-items>
         </div>
       </cds-side-nav>
     `;
