@@ -15,20 +15,11 @@ export default {
       ${TABS.map(
         (label) => {
           const value = label.toLowerCase().replace(/ /g, "-");
-          return html`<cds-tab id="tab-${value}" value=${value}>${label}</cds-tab>`;
+          return html`<cds-tab id="tab-${value}" role="presentation" value=${value}>${label}</cds-tab>`;
         }
       )}
     </cds-tabs>
   `,
-  parameters: {
-    a11y: {
-      config: {
-        // The tablist lives in cds-tabs' shadow root and the slotted cds-tab elements are its
-        // children, which axe cannot resolve across the shadow boundary (false positive).
-        rules: [{ id: "aria-required-parent", enabled: false }],
-      },
-    },
-  },
   argTypes: {
     size: { control: "select", options: ["md", "lg"] },
   },
