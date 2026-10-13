@@ -13,7 +13,7 @@ export class GradientContainer extends LitElement {
     }
     main {
       display: flex;
-      padding: var(--Typography-Fluid-Display-Display-01-Line-height, 50px) 0;
+      padding: 0;
       flex-direction: column;
       align-items: flex-start;
       gap: 31px;
