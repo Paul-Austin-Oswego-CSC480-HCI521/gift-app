@@ -20,6 +20,7 @@ import "./styles/carbon-font-overrides.js";
 import "./components/gift-nav-header/gift-nav-header.js";
 import "./components/gift-image-container/gift-image-container.js";
 import "./components/gift-site-footer/gift-site-footer.js";
+import "./components/gift-side-nav/gift-side-nav.js";
 
 // This entry point registers the components used by index.html. Page authors can work in
 // HTML while component implementations keep their behavior and state in JavaScript.
