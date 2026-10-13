@@ -9,20 +9,13 @@
   margin-block-start: var(--cds-spacing-09, 3rem);
 }
 
-@media (min-width: 768px) {
-  .page-auth .page-auth__main {
-    justify-content: flex-start;
-    padding-left: clamp(1.5rem, 5vw, 3rem);
-  }
-}
-
 .page-auth .page-auth__panel {
   display: flex;
   flex-direction: column;
   gap: var(--cds-spacing-07, 2rem);
   width: 100%;
-  max-width: 28rem;
-  min-width: 0;
+  max-width: 90vw;
+  min-width: 20rem;
   box-sizing: border-box;
   padding: clamp(1.5rem, 5vw, 3rem);
   background: var(--cds-background, #fff);
@@ -31,6 +24,16 @@
   box-shadow: 0 1rem 3rem rgba(92, 48, 32, 0.1);
 }
 
+@media (min-width: 768px) {
+  .page-auth .page-auth__main {
+    justify-content: flex-start;
+    padding: 5rem;
+    min-height: 100vh;
+  }
+  .page-auth .page-auth__panel {
+    max-width: 50rem;
+  }
+}
 
 .page-auth .page-auth__intro {
   display: flex;
