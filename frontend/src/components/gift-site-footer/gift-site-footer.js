@@ -6,14 +6,14 @@ export class SiteFooter extends LitElement {
     footer {
       display: flex;
       flex-direction: column;
-      background: var(--Layer-layer-selected-inverse, #161616);
+      background: var(--cds-layer-selected-inverse, #161616);
       padding: 32px 32px;
       align-items: flex-end;
       gap: 10px;
       align-self: stretch;
     }
 
-    //overide the color scheme of the cds link.
+    /* Override the color scheme of the cds link. */
     cds-link {
       --cds-link-primary: #a6c8ff; /* 13.5:1 ratio against #262626 */
       --cds-link-primary-hover: #78a9ff;

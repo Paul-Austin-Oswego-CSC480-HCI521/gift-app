@@ -1,18 +1,18 @@
 import { describe, expect, it } from "vitest";
-import "./gift-gradient-container.js";
+import "./gift-image-container.js";
 
-async function renderGradientContainer(innerHtml = "") {
+async function renderImageContainer(innerHtml = "") {
   const el = document.createElement("div");
-  el.innerHTML = `<gift-gradient-container>${innerHtml}</gift-gradient-container>`;
+  el.innerHTML = `<gift-image-container>${innerHtml}</gift-image-container>`;
   document.body.append(el);
-  const container = el.querySelector("gift-gradient-container");
+  const container = el.querySelector("gift-image-container");
   await container.updateComplete;
   return container;
 }
 
-describe("gift-gradient-container", () => {
+describe("gift-image-container", () => {
   it("renders an empty <main> when given no content", async () => {
-    const container = await renderGradientContainer();
+    const container = await renderImageContainer();
 
     const main = container.shadowRoot.querySelector("main");
     expect(main).not.toBeNull();
@@ -20,7 +20,7 @@ describe("gift-gradient-container", () => {
   });
 
   it("projects page content through the default slot", async () => {
-    const container = await renderGradientContainer("<h1>Page content</h1>");
+    const container = await renderImageContainer("<h1>Page content</h1>");
 
     const slot = container.shadowRoot.querySelector("slot");
     const [assigned] = slot.assignedElements();

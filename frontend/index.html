@@ -7,8 +7,12 @@
     <meta name="description" content="Log in to your Gift App account." />
     <!-- Linked (not JS-imported) so these load as real stylesheets that block first paint,
          avoiding a flash of unstyled content while the JS module graph loads. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/src/styles/fonts.css" />
     <link rel="stylesheet" href="/src/styles/app.css" />
-    <link rel="stylesheet" href="/src/styles/login.css" />
+    <link rel="stylesheet" href="/src/styles/brand-theme.css" />
+    <link rel="stylesheet" href="/src/styles/page-templates.css" />
     <!-- Hide custom elements until their JS defines them, avoiding a flash of unstyled
          <gift-*>/<cds-*> elements before they upgrade. -->
     <style>
@@ -17,39 +21,32 @@
       }
     </style>
   </head>
-  <body class="cds--white">
-    <div class="no-scrolling login-page">
+  <body class="cds--white" data-carbon-theme="brand">
+    <div class="fill-height page-auth">
       <gift-nav-header product-name="Gift App">
         <cds-header-nav menu-bar-label="Gift App navigation">
         </cds-header-nav>
       </gift-nav-header>
-    <gift-gradient-container>
-      <main class="login-main">
-        <section class="login-panel" aria-labelledby="login-heading">
-                    <div class="login-brand" aria-label="Gift App">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-              <path d="M5 14h22v16H5zM3 8h26v6H3zM16 8v22" />
-              <path d="M16 8h-4a3.5 3.5 0 1 1 3.5-3.5L16 8Zm0 0h4a3.5 3.5 0 1 0-3.5-3.5L16 8Z" />
-            </svg>
-            <span>Gift App</span>
-          </div>
-          <header class="login-intro">
-            <h1 id="login-heading" class="cds--type-heading-05">Welcome back</h1>
-            <p class="cds--type-body-01">Log in for more thoughtful gift-giving.</p>
-          </header>
+      <gift-image-container>
+        <main class="page-auth__main">
+          <section class="page-auth__panel" aria-labelledby="login-heading">
+            <gift-brand></gift-brand>
+            <header class="page-auth__intro">
+              <h1 id="login-heading" class="cds--type-heading-05">Welcome back</h1>
+              <p class="cds--type-body-01">Log in for more thoughtful gift-giving.</p>
+            </header>
 
-          <div id="login-form-container">
-            <gift-login-form></gift-login-form>
-          </div>
-          <p class="cds--type-body-01">
-            New to Gift App?
-
-            <cds-link id="create-account-link" href="./create-account.html">Create account</cds-link>
-          </p>
-        </section>
-
-      </main>
-    </gift-gradient-container>
+            <div id="login-form-container">
+              <gift-login-form></gift-login-form>
+            </div>
+            <p class="cds--type-body-01">
+              New to Gift App?
+              <cds-link id="create-account-link" href="./create-account.html">Create account</cds-link>
+            </p>
+          </section>
+        </main>
+      </gift-image-container>
+      <!-- <gift-site-footer></gift-site-footer> -->
 
     </div>
     <script type="module" src="/src/index.js"></script>

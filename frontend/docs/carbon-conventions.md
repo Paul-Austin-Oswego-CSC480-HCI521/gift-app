@@ -28,7 +28,29 @@ Browse available components and their attributes/slots at [carbondesignsystem.co
 
 Global styles come from the prebuilt CSS: `@carbon/styles/css/styles.css`, imported once in `src/index.js` (and separately in `.storybook/preview.js` for Storybook). Don't hand-write colors, spacing, or typography — use Carbon's tokens and components so contrast/spacing stay WCAG-compliant automatically.
 
+### Applying the brand theme
+
+The project's brand re-theme lives in `src/styles/brand-theme.css` (light) and `src/styles/brand-theme-dark.css` (dark). It only takes effect when the matching attribute is present, so **every page's HTML must put `data-carbon-theme="brand"` on the `<body>` tag**, alongside the Carbon base theme class:
+
+```html
+<body class="cds--white" data-carbon-theme="brand">
+```
+
+For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).
+
 We're using the `white` theme (`class="cds--white"` on `<body>` / story wrapper) as the default. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
+
+## Carbon first
+
+Our `gift-*` components are compositions of Carbon components, not replacements for them. Order of
+preference: use a Carbon component as-is, then configure it (attributes, slots, `::part()`, brand
+tokens), then compose several into a `gift-*` component, and only then write a custom element for
+something Carbon lacks. Custom elements must start with `// carbon-exempt: <reason>`.
+
+`npm run lint:carbon` (also a CI check, `.github/workflows/carbon-first.yml`) fails when a
+component imports no Carbon component or uses a raw `<button>`, `<input>`, `<select>`,
+`<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. The full guide, including the Carbon
+component lookup table used by AI tools, is [`../AGENTS.md`](../AGENTS.md).
 
 ## JavaScript, not TypeScript (for now)
 
@@ -39,15 +61,15 @@ Per the ADR, we're starting with plain JavaScript since the team is new to JS it
 Every component you build or customize should get a Storybook story, co-located in its own folder
 under `src/components/<tag-name>/` alongside the component and its test — see
 [frontend-structure.md](frontend-structure.md#componentsyour-tag-name) for the full layout. Use
-`stories/ExampleCarbonButton.stories.js` as a template for the CSF3 format we use with
-`@storybook/web-components-vite` and `lit`'s `html` tag — that file stays in the top-level
-`stories/` folder because it demonstrates a raw Carbon component (`<cds-button>`), not one of our
-own components.
+`stories/CarbonComponents/Button.stories.js` as a template for the CSF3 format we use with
+`@storybook/web-components-vite` and `lit`'s `html` tag. Stories for stock Carbon components and
+token changes stay in the top-level `stories/` folder (`CarbonComponents/`, `Foundations/`); which
+Storybook group a story belongs in is defined in [`../AGENTS.md`](../AGENTS.md#where-stories-go-storybook-organization).
 
 Two worked examples of our own components, each co-located with its component and test:
 
 - `src/components/gift-nav-header/gift-nav-header.stories.js` — the standard `<cds-header>` configuration used on every page.
-- `src/components/gift-gradient-container/gift-gradient-container.stories.js` — a story for a custom (non-Carbon) component.
+- `src/components/gift-image-container/gift-image-container.stories.js` — a story for a custom (non-Carbon) component.
 
 ## Styling
 
@@ -61,7 +83,7 @@ here, and it would mean introducing a second, competing styling convention plus 
 no real benefit.
 
 Keep styles inline in the component file while they're small (as `gift-site-footer.js` and
-`gift-gradient-container.js` do today). If a component's styles grow large enough to make the file
+`gift-image-container.js` do today). If a component's styles grow large enough to make the file
 hard to read, extract them into a co-located `<tag-name>.styles.js` that exports the `css` tagged
 template, and import it into the component file — still in the same `src/components/<tag-name>/`
 folder, not a separate top-level styles directory.
@@ -73,9 +95,9 @@ custom element tags:
 
 ```html
 <gift-nav-header product-name="Gift App"></gift-nav-header>
-<gift-gradient-container>
+<gift-image-container>
 	<h1>Page content</h1>
-</gift-gradient-container>
+</gift-image-container>
 ```
 
 The page file should describe the structure and content a teammate can see. The component file

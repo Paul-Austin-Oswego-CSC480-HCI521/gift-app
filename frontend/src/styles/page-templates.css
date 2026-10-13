@@ -1,0 +1,106 @@
+/* Shared page templates. Auth template (login, create account): centered panel over the image background. */
+.page-auth .page-auth__main {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin-block-start: var(--cds-spacing-09, 6rem);
+}
+
+.page-auth .page-auth__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-07, 2rem);
+  width: 100%;
+  max-width: 90vw;
+  min-width: 20rem;
+  box-sizing: border-box;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: var(--cds-background, #fff);
+  border: 1px solid rgba(22, 22, 22, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 1rem 3rem rgba(92, 48, 32, 0.1);
+}
+
+@media (min-width: 768px) {
+  .page-auth .page-auth__main {
+    justify-content: flex-start;
+    padding: 5rem;
+    min-height: 100vh;
+  }
+  .page-auth .page-auth__panel {
+    max-width: 30rem;
+  }
+}
+
+.page-auth .page-auth__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-03, 0.5rem);
+  text-align: center;
+}
+
+.page-auth .page-auth__intro p {
+  color: var(--cds-text-secondary, #525252);
+}
+
+.page-auth .page-auth__panel > p {
+  text-align: center;
+}
+
+/* Authenticated template: header + side nav + main content. */
+/* Bottom group of the authenticated side nav: primary actions and Settings pinned below the
+   links. margin-top:auto works because cds-side-nav's panel is a flex column. */
+.page-sidenav-footer {
+  margin-block-start: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 0 0.5rem;
+}
+
+.page-sidenav-footer cds-button {
+  inline-size: 100%;
+  max-inline-size: none;
+  padding-inline: 1rem;
+  box-sizing: border-box;
+}
+
+.page-sidenav-footer cds-button::part(button) {
+  inline-size: 100%;
+  max-inline-size: none;
+  padding-inline: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.page-main {
+  flex: 1;
+  min-width: 0;
+  margin-inline-start: 0;
+}
+
+.page-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: stretch;
+  /* Matches cds-side-nav's panel width (--side-nav-width, applied inside its shadow
+     root by carbon-shape-overrides.js). The side nav draws its own right border. */
+  margin-inline-start: var(--side-nav-width, 16rem);
+  padding: 2rem;
+  background: var(--cds-background);
+  box-sizing: border-box;
+  min-height: calc(100vh - 3rem);
+}
+
+.page-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-section-heading {
+  margin: 0;
+}

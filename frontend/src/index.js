@@ -5,11 +5,23 @@ import Clarity from "@microsoft/clarity";
 
 Clarity.init("yjthhigok4");
 
+// Rounds Carbon input/select/textarea field corners — see the file for why this
+// has to be JS rather than a CSS rule.
+import "./styles/carbon-shape-overrides.js";
+
+// Applies the brand font-family to Carbon component text. Imported before any
+// component registration below (and before create-account.js's own import, which
+// loads after this module finishes) since it patches attachShadow itself — see the
+// file for why that patch has to be in place before any gift-*/cds-* element upgrades.
+import "./styles/carbon-font-overrides.js";
+
 // Importing a component runs its registration code. After these imports, the browser
 // knows what the two gift-* custom elements in index.html mean.
 import "./components/gift-nav-header/gift-nav-header.js";
-import "./components/gift-gradient-container/gift-gradient-container.js";
+import "./components/gift-image-container/gift-image-container.js";
+import "./components/gift-site-footer/gift-site-footer.js";
 import "./components/gift-side-nav/gift-side-nav.js";
+import "./components/gift-brand/gift-brand.js";
 
 // This entry point registers the components used by index.html. Page authors can work in
 // HTML while component implementations keep their behavior and state in JavaScript.

@@ -3,7 +3,7 @@ import { html } from "lit";
 import "./gift-site-footer.js";
 
 export default {
-  title: "Components/Site Footer",
+  title: "Custom Components/Site Footer",
   render: () => html`<gift-site-footer></gift-site-footer>`,
 };
 

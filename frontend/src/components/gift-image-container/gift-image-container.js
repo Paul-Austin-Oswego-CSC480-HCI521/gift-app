@@ -1,10 +1,11 @@
+// carbon-exempt: Carbon has no background-image page panel; this only provides a styled slot for page content.
 import { LitElement, html, css, unsafeCSS} from "lit";
 
 import bgImage from "../../assets/background.jpg";
 
-// Reusable pink/orange panel for page content. It is a custom component because Carbon does not
+// Reusable background-image panel for page content. It is a custom component because Carbon does not
 // provide this exact layout. Page content goes into the default slot below.
-export class GradientContainer extends LitElement {
+export class ImageContainer extends LitElement {
   static styles = css`
     :host {
       display: flex;
@@ -21,10 +22,8 @@ export class GradientContainer extends LitElement {
       flex: 1 0 0;
       align-self: stretch;
       box-sizing: border-box;
-      /*background: linear-gradient(90deg, #ffc6c6 0%, #ffd7a3 100%);*/
       background: url("${unsafeCSS(bgImage)}") lightgray 50% / cover no-repeat;
-      color: var(--Text-text-primary, #161616);
-      font-family: var(--Font-family, "IBM Plex Sans");
+      color: var(--cds-text-primary, #161616);
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
@@ -38,6 +37,6 @@ export class GradientContainer extends LitElement {
   }
 }
 
-customElements.define("gift-gradient-container", GradientContainer);
+customElements.define("gift-image-container", ImageContainer);
 
 // This connects the HTML tag to the class above. Import this file before using the tag.
