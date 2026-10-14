@@ -32,14 +32,24 @@ export class SideNav extends LitElement {
     return this;
   }
 
-  // Destinations do not exist yet. The page assembler can listen for side-nav-select
-  // (detail: { item }) to connect routes/actions without changing this component.
   _select(event, item) {
-    event.preventDefault();
-    this.dispatchEvent(new CustomEvent("side-nav-select", {
-      detail: { item }, bubbles: true, composed: true,
-    }));
-  }
+      event.preventDefault();
+
+      const routes = {
+        dashboard: "dashboard.html",
+        wishlist: "my-wishlist.html",
+        people: "people.html",
+        dates: "upcoming-dates.html",
+        gifts: "all-gifts.html",
+        settings: "settings.html",
+        "add-gift": "add-gift.html",
+        "add-recipient": "add-recipient.html"
+      };
+
+      if (routes[item]) {
+        window.location.href = routes[item];
+      }
+    }
 
   _icon(path, slot = "title-icon") {
     return html`<svg slot=${slot} viewBox="0 0 24 24" width="20" height="20" fill="none"
