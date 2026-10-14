@@ -23,7 +23,7 @@ describe("apiFetch", () => {
 
     expect(result).toEqual({ id: 1, name: "Alex" });
     expect(fetchMock).toHaveBeenCalledWith(
-      "http://localhost:9080/people/1",
+      "http://localhost:9080/gift-app/api/people/1",
       expect.objectContaining({ headers: expect.any(Headers) }),
     );
   });
