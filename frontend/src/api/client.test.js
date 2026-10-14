@@ -19,11 +19,11 @@ describe("apiFetch", () => {
       json: async () => ({ id: 1, name: "Alex" }),
     });
 
-    const result = await apiFetch("/people/1");
+    const result = await apiFetch("/user/1");
 
     expect(result).toEqual({ id: 1, name: "Alex" });
     expect(fetchMock).toHaveBeenCalledWith(
-      "http://localhost:9080/gift-app/api/people/1",
+      "http://localhost:9080/gift-app/api/user/1",
       expect.objectContaining({ headers: expect.any(Headers) }),
     );
   });
