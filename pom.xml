@@ -94,6 +94,12 @@
             <version>3.1.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.openliberty.api</groupId>
+            <artifactId>io.openliberty.jwt</artifactId>
+            <version>1.1.117</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 
