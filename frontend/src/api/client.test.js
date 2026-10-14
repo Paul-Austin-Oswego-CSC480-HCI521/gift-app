@@ -1,5 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { apiFetch } from "./client.js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 function mockFetchOnce(response) {
   global.fetch = vi.fn().mockResolvedValue(response);
@@ -7,8 +6,17 @@ function mockFetchOnce(response) {
 }
 
 describe("apiFetch", () => {
+  let apiFetch;
+
+  beforeEach(async () => {
+    vi.stubEnv("VITE_API_BASE_URL", "http://localhost:9080/gift-app/api");
+    vi.resetModules();
+    ({ apiFetch } = await import("./client.js"));
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     delete global.fetch;
   });
 
