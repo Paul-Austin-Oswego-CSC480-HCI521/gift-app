@@ -35,7 +35,7 @@ describe("apiFetch", () => {
       json: async () => null,
     });
 
-    const result = await apiFetch("/people");
+    const result = await apiFetch("/user");
 
     expect(result).toBeNull();
   });
@@ -47,8 +47,8 @@ describe("apiFetch", () => {
       json: async () => ({ error: "not found" }),
     });
 
-    await expect(apiFetch("/people/missing")).rejects.toThrow(
-      "API request to /people/missing failed: 404",
+    await expect(apiFetch("/user/missing")).rejects.toThrow(
+      "API request to /user/missing failed: 404",
     );
   });
 
@@ -65,7 +65,7 @@ describe("apiFetch", () => {
   it("attaches a Bearer Authorization header when a token is given", async () => {
     const fetchMock = mockFetchOnce({ ok: true, status: 200, json: async () => ({}) });
 
-    await apiFetch("/people", { token: "abc123" });
+    await apiFetch("/user", { token: "abc123" });
 
     const [, options] = fetchMock.mock.calls[0];
     expect(options.headers.get("Authorization")).toBe("Bearer abc123");
@@ -74,7 +74,7 @@ describe("apiFetch", () => {
   it("forwards method and body options to fetch", async () => {
     const fetchMock = mockFetchOnce({ ok: true, status: 201, json: async () => ({ id: 2 }) });
 
-    await apiFetch("/people", { method: "POST", body: JSON.stringify({ name: "Sam" }) });
+    await apiFetch("/user", { method: "POST", body: JSON.stringify({ name: "Sam" }) });
 
     const [, options] = fetchMock.mock.calls[0];
     expect(options.method).toBe("POST");
