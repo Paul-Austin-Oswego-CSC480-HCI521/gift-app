@@ -1,4 +1,6 @@
 import { apiFetch } from "./api/client.js";
+import './components/gift-side-nav/gift-side-nav.js';
+import "./components/gift-nav-header/gift-nav-header.js";
 
 const heading = document.querySelector("#page-heading");
 const status = document.querySelector("#status");
