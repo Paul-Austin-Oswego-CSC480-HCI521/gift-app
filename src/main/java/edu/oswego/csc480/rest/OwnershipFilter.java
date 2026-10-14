@@ -35,7 +35,11 @@ public class OwnershipFilter implements ContainerRequestFilter {
 
         for (String s : pathItems){
             if (s.equalsIgnoreCase("user")){
-                pathuid = pathItems.get(pathItems.indexOf(s)+1);
+                if (pathItems.indexOf(s)+1 < pathItems.size()){
+                    pathuid = pathItems.get(pathItems.indexOf(s)+1);
+                }else{
+                    return;
+                }
             }
         }
         if (pathuid == "" || !pathuid.equalsIgnoreCase(id)){
