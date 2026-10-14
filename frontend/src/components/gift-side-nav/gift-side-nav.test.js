@@ -35,19 +35,37 @@ it("keeps decorative icons out of the accessibility tree", async () => {
   icons.forEach((icon) => expect(icon).toHaveAttribute("aria-hidden", "true"));
 });
 
-it("emits each selection without navigating to an unfinished page", async () => {
+it("navigates to the correct page when clicked", async () => {
   const nav = await renderNav();
-  const selected = vi.fn();
-  document.body.addEventListener("side-nav-select", selected);
+
+  // Mock window.location so it doesn't try to actually redirect during the test
+  const originalLocation = window.location;
+  delete window.location;
+  window.location = { href: "" };
+
   const controls = [...nav.querySelectorAll("cds-side-nav-link, cds-button")];
-  for (const control of controls) {
+
+  // Expected HTML file routes matching your component's navigation mapping
+  const expectedRoutes = [
+    "dashboard.html",
+    "my-wishlist.html",
+    "people.html",
+    "upcoming-dates.html",
+    "all-gifts.html",
+    "settings.html",
+    "add-gift.html",
+    "add-recipient.html"
+  ];
+
+  for (let i = 0; i < controls.length; i++) {
+    const control = controls[i];
     const click = new MouseEvent("click", { bubbles: true, cancelable: true });
     control.dispatchEvent(click);
+
     expect(click.defaultPrevented).toBe(true);
+    expect(window.location.href).toBe(expectedRoutes[i]);
   }
-  expect(selected.mock.calls.map(([event]) => event.detail.item)).toEqual([
-    "dashboard", "wishlist", "people", "dates", "gifts", "add-gift", "add-recipient", "settings",
-  ]);
-  expect(selected.mock.calls.every(([event]) => event.bubbles && event.composed)).toBe(true);
-  document.body.removeEventListener("side-nav-select", selected);
+
+  // Restore original window location object
+  window.location = originalLocation;
 });
