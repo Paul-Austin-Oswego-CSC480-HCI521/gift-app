@@ -62,10 +62,10 @@
                 sslmode="require"/>
     </dataSource>
     <cors
-            domain="/gift-app"
-            allowedOrigins="${cors.allowed.domain}"
-            allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
-            allowCredentials="true"
-            allowedHeaders="Authorization, Content-Type"
+        domain="/gift-app/api/"
+        allowedOrigins="https://congenial-spork-4pg47w9pr94f54g9-5173.app.github.dev"
+        allowedMethods="GET, POST, PUT, DELETE, OPTIONS"
+        allowedHeaders="Authorization, Content-Type"
+        allowCredentials="true"
     />
 </server>

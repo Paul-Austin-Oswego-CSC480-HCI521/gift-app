@@ -9,8 +9,15 @@ export default defineConfig({
   //Relative paths, not absolute.
   base: "./",
   server: {
-    port: 5173,
+  port: 5173,
+  host: "0.0.0.0",
+  proxy: {
+    "/gift-app/api": {
+      target: "http://localhost:9080",
+      changeOrigin: true,
+    },
   },
+},
   build: {
     rollupOptions: {
       input: {

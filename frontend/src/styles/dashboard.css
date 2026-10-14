@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  background: #f4f4f4;
+  color: #161616;
+  font-family: 'IBM Plex Sans', Arial, sans-serif;
+}
+.dashboard-page { max-width: 1100px; margin: 32px auto; padding: 24px; background: white; }
+.page-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.page-toolbar a { color: #0f62fe; }
+#status { min-height: 20px; margin: 16px 0; color: #525252; font-size: 14px; }
+gift-dashboard { display: block; --cds-interactive: #245e53; --cds-focus: #0f62fe; }
+gift-dashboard * { box-sizing: border-box; }
+gift-dashboard h1 { margin: 0 0 28px; font-size: 32px; font-weight: 400; }
+gift-dashboard .gift-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+gift-dashboard .dashboard-card { background: #fbfaf4; border-radius: 8px; overflow: hidden; }
+gift-dashboard .card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px; border-bottom: 1px solid #8d8d8d; }
+gift-dashboard h2 { margin: 0; color: #245e53; font-size: 16px; font-weight: 500; }
+gift-dashboard cds-button { flex-shrink: 0; }
+gift-dashboard ul { margin: 0; padding: 16px 24px; list-style: none; }
+gift-dashboard .gift-list > li { padding: 4px 0; overflow-wrap: anywhere; }
+gift-dashboard cds-checkbox { display: block; }
+gift-dashboard .people-card { margin-top: 40px; }
+gift-dashboard .people-list > li { padding: 8px 0; }
+gift-dashboard .person-name { margin: 0; font-size: 14px; }
+gift-dashboard .gift-count, gift-dashboard .empty-message { color: #525252; font-size: 14px; }
+gift-dashboard .empty-message { margin: 0; padding: 0 24px 20px; }
+gift-dashboard .gift-details { margin: 12px 0 20px 28px; font-size: 14px; }
+gift-dashboard .gift-details > div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px; padding: 4px 0; }
+gift-dashboard dt { color: #525252; }
+gift-dashboard dd { margin: 0; overflow-wrap: anywhere; }
+gift-dashboard .person-gifts { padding: 0; }
+@media (max-width: 640px) {
+  .dashboard-page { margin: 0; padding: 16px; }
+  gift-dashboard .gift-grid { grid-template-columns: 1fr; }
+  gift-dashboard .card-header { padding: 8px 12px; }
+  gift-dashboard ul { padding: 16px; }
+  gift-dashboard .gift-details > div { grid-template-columns: 1fr; gap: 2px; }
+}
