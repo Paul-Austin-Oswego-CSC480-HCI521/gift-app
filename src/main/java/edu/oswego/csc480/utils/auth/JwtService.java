@@ -18,12 +18,12 @@ public class JwtService {
         return instance;
     }
 
-    public String mintAccessToken(int uid, List<String> roles){
+    public String mintAccessToken(int uid, List<String> roles, String email){
         try{
             JwtBuilder builder = JwtBuilder.create("myBuilder");
             return builder
                     .subject(Integer.toString(uid))
-                    .claim("upn", Integer.toString(uid))
+                    .claim("upn", email)
                     .claim("groups", roles)
                     .buildJwt()
                     .compact();
