@@ -3,6 +3,7 @@ package edu.oswego.csc480.rest.gift_service;
 import edu.oswego.csc480.entities.Person;
 import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @Path("/user/{user_id}/person")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("user")
 public class PersonResource {
 
     @Inject

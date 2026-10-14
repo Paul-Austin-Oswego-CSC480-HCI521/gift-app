@@ -18,6 +18,7 @@
 
         <liberty.var.http.port>9080</liberty.var.http.port>
         <liberty.var.https.port>9443</liberty.var.https.port>
+        <liberty.var.jwt.issuer>https://gift-app.oswego.edu</liberty.var.jwt.issuer>
         <liberty.var.app.context.root>gift-app</liberty.var.app.context.root>
         <liberty.var.cors.allowed.domain>http://localhost:5173</liberty.var.cors.allowed.domain>
 
@@ -75,6 +76,12 @@
             <artifactId>jersey-common</artifactId>
             <version>3.1.10</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.openliberty.api</groupId>
+            <artifactId>io.openliberty.jwt</artifactId>
+            <version>1.1.117</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
