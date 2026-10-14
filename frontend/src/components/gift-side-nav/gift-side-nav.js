@@ -32,14 +32,24 @@ export class SideNav extends LitElement {
     return this;
   }
 
-  // Destinations do not exist yet. The page assembler can listen for side-nav-select
-  // (detail: { item }) to connect routes/actions without changing this component.
   _select(event, item) {
-    event.preventDefault();
-    this.dispatchEvent(new CustomEvent("side-nav-select", {
-      detail: { item }, bubbles: true, composed: true,
-    }));
-  }
+      event.preventDefault();
+
+      const routes = {
+        dashboard: "dashboard.html",
+        wishlist: "my-wishlist.html",
+        people: "people.html",
+        dates: "upcoming-dates.html",
+        gifts: "all-gifts.html",
+        settings: "settings.html",
+        "add-gift": "add-gift.html",
+        "add-recipient": "add-recipient.html"
+      };
+
+      if (routes[item]) {
+        window.location.href = routes[item];
+      }
+    }
 
   _icon(path, slot = "title-icon") {
     return html`<svg slot=${slot} viewBox="0 0 24 24" width="20" height="20" fill="none"
@@ -64,12 +74,6 @@ export class SideNav extends LitElement {
           ${links.map(([item, label, path]) => this._link(item, label, path))}
         </cds-side-nav-items>
         <div class="page-sidenav-footer">
-          <cds-button kind="primary" size="sm" @click=${event => this._select(event, "add-gift")}>
-            Add Gift ${this._icon("M12 5v14M5 12h14", "icon")}
-          </cds-button>
-          <cds-button kind="primary" size="sm" @click=${event => this._select(event, "add-recipient")}>
-            Add Recipient ${this._icon("M12 5v14M5 12h14", "icon")}
-          </cds-button>
           <cds-side-nav-items>${this._link("settings", "Settings", settingsPath)}</cds-side-nav-items>
         </div>
       </cds-side-nav>

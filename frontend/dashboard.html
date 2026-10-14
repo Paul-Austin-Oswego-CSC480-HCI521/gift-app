@@ -15,27 +15,22 @@
     />
   </head>
 
-  <body>
-    <main class="dashboard-page">
-      <div class="page-toolbar">
-        <a href="./index.html">Back to welcome page</a>
-
-        <cds-button
-          id="reload-button"
-          kind="secondary"
-          size="sm"
-        >
-          Reload data
-        </cds-button>
-      </div>
-
-      <p
-        id="status"
-        role="status"
-        aria-live="polite"
-      ></p>
-
+  <main class="dashboard-page">
       <gift-dashboard></gift-dashboard>
+
+  <body>
+  <div data-carbon-theme="brand">
+      <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation">
+          </cds-header-nav>
+      </gift-nav-header>
+      <gift-side-nav></gift-side-nav>
+  </div>
+    <main>
+      <button id="reload-button" type="button">Reload data</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div id="people-list"></div>
+
     </main>
 
     <script

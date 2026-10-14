@@ -2,6 +2,7 @@ package edu.oswego.csc480.rest.gift_service;
 
 import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.Path;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("user")
 public class UsersResource {
 
     @Inject
@@ -57,6 +59,7 @@ public class UsersResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedUser.setId(id);
+        updatedUser.setPasswordHash(existingUser.getPasswordHash()); //Copy password hash from existing user on to update user to save it
         User savedUser = userRepository.save(updatedUser);
         return Response.ok(savedUser).build();
     }
