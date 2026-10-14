@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name="users")
-public class User implements Serializable {
+public class Users implements Serializable {
 
     // here are the columns
 
@@ -24,13 +24,13 @@ public class User implements Serializable {
     private String surname;
 
     @Column(name="full_name")
-    private String fullName; // could instead be managed by a function?
+    private String fullName;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    UserAttributes attributes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<UsersAttributes> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<Person> people;
+    private List<People> people;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserWishedItem> wishlist;
@@ -41,81 +41,63 @@ public class User implements Serializable {
     @Column(name="username")
     private String username;
 
-    // Make sure there is a dummy constructor for persistence to work
-    // also getters and setters for everything.
+    public Users(){}
 
-    public User(){
-    } // we can use setters anyway.
-
-    public void setId(Integer id){
-        this.id = id;
-    }
-
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public void setSurname(String surname){
-        this.surname = surname;
-    }
-
-    public void setFullName(String fullName){
-        this.fullName =fullName;
-    }
-
+    //get
     public Integer getId() {
         return id;
     }
-
     public String getFirstName() {
         return firstName;
     }
-
     public String getFullName() {
         return fullName;
     }
-
     public String getSurname() {
         return surname;
     }
-
-    public void setAttributes(UserAttributes attributes) {
-        this.attributes = attributes;
-    }
-
-    public void setPeople(List<Person> people) {
-        this.people = people;
-    }
-
-    public UserAttributes getAttributes() {
-        return attributes;
-    }
-
-    public List<Person> getPeople() {
-        return people;
-    }
-
     public List<UserWishedItem> getWishlist() {
         return wishlist;
     }
-
-    public void setWishlist(List<UserWishedItem> wishlist) {
-        this.wishlist = wishlist;
-    }
-
     public String getEmail() {
         return email;
     }
-
     public String getUsername() {
         return username;
     }
+    public List<UsersAttributes> getAttributes() {
+        return attributes;
+    }
+    public List<People> getPeople() {
+        return people;
+    }
 
+    //set
+    public void setId(Integer id){
+        this.id = id;
+    }
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
+    }
+    public void setFullName(String fullName){
+        this.fullName =fullName;
+    }
+    public void setSurname(String surname){
+        this.surname = surname;
+    }
+    public void setWishlist(List<UserWishedItem> wishlist) {
+        this.wishlist = wishlist;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+    public void setAttributes(List<UsersAttributes> attributes) {
+        this.attributes = attributes;
+    }
+    public void setPeople(List<People> people) {
+        this.people = people;
     }
 }

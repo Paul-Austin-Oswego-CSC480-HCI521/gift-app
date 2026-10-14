@@ -1,6 +1,6 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -22,7 +22,7 @@ public class UsersResource {
     //Returns all users
     @GET
     public Response getUsers() {
-        List<User> users = userRepository.findAll().toList();
+        List<Users> users = userRepository.findAll().toList();
         return Response.ok(users).build();
     }
 
@@ -37,11 +37,11 @@ public class UsersResource {
 
     //Creates a new user
     @POST
-    public Response createUser(User user) {
+    public Response createUser(Users user) {
         if (user == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        User savedUser = userRepository.save(user);
+        Users savedUser = userRepository.save(user);
         return Response
                 .status(Response.Status.CREATED)
                 .entity(savedUser)
@@ -50,21 +50,21 @@ public class UsersResource {
 
     @PUT
     @Path("/{id}")
-    public Response updateUser(@PathParam("id") Integer id, User updatedUser) {
-        User existingUser = userRepository.findById(id)
+    public Response updateUser(@PathParam("id") Integer id, Users updatedUser) {
+        Users existingUser = userRepository.findById(id)
                 .orElse(null);
         if(existingUser == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedUser.setId(id);
-        User savedUser = userRepository.save(updatedUser);
+        Users savedUser = userRepository.save(updatedUser);
         return Response.ok(savedUser).build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteUser(@PathParam("id") Integer id) {
-        User existingUser = userRepository.findById(id)
+        Users existingUser = userRepository.findById(id)
                 .orElse(null);
         if(existingUser == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

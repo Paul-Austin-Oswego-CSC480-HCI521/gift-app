@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "gifts")
-public class Gift {
+public class Gifts {
 
     @Id  @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="gift_id")
@@ -15,7 +15,7 @@ public class Gift {
 
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="occasion_id")
-    private Occasion occasion;
+    private Occasions occasion;
 
     @Column(name="purchase_date")
     private LocalDate purchaseDate;
@@ -33,66 +33,56 @@ public class Gift {
     @ManyToOne
     @JoinColumn(name="person_id")
     @JsonbTransient
-    private Person person;
+    private People person;
 
     @Column(name="gift_price")
     private double price;
+    public Gifts(){}
 
-    public Gift(){}
-
+    //get
     public Integer getId() {
         return id;
     }
-
-    public Person getPerson() {
+    public People getPerson() {
         return person;
     }
-
     public String getName() {
         return name;
     }
-
-    public Occasion getOccasion() {
+    public Occasions getOccasion() {
         return occasion;
     }
-
     public String getType() {
         return type;
     }
-
     public LocalDate getPurchaseDate() {
         return purchaseDate;
     }
+    public GiftStatus getStatus() {
+        return status;
+    }
 
+    //set
     public void setName(String name) {
         this.name = name;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public void setPerson(Person person) {
+    public void setPerson(People person) {
         this.person = person;
     }
-
-    public void setOccasion(Occasion occasion) {
+    public void setOccasion(Occasions occasion) {
         this.occasion = occasion;
     }
-
     public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
-
     public void setType(String type) {
         this.type = type;
     }
-
     public void setStatus(GiftStatus status) {
         this.status = status;
     }
 
-    public GiftStatus getStatus() {
-        return status;
-    }
 }
