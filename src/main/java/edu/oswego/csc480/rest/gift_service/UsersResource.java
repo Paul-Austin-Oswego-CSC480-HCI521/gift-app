@@ -57,6 +57,7 @@ public class UsersResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedUser.setId(id);
+        updatedUser.setPasswordHash(existingUser.getPasswordHash()); //Copy password hash from existing user on to update user to save it
         User savedUser = userRepository.save(updatedUser);
         return Response.ok(savedUser).build();
     }
