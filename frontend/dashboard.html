@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>People and Gifts | Gift App</title>
+    <style>
+      body {
+        margin: 0;
+        background: #f4f7fb;
+        color: #161616;
+        font-family: Arial, sans-serif;
+      }
+
+      main {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 24px;
+      }
+
+      .person-card {
+        margin: 20px 0;
+        padding: 24px;
+        background: white;
+        border: 1px solid #dbe4ef;
+        border-radius: 8px;
+      }
+
+      li {
+        margin-bottom: 16px;
+        line-height: 1.6;
+      }
+
+      #status {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a href="./index.html">Back to welcome page</a>
+      <h1 id="page-heading">People and gifts</h1>
+      <p>Viewing test User 1. Authentication is not enabled yet.</p>
+
+      <button id="reload-button" type="button">Reload data</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div id="people-list"></div>
+    </main>
+
+    <script type="module" src="/src/dashboard.js"></script>
+  </body>
+</html>

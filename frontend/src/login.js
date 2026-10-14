@@ -3,7 +3,15 @@
 
 // The form emits credentials; the page owns the login integration.
 // TODO (#49): Replace this temporary event inspection with the real login API call.
-document.querySelector("#login-form-container").addEventListener("login-submit", (event) => {
-  console.log(event.detail);
-});
+// document.querySelector("#login-form-container").addEventListener("login-submit", (event) => {
+//   console.log(event.detail);
+// });
 
+
+// Zia modified this 
+
+const container = document.querySelector("#login-form-container");
+
+container.addEventListener("login-submit", () => {
+  window.location.href = "./dashboard.html";
+});
