@@ -1,6 +1,6 @@
 package edu.oswego.csc480.integration;
 
-import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.inject.Inject;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -31,7 +31,7 @@ public class PersistenceIT {
 
     @Test
     public void GetAllReturnsNonEmptyList(){
-        List<User> users = uRepo.findAll().toList();
+        List<Users> users = uRepo.findAll().toList();
         Assert.assertFalse(users.isEmpty());
     }
 

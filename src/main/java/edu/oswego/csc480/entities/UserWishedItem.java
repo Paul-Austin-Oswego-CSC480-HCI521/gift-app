@@ -14,7 +14,7 @@ public class UserWishedItem {
     @ManyToOne
     @JoinColumn(name="user_id")
     @JsonbTransient
-    private User user;
+    private Users user;
 
     @Column(name="gift_name")
     private String giftName;
@@ -31,7 +31,7 @@ public class UserWishedItem {
         return id;
     }
 
-    public User getUser() {
+    public Users getUser() {
         return user;
     }
 
@@ -47,7 +47,7 @@ public class UserWishedItem {
         this.id = id;
     }
 
-    public void setUser(User user) {
+    public void setUser(Users user) {
         this.user = user;
     }
 

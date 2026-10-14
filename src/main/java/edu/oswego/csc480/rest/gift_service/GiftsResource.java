@@ -1,8 +1,8 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Gift;
-import edu.oswego.csc480.entities.Person;
-import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Gifts;
+import edu.oswego.csc480.entities.People;
+import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -16,7 +16,7 @@ import static jakarta.ws.rs.core.Response.Status;
 
 @Path("user/{uid}/gift")
 @Produces(MediaType.APPLICATION_JSON)
-public class GiftResource {
+public class GiftsResource {
 
     @Inject
     private UserRepository uRepo;
@@ -28,14 +28,14 @@ public class GiftResource {
     @GET
     public Response getGiftDirect( @PathParam("gid") Integer gid){
 
-        Optional<User> user = uRepo.findById(uid);
+        Optional<Users> user = uRepo.findById(uid);
 
         if (user.isEmpty()){
             return Response.status(Status.NOT_FOUND).build();
         }
-        ArrayList<Gift> gifts = new ArrayList<>();
+        ArrayList<Gifts> gifts = new ArrayList<>();
 
-        Gift gift = user.get().getPeople().stream()
+        Gifts gift = user.get().getPeople().stream()
                 .flatMap(p->p.getGifts().stream())
                 .filter(g -> g.getId().equals(gid))
                 .findFirst().orElse(null);
@@ -48,11 +48,11 @@ public class GiftResource {
 
     @GET
     public Response getEveryGiftFromUser(){
-        Optional<User> user = uRepo.findById(uid);
+        Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
             return Response.status(Status.NOT_FOUND).build();
         }
-        ArrayList<Gift> gifts = new ArrayList<>();
+        ArrayList<Gifts> gifts = new ArrayList<>();
         user.get().getPeople().forEach(p->p.getGifts().forEach(g->gifts.add(g)));
         return Response.ok(gifts).build();
     }
@@ -60,11 +60,11 @@ public class GiftResource {
     @Path("/person/{pid}")
     @GET
     public Response getEveryGiftFromSpecificPerson(@PathParam("pid") Integer pid){
-        Optional<User> user = uRepo.findById(uid);
+        Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
             return Response.status(Status.NOT_FOUND).build();
         }
-        Person person = user.get().getPeople().stream()
+        People person = user.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -75,17 +75,17 @@ public class GiftResource {
 
     @Path("/person/{pid}")
     @POST
-    public Response postNewGiftToPerson(@PathParam("pid") Integer pid, Gift gift){
+    public Response postNewGiftToPerson(@PathParam("pid") Integer pid, Gifts gift){
 
         if (gift==null || gift.getName().isBlank() || gift.getType().isBlank() || gift.getStatus() == null || gift.getStatus() == null){
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        Optional<User> optUser = uRepo.findById(uid);
+        Optional<Users> optUser = uRepo.findById(uid);
 
         if (optUser.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
-        Person person = optUser.get().getPeople().stream()
+        People person = optUser.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -93,7 +93,7 @@ public class GiftResource {
 
         person.getGifts().add(gift);
         gift.setPerson(person);
-        User user = uRepo.save(optUser.get());
+        Users user = uRepo.save(optUser.get());
         final String giftName = gift.getName();
 
         gift = user.getPeople().stream()
@@ -114,16 +114,16 @@ public class GiftResource {
 
     @Path("/{gid}")
     @PUT
-    public Response updateGiftDirect(@PathParam("gid") Integer gid, Gift gift){
-        Optional<User> user = uRepo.findById(uid);
+    public Response updateGiftDirect(@PathParam("gid") Integer gid, Gifts gift){
+        Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
-        Person person = null;
-        Gift  currentGift = null;
+        People person = null;
+        Gifts currentGift = null;
 
-        for (Person p : user.get().getPeople()){
+        for (People p : user.get().getPeople()){
             if (p.getGifts().isEmpty()) continue;
-            for (Gift g : p.getGifts()){
+            for (Gifts g : p.getGifts()){
                 if (!g.getId().equals(gid)) continue;
                 person = p;
                 currentGift = g;
@@ -143,7 +143,7 @@ public class GiftResource {
 
     @DELETE
     public Response nukeItAll(){
-        Optional<User> user = uRepo.findById(uid);
+        Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
         user.get().getPeople().forEach(p -> p.getGifts().clear());
@@ -155,15 +155,15 @@ public class GiftResource {
     @DELETE
     public Response deleteGift(@PathParam("gid") Integer gid){
 
-        Optional<User> user = uRepo.findById(uid);
+        Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
-        Person person = null;
-        Gift  target = null;
+        People person = null;
+        Gifts target = null;
 
-        for (Person p : user.get().getPeople()){
+        for (People p : user.get().getPeople()){
             if (p.getGifts().isEmpty()) continue;
-            for (Gift g : p.getGifts()){
+            for (Gifts g : p.getGifts()){
                 if (!g.getId().equals(gid)) continue;
                 person = p;
                 target = g;
@@ -183,10 +183,10 @@ public class GiftResource {
     @DELETE
     public Response charcoal(@PathParam("pid") Integer pid){
 
-        Optional<User> user = uRepo.findById(uid);
+        Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 
-        Person person = user.get().getPeople().stream()
+        People person = user.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
