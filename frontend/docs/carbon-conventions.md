@@ -47,7 +47,7 @@ preference: use a Carbon component as-is, then configure it (attributes, slots, 
 tokens), then compose several into a `gift-*` component, and only then write a custom element for
 something Carbon lacks. Custom elements must start with `// carbon-exempt: <reason>`.
 
-`npm run lint:carbon` (also a CI check, `.github/workflows/carbon-first.yml`) fails when a
+`npm run lint:carbon` (also a CI check, `.github/workflows/frontend-checks.yml`) fails when a
 component imports no Carbon component or uses a raw `<button>`, `<input>`, `<select>`,
 `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. The full guide, including the Carbon
 component lookup table used by AI tools, is [`../AGENTS.md`](../AGENTS.md).
