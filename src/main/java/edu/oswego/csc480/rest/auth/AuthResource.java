@@ -23,6 +23,8 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
+    private static final String DUMMY_HASH = new PasswordService().hash("dummy-password");
+
     @Inject
     private UserRepository users;
 
@@ -42,9 +44,10 @@ public class AuthResource {
 
         User user = users.findByEmail(request.email.strip()).orElse(null);
         String storedHash = user == null ? null : user.getPasswordHash();
+        String hashToVerify = storedHash == null ? DUMMY_HASH : storedHash;
         boolean verified;
         try {
-            verified = storedHash != null && passwords.verify(request.password, storedHash);
+            verified = passwords.verify(request.password, hashToVerify);
         } catch (IllegalArgumentException invalidHashOrPassword) {
             verified = false;
         }

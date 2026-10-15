@@ -101,7 +101,8 @@ public class AuthResourceTest {
         assertError(resource.login(request(unknownEmail, PASSWORD)), 401, INVALID_CREDENTIALS);
 
         verify(users).findByEmail(unknownEmail);
-        verifyNoInteractions(passwords, tokens);
+        verify(passwords).verify(eq(PASSWORD), anyString());
+        verifyNoInteractions(tokens);
     }
 
     @Test
@@ -118,7 +119,8 @@ public class AuthResourceTest {
 
         assertError(resource.login(request(EMAIL, PASSWORD)), 401, INVALID_CREDENTIALS);
 
-        verifyNoInteractions(passwords, tokens);
+        verify(passwords).verify(eq(PASSWORD), anyString());
+        verifyNoInteractions(tokens);
     }
 
     @Test
