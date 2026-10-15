@@ -20,6 +20,9 @@ cp .env.example .env   # adjust VITE_API_BASE_URL if needed
 
 ## Running things
 
+For the development-only database connection control and Neon credential setup,
+see [Local database connection check](docs/database-check.md).
+
 | Command | What it does |
 |---|---|
 | `npm run dev` | Starts the app's own dev server (default `http://localhost:5173`), live-reloading. |

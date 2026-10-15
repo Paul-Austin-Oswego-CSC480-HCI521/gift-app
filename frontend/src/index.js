@@ -23,6 +23,15 @@ import "./components/gift-side-nav/gift-side-nav.js";
 import "@carbon/web-components/es/components/link/index.js";
 import "./components/gift-brand/gift-brand.js";
 
+// Vite removes this diagnostic control and its import from production builds.
+if (import.meta.env.DEV) {
+  import("./components/database-status.js").then(() => {
+    document.querySelector("gift-gradient-container")?.append(
+      document.createElement("gift-database-status"),
+    );
+  });
+}
+
 // This entry point registers the components used by index.html. Page authors can work in
 // HTML while component implementations keep their behavior and state in JavaScript.
 import "./components/gift-login-form/gift-login-form.js";
