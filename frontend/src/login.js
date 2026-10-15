@@ -1,17 +1,32 @@
-// login.css is linked directly in index.html's <head> rather than imported here, so it
-// loads as a blocking stylesheet instead of flashing unstyled content while this JS loads.
+import { apiFetch } from "./api/client.js";
+import { setAccessToken } from "./auth/token-store.js";
 
-// The form emits credentials; the page owns the login integration.
-// TODO (#49): Replace this temporary event inspection with the real login API call.
-// document.querySelector("#login-form-container").addEventListener("login-submit", (event) => {
-//   console.log(event.detail);
-// });
+const POST_LOGIN_URL = "./dashboard.html";
 
+const form = document.querySelector("gift-login-form");
 
-// Zia modified this 
+form.addEventListener("login-submit", async (event) => {
+  const { email, password } = event.detail;
+  // TODO: event.detail.rememberMe is ignored until the backend supports persistent sessions.
 
-const container = document.querySelector("#login-form-container");
+  form.loading = true;
+  form.errorMessage = "";
 
-container.addEventListener("login-submit", () => {
-  window.location.href = "./dashboard.html";
+  try {
+    const data = await apiFetch("/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    setAccessToken(data.token);
+    window.location.assign(POST_LOGIN_URL);
+  } catch (error) {
+    form.errorMessage =
+      error.status === 401
+        ? "Incorrect email or password."
+        : "Something went wrong, try again.";
+  } finally {
+    form.loading = false;
+  }
 });

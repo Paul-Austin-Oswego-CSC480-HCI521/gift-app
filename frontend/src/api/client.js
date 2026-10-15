@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:9080";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:9080/gift-app/api";
 
 /**
  * Thin fetch wrapper for talking to the Open Liberty backend.
@@ -13,7 +13,9 @@ export async function apiFetch(path, { token, ...options } = {}) {
 
   const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
   if (!response.ok) {
-    throw new Error(`API request to ${path} failed: ${response.status}`);
+    const error = new Error(`API request to ${path} failed: ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
   return response.json();
 }
