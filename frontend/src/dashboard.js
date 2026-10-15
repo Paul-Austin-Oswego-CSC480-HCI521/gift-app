@@ -1,3 +1,4 @@
+//import "./auth/require-auth.js";
 import { LitElement, html } from "lit";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/checkbox/index.js";
@@ -7,6 +8,8 @@ import "./components/gift-nav-header/gift-nav-header.js";
 import "./styles/brand-theme.css";
 import "./styles/carbon-shape-overrides.js";
 import "./styles/carbon-font-overrides.js";
+import { getAccessToken, clearAccessToken } from "./auth/token-store.js";
+
 
 export class GiftDashboard extends LitElement {
   static properties = {
@@ -167,17 +170,22 @@ async function loadData() {
   status.textContent = "Loading…";
 
   try {
-    const user = await apiFetch("/user/1");
+    const user = await apiFetch("/user/1", { token: getAccessToken() });
     dashboard.people = user.people ?? [];
     status.textContent = "Data loaded successfully.";
   } catch (error) {
+  if (error.status === 401) {
+        clearAccessToken();
+        window.location.replace("./index.html");
+        return;
+      }
     status.textContent = `Could not load data: ${error.message}`;
   } finally {
     reloadButton.disabled = false;
   }
 }
 
-if (dashboard && status && reloadButton) {
+if (getAccessToken() && dashboard && status && reloadButton) {
   reloadButton.addEventListener("click", loadData);
   loadData();
 }

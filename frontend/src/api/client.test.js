@@ -79,6 +79,12 @@ describe("apiFetch", () => {
     expect(options.headers.get("Authorization")).toBe("Bearer abc123");
   });
 
+  it("attaches the HTTP status to the thrown error", async () => {
+    mockFetchOnce({ ok: false, status: 401, json: async () => ({}) });
+
+    await expect(apiFetch("/auth/login")).rejects.toMatchObject({ status: 401 });
+  });
+
   it("forwards method and body options to fetch", async () => {
     const fetchMock = mockFetchOnce({ ok: true, status: 201, json: async () => ({ id: 2 }) });
 
