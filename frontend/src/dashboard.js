@@ -8,7 +8,7 @@ import "./components/gift-nav-header/gift-nav-header.js";
 import "./styles/brand-theme.css";
 import "./styles/carbon-shape-overrides.js";
 import "./styles/carbon-font-overrides.js";
-import { getAccessToken, clearAccessToken } from "./auth/token-store.js";
+import { getAccessToken, getUserId, clearAccessToken } from "./auth/token-store.js";
 
 
 export class GiftDashboard extends LitElement {

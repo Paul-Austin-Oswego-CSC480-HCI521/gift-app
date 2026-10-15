@@ -1,5 +1,5 @@
 import { apiFetch } from "./api/client.js";
-import { setAccessToken } from "./auth/token-store.js";
+import { setAccessToken, setUserId } from "./auth/token-store.js";
 
 const POST_LOGIN_URL = "./dashboard.html";
 
@@ -20,6 +20,7 @@ form.addEventListener("login-submit", async (event) => {
     });
 
     setAccessToken(data.token);
+    setUserId(data.userId)
     window.location.assign(POST_LOGIN_URL);
   } catch (error) {
     form.errorMessage =
