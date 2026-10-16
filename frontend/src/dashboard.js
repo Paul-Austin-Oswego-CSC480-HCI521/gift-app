@@ -6,6 +6,9 @@ import "./styles/brand-theme.css";
 import "./styles/carbon-shape-overrides.js";
 import "./styles/carbon-font-overrides.js";
 
+const addGiftButton = document.getElementById("add-gift-button");
+const addGiftModal = document.getElementById("add-gift-modal");
+
 const heading = document.querySelector("#page-heading");
 const status = document.querySelector("#status");
 const peopleList = document.querySelector("#people-list");
@@ -16,6 +19,10 @@ function makeElement(tag, text) {
   element.textContent = text;
   return element;
 }
+
+addGiftButton.addEventListener("click", () => {
+  addGiftModal.open = true;
+});
 
 async function loadData() {
   reloadButton.disabled = true;

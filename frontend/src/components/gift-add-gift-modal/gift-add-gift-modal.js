@@ -4,6 +4,9 @@ import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/radio-button/index.js";
 import "@carbon/web-components/es/components/button/index.js";
+import "../../styles/brand-theme.css";
+import "../../styles/carbon-shape-overrides.js";
+import "../../styles/carbon-font-overrides.js";
 
 export class GiftAddGiftModal extends LitElement {
     static properties = {
@@ -11,13 +14,47 @@ export class GiftAddGiftModal extends LitElement {
     };
 
     static styles = css`
-        .gift-form {
-            display: flex;
-            flex-direction: column;
-            gap: var(--cds-spacing-05, 1rem);
+        cds-modal {
+          font-family: var(--font-family-heading);
         }
+
+        cds-modal::part(dialog) {
+          background: var(--card-background, #fcfbf4);
+          border-radius: var(--radius-large, 0.75rem);
+          overflow: hidden;
+
+          width: 32rem;
+          max-width: 95vw;
+          height: auto;
+          block-size: auto;
+          max-height: none;
+        }
+
+        cds-modal-heading {
+          font-family: var(--font-family-heading);
+          font-size: 2rem;
+          line-height: 1.25;
+          font-weight: 400;
+        }
+        cds-modal-header {
+          overflow: visible;
+          block-size: auto;
+          min-block-size: 0;
+        }
+
+        cds-button::part(button),
+        cds-dropdown::part(trigger-button) {
+          border-radius: var(--radius-small, 0.25rem);
+        }
+
+        .gift-form {
+          display: flex;
+          flex-direction: column;
+          gap: var(--cds-spacing-05, 1rem);
+        }
+
         cds-button {
-            align-self: flex-end;
+          align-self: flex-end;
         }
     `;
 
@@ -32,9 +69,18 @@ export class GiftAddGiftModal extends LitElement {
 //   </cds-text-input>
 // </div> 
 
+  _closeModal() {
+          this.open = false;
+      }
+
   render() {
     return html`
-      <cds-modal ?open=${this.open} aria-label="Add Gift">
+      <cds-modal
+        ?open=${this.open}
+        size="sm"
+        aria-label="Add Gift"
+        @cds-modal-closed=${this._closeModal}
+      >
         <cds-modal-header>
           <cds-modal-close-button></cds-modal-close-button>
           <cds-modal-heading>Add Gift</cds-modal-heading>
@@ -49,6 +95,7 @@ export class GiftAddGiftModal extends LitElement {
               size="lg"
               type="text"
               required
+              data-modal-primary-focus
             >
             </cds-text-input>
 
@@ -125,7 +172,7 @@ export class GiftAddGiftModal extends LitElement {
               </svg>
             </cds-button>
           </form>
-        </cds-modal-body>
+          </cds-modal-body>
       </cds-modal>
     `;
   }
