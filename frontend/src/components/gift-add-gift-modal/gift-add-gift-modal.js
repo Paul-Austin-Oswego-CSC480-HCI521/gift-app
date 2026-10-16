@@ -7,7 +7,7 @@ import "@carbon/web-components/es/components/button/index.js";
 
 export class GiftAddGiftModal extends LitElement {
     static properties = {
-        open: { type: Boolean },
+        open: { type: Boolean, reflect: true },
     };
 
     static styles = css`
