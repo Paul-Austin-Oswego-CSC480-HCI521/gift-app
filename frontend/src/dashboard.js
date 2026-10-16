@@ -1,3 +1,7 @@
+import "./auth/require-auth.js";
+import { LitElement, html } from "lit";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
 import { apiFetch } from "./api/client.js";
 import "./components/gift-side-nav/gift-side-nav.js";
 import "./components/gift-nav-header/gift-nav-header.js";
