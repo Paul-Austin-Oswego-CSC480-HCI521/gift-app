@@ -9,6 +9,7 @@ import "./styles/brand-theme.css";
 import "./styles/carbon-shape-overrides.js";
 import "./styles/carbon-font-overrides.js";
 import { getAccessToken, getUserId, clearAccessToken } from "./auth/token-store.js";
+import "./components/gift-add-gift-modal/gift-add-gift-modal.js";
 
 
 export class GiftDashboard extends LitElement {
@@ -164,6 +165,12 @@ if (!customElements.get("gift-dashboard")) {
 const dashboard = document.querySelector("gift-dashboard");
 const status = document.querySelector("#status");
 const reloadButton = document.querySelector("#reload-button");
+const addGiftButton = document.getElementById("add-gift-button");
+const addGiftModal = document.getElementById("add-gift-modal");
+
+addGiftButton?.addEventListener("click", () => {
+  addGiftModal.open = true;
+});
 
 async function loadData() {
   reloadButton.disabled = true;

@@ -15,27 +15,22 @@
     />
   </head>
 
+  <body data-carbon-theme="brand">
+  <gift-nav-header product-name="Gift App">
+      <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+  </gift-nav-header>
+  <gift-side-nav></gift-side-nav>
+
   <main class="dashboard-page">
+      <button id="reload-button" type="button">Reload data</button>
+      <button id="add-gift-button" type="button">Add Gift</button>
+      <p id="status" role="status" aria-live="polite"></p>
+
       <gift-dashboard></gift-dashboard>
 
-  <body>
-  <div data-carbon-theme="brand">
-      <gift-nav-header product-name="Gift App">
-          <cds-header-nav menu-bar-label="Gift App navigation">
-          </cds-header-nav>
-      </gift-nav-header>
-      <gift-side-nav></gift-side-nav>
-  </div>
-    <main>
-      <button id="reload-button" type="button">Reload data</button>
-      <p id="status" role="status" aria-live="polite"></p>
-      <div id="people-list"></div>
+      <gift-add-gift-modal id="add-gift-modal"></gift-add-gift-modal>
+  </main>
 
-    </main>
-
-    <script
-      type="module"
-      src="./src/dashboard.js"
-    ></script>
+  <script type="module" src="./src/dashboard.js"></script>
   </body>
 </html>
