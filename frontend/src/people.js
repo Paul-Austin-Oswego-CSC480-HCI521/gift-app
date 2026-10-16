@@ -5,3 +5,5 @@ import "@carbon/web-components/es/components/ui-shell/index.js";
 import "./styles/brand-theme.css";
 import "./styles/carbon-shape-overrides.js";
 import "./styles/carbon-font-overrides.js";
+
+import "./auth/require-auth.js";

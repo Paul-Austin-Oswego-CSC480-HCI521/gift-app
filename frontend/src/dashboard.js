@@ -1,4 +1,4 @@
-//import "./auth/require-auth.js";
+import "./auth/require-auth.js";
 import { LitElement, html } from "lit";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/checkbox/index.js";
