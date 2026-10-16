@@ -17,5 +17,6 @@ export async function apiFetch(path, { token, ...options } = {}) {
     error.status = response.status;
     throw error;
   }
-  return response.json();
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 }

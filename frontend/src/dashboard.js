@@ -178,6 +178,7 @@ async function loadData() {
   try {
     const user = await apiFetch("/user/1", { token: getAccessToken() });
     dashboard.people = user.people ?? [];
+    addGiftModal.people = dashboard.people;
     status.textContent = "Data loaded successfully.";
   } catch (error) {
     if (error.status === 401) {
@@ -193,5 +194,6 @@ async function loadData() {
 
 if (getAccessToken() && dashboard && status && reloadButton) {
   reloadButton.addEventListener("click", loadData);
+  addGiftModal?.addEventListener("gift-added", loadData);
   loadData();
 }
