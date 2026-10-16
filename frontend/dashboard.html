@@ -1,36 +1,28 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard | Gift App</title>
+    <link rel="stylesheet" href="./src/styles/dashboard.css" />
+</head>
 
-    <link
-      rel="stylesheet"
-      href="./src/styles/dashboard.css"
-    />
-  </head>
+<body data-carbon-theme="brand">
+<gift-nav-header product-name="Gift App">
+    <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+</gift-nav-header>
+<gift-side-nav></gift-side-nav>
 
-  <body data-carbon-theme="brand">
-  <gift-nav-header product-name="Gift App">
-      <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
-  </gift-nav-header>
-  <gift-side-nav></gift-side-nav>
+<main class="dashboard-page">
+    <button id="reload-button" type="button">Reload data</button>
+    <button id="add-gift-button" type="button">Add Gift</button>
+    <p id="status" role="status" aria-live="polite"></p>
 
-  <main class="dashboard-page">
-      <button id="reload-button" type="button">Reload data</button>
-      <button id="add-gift-button" type="button">Add Gift</button>
-      <p id="status" role="status" aria-live="polite"></p>
+    <gift-dashboard></gift-dashboard>
 
-      <gift-dashboard></gift-dashboard>
+    <gift-add-gift-modal id="add-gift-modal"></gift-add-gift-modal>
+</main>
 
-      <gift-add-gift-modal id="add-gift-modal"></gift-add-gift-modal>
-  </main>
-
-  <script type="module" src="./src/dashboard.js"></script>
-  </body>
+<script type="module" src="./src/dashboard.js"></script>
+</body>
 </html>

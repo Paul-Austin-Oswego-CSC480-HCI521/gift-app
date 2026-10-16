@@ -3,14 +3,13 @@ import { LitElement, html } from "lit";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/checkbox/index.js";
 import { apiFetch } from "./api/client.js";
-import './components/gift-side-nav/gift-side-nav.js';
+import "./components/gift-side-nav/gift-side-nav.js";
 import "./components/gift-nav-header/gift-nav-header.js";
+import "./components/gift-add-gift-modal/gift-add-gift-modal.js";
 import "./styles/brand-theme.css";
 import "./styles/carbon-shape-overrides.js";
 import "./styles/carbon-font-overrides.js";
 import { getAccessToken, getUserId, clearAccessToken } from "./auth/token-store.js";
-import "./components/gift-add-gift-modal/gift-add-gift-modal.js";
-
 
 export class GiftDashboard extends LitElement {
   static properties = {
@@ -181,11 +180,11 @@ async function loadData() {
     dashboard.people = user.people ?? [];
     status.textContent = "Data loaded successfully.";
   } catch (error) {
-  if (error.status === 401) {
-        clearAccessToken();
-        window.location.replace("./index.html");
-        return;
-      }
+    if (error.status === 401) {
+      clearAccessToken();
+      window.location.replace("./index.html");
+      return;
+    }
     status.textContent = `Could not load data: ${error.message}`;
   } finally {
     reloadButton.disabled = false;
