@@ -1,8 +1,8 @@
-# Frontend agent instructions (Codex and other AI coding tools)
+# Frontend agent instructions (Codex, Claude, Copilot and other AI coding tools)
 
 The frontend is a Vite app built on **IBM Carbon Design System web components**
 (`@carbon/web-components`, built on Lit), plain JavaScript, with a project brand theme layered on
-top. Our own `gift-*` components are almost always **compositions of Carbon components**, not
+top. Our own `gift-*` components are almost always **compositions of Carbon  components**, not
 replacements for them. Read this before creating or editing any component.
 
 Why: Carbon provides the accessibility behavior (ARIA roles, keyboard handling, focus management,
