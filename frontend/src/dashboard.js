@@ -20,7 +20,10 @@ async function loadData() {
   dashboard.error = "";
 
   try {
-    dashboard.user = await apiFetch("/user/1", { token: getAccessToken() });
+    const userData = await apiFetch("/user/1", { token: getAccessToken() });
+    dashboard.user = userData;
+
+    addGiftModal.people = userData.people ?? [];
   } catch (error) {
     if (error.status === 401) {
       clearAccessToken();
