@@ -280,4 +280,4 @@ export class GiftAddGiftModal extends LitElement {
   }
 }
 
-customElements.define("gift-add-gift-modal", GiftAddGiftModal);
+customElements.define("gift-modal", GiftAddGiftModal);

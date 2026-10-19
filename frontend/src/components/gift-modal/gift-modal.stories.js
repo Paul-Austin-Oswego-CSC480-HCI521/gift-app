@@ -32,10 +32,20 @@ export const Default = {
 
 // Waits for gift-modal and the Carbon elements it rendered, then returns the pieces a user touches.
 const renderedModal = async (canvasElement) => {
-  const host = canvasElement.querySelector("gift-modal");
+  const host = canvasElement.querySelector("gift-modal") || canvasElement.querySelector("gift-modal");
+  if (!host) {
+    throw new Error("Modal host element not found in canvas");
+  }
   await host.updateComplete;
+
   const root = host.shadowRoot;
-  await Promise.all([...root.querySelectorAll("*")].map((el) => el.updateComplete));
+  if (!root) {
+    return { host, dialog: null, named: () => null };
+  }
+
+  const allElements = [...root.querySelectorAll("*")];
+  await Promise.all(allElements.map((el) => el.updateComplete ?? Promise.resolve()));
+
   return {
     host,
     dialog: root.querySelector("cds-modal"),
@@ -79,23 +89,34 @@ export const CloseWithEscape = {
 };
 
 export const FillInGift = {
-  render: Default.render,
+  render: () => html`
+    <gift-modal
+      open
+      .people=${[{ id: "example-person", fullName: "Example Recipient" }]}
+    ></gift-modal>
+  `,
   parameters: carbonRadioAriaReadonly,
   play: async ({ canvasElement, step }) => {
     const { host, dialog, named } = await renderedModal(canvasElement);
+
     await step("Type a gift name", async () => {
       const field = await nativeInput(named("gift-name"));
       await userEvent.type(field, "Lego set");
       await waitFor(() => expect(field).toHaveValue("Lego set"));
     });
+
     await step("Choose a recipient", async () => {
       const dropdown = named("person-id");
       await userEvent.click(dropdown.shadowRoot.querySelector("[part='trigger-button']") ?? dropdown);
+
       const item = dropdown.querySelector("cds-dropdown-item");
       await waitFor(() => expect(dropdown.open).toBe(true));
+
       await userEvent.click(item);
+
       await waitFor(() => expect(dropdown.value).toBe("example-person"));
     });
+
     await step("Switch status to Purchased", async () => {
       const radios = [...named("status").querySelectorAll("cds-radio-button")];
       const purchased = radios.find((radio) => radio.value === "purchased");
@@ -103,6 +124,7 @@ export const FillInGift = {
       await userEvent.click(purchased);
       await waitFor(() => expect(named("status").value).toBe("purchased"));
     });
+
     await step("Modal stays open", async () => {
       expect(host.open).toBe(true);
       expect(dialog.open).toBe(true);
