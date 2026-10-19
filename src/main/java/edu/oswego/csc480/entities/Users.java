@@ -89,6 +89,10 @@ public class Users implements Serializable {
         return people;
     }
 
+    public String getPasswordHash() {
+        return this.passwordHash;
+    }
+
     //set
     public void setId(Integer id) {
         this.id = id;
@@ -122,16 +126,13 @@ public class Users implements Serializable {
         this.attributes = attributes;
     }
 
-    public String setPeople(List<People> people) {
+    public void setPeople(List<People> people) {
         this.people = people;
-
-        // Two new getter and setter methods for the password hashes
-        public String getPasswordHash() {
-            return this.passwordHash;
-        }
-        public void setPasswordHash (String passwordHash){
-            this.passwordHash = passwordHash;
-        }
-        
     }
+
+    public void setPasswordHash (String passwordHash){
+        this.passwordHash = passwordHash;
+    }
+
+
 }
