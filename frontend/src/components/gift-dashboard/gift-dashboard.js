@@ -37,9 +37,25 @@ export class GiftDashboard extends LitElement {
       gap: var(--cds-spacing-05, 1rem);
     }
 
+    /* The page-level heading rules in brand-theme.css and Carbon's cds--type-* classes cannot
+       reach into this shadow root, so the heading font and sizes are set here from the brand
+       tokens (the h1 matches .page-title). */
     h1,
     h2 {
       margin: 0;
+      font-family: var(--font-family-heading);
+    }
+
+    h1 {
+      font-size: var(--page-title-font-size);
+      line-height: var(--page-title-line-height);
+      font-weight: var(--page-title-font-weight);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      font-weight: 400;
     }
 
     .people {
@@ -111,10 +127,10 @@ export class GiftDashboard extends LitElement {
     const gifts = person.gifts ?? [];
     return html`
       <cds-tile>
-        <h2 class="cds--type-heading-03">${person.fullName}</h2>
+        <h2>${person.fullName}</h2>
         ${gifts.length
           ? this._gifts({ ...person, gifts })
-          : html`<p class="empty cds--type-body-01">No gifts yet.</p>`}
+          : html`<p class="empty">No gifts yet.</p>`}
       </cds-tile>
     `;
   }
@@ -126,7 +142,7 @@ export class GiftDashboard extends LitElement {
       : "People and gifts";
 
     return html`
-      <h1 class="cds--type-heading-05">${heading}</h1>
+      <h1>${heading}</h1>
       <div class="actions">
         <cds-button kind="primary" ?disabled=${this.loading} @click=${() => this._emit("add-gift")}>
           Add Gift
