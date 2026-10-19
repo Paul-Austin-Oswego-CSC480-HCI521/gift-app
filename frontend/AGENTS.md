@@ -116,12 +116,31 @@ Rules:
   `src/components/gift-nav-header/gift-nav-header.stories.js` (custom),
   `stories/Foundations/BorderRadius.stories.js` (foundation; `Brand.stories.js` is the logo).
 
+### Interactive stories (`play` functions)
+
+Add a `play` story when a component owns behavior a user triggers: a domain event it emits, validation
+or error display, state changes (open/close, disabled, selection), or keyboard/focus handling. Do not
+add one for static or visual stories (Foundations, Page Layouts, Nav Header) or for stock Carbon
+components with nothing of ours on top. Logic that needs no browser goes in `<tag-name>.test.js`.
+
+- Make it a separate named story for the behavior (`CloseWithX`, `LoadingBlocksActions`), not a `play`
+  on `Default`.
+- Import `expect, fn, userEvent, waitFor` from `storybook/test`. Capture emitted events with `fn()` args
+  bound in `render`, and hide those args with `argTypes: { onX: { table: { disable: true } } }`.
+- Use `step("...")` per phase. Get through shadow roots with `stories/helpers/shadow.js`, and await
+  `updateComplete` on the host and its Carbon children before interacting.
+- Assert on our component's own state and events (`host.open`, `invalidText`, `args.onX`), not just Carbon's.
+- Scope any axe exemption to the one story that needs it.
+
+Copy from `gift-login-form.stories.js`, `gift-modal.stories.js` and `gift-dashboard.stories.js`. Details:
+`docs/carbon-conventions.md#interactive-stories-play-functions`.
+
 ## Required for every component
 
 Each component lives in `src/components/<tag-name>/` and the folder, file and tag share one name:
 
 - `<tag-name>.js`: the component
-- `<tag-name>.stories.js`: a Storybook story under `Custom Components/` (see above; required by the PR checklist)
+- `<tag-name>.stories.js`: a Storybook story under `Custom Components/` (see above; required by the PR checklist). Add `play` stories for any user-triggered behavior (see Interactive stories)
 - `<tag-name>.test.js`: Vitest + Testing Library test
 
 Also: plain JavaScript (no TypeScript), keyboard operable, and every control has an accessible name.
@@ -133,7 +152,7 @@ Run from `frontend/`:
 ```sh
 npm run lint:carbon     # Carbon-first + Carbon attribute checks, also runs in CI and must pass to merge
 npm run test:unit
-npm run test:storybook  # runs every story in a browser, includes accessibility checks
+npm run test:storybook  # runs every story and its play function in a browser, includes accessibility checks
 npm run build
 ```
 
