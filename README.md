@@ -119,6 +119,9 @@ _(Update this section as the actual module/service layout evolves. The backend w
 
 ## Testing
 
+For the opt-in live authentication HTTP/JWT contract suite, see
+[Authentication contract tests](docs/qa/authentication-contract-tests.md). It requires a running backend and a designated test account; ordinary unit tests do not verify deployed token signing.
+
 Testing isn't an afterthought. We're using Agile methodology and Test-Driven Development, and validating with System Verification Testing (SVT) before merging significant features:
 
 - **Unit tests (TDD):** write tests alongside/before implementation; run via `mvn test`.
