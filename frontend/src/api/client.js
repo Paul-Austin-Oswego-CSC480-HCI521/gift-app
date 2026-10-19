@@ -13,6 +13,10 @@ export async function apiFetch(path, { token, ...options } = {}) {
     error.status = response.status;
     throw error;
   }
-  const text = await response.text();
-  return text ? JSON.parse(text) : null;
+  if (typeof response.text === "function") {
+      const text = await response.text();
+      return text ? JSON.parse(text) : null;
+    }
+
+    return typeof response.json === "function" ? response.json() : null;
 }

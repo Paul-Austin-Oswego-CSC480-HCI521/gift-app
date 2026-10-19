@@ -25,6 +25,7 @@ const STAGES = {
 export class GiftAddGiftModal extends LitElement {
   static properties = {
     open: { type: Boolean, reflect: true },
+    type: { type: String, reflect: true },
     people: { attribute: false },
     _personId: { state: true },
     _saving: { state: true },
@@ -80,6 +81,7 @@ export class GiftAddGiftModal extends LitElement {
   constructor() {
     super();
     this.open = false;
+    this.type = "add-gift";
     this.people = [];
     this._personId = "";
     this._saving = false;
@@ -165,7 +167,7 @@ export class GiftAddGiftModal extends LitElement {
           <cds-modal-heading>Add Gift</cds-modal-heading>
         </cds-modal-header>
 
-        <cds-modal-body has-form-content>
+        <cds-modal-body>
           <form class="gift-form">
             <cds-text-input
               name="gift-name"
@@ -208,16 +210,16 @@ export class GiftAddGiftModal extends LitElement {
               title-text="Who is this gift for?"
               label="Choose a person"
               direction="bottom"
-              ?invalid=${Boolean(this._errors.person)}
-              invalid-text=${this._errors.person ?? ""}
-              @cds-dropdown-selected=${(e) => {
+              ?invalid="${Boolean(this._errors.person)}"
+              invalid-text="${this._errors.person ?? ''}"
+              @cds-dropdown-selected="${(e) => {
                 this._personId = e.detail.item.value;
                 this._errors = { ...this._errors, person: undefined };
-              }}
+              }}"
             >
               ${(this.people ?? []).map(
                 (person) => html`
-                  <cds-dropdown-item value=${person.id}>
+                  <cds-dropdown-item value="${person.id}">
                     ${person.fullName ?? "Unnamed person"}
                   </cds-dropdown-item>
                 `
