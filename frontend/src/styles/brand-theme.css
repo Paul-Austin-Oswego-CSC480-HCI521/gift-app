@@ -1,3 +1,4 @@
+@import "./fonts.css"; /* Outfit + Roboto, so every page that loads the brand theme gets the fonts */
 /*
  * Brand re-theme for Carbon Design System (@carbon/web-components).
  * Generated from carbon-token-map.json (Usability-Team-Figma-File, node 895:248).

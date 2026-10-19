@@ -69,6 +69,10 @@ domain event (`login-submit`).
   variables in `src/styles/brand-theme.css`. Add a new token there rather than a hex in a component.
 - Every page `<body>` needs `class="cds--white" data-carbon-theme="brand"` (dark: `cds--g100` and
   `brand-dark`), or the brand colors do not apply.
+- Headings use Outfit (`--font-family-heading`). `brand-theme.css` applies it to `h1`-`h6` and
+  `cds--type-heading-*` in the page, but those rules cannot reach inside a shadow root: a `gift-*`
+  component that renders its own heading must set `font-family: var(--font-family-heading)` (and
+  size/weight from tokens) in its `static styles`. See `gift-dashboard`.
 - Component styles use Lit `static styles = css\`...\``. No CSS Modules, no `<style>` in `render()`.
 - Shared page layouts (`.page-auth`, `.page-main`, side nav footer) live in
   `src/styles/page-templates.css`. Reuse them. Do not add per-page layout CSS.
