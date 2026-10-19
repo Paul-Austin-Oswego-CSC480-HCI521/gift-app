@@ -89,6 +89,8 @@
   /* Matches cds-side-nav's panel width (--side-nav-width, applied inside its shadow
      root by carbon-shape-overrides.js). The side nav draws its own right border. */
   margin-inline-start: var(--side-nav-width, 16rem);
+  /* cds-header is position:fixed and 3rem tall, so without this the content starts underneath it. */
+  margin-block-start: 3rem;
   padding: 2rem;
   background: var(--cds-background);
   box-sizing: border-box;
