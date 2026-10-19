@@ -5,6 +5,7 @@ import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/tag/index.js";
 import "@carbon/web-components/es/components/tile/index.js";
+import { notificationTheme } from "../../styles/notification-theme.js";
 
 const EMPTY = "—";
 
@@ -20,7 +21,9 @@ export class GiftDashboard extends LitElement {
     error: { type: String },
   };
 
-  static styles = css`
+  static styles = [
+    notificationTheme,
+    css`
     :host {
       display: flex;
       flex-direction: column;
@@ -55,7 +58,8 @@ export class GiftDashboard extends LitElement {
       margin: 0;
       color: var(--cds-text-secondary);
     }
-  `;
+  `,
+  ];
 
   constructor() {
     super();
