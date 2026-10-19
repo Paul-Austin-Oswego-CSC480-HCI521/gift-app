@@ -312,3 +312,51 @@ body,
   --cds-support-warning: #ab8c61;
   --cds-support-info: #0043ce;
 }
+
+/*
+ * Notifications (light theme): light tinted surface with dark text, instead of Carbon's default
+ * of --cds-background-inverse.
+ *
+ * Carbon draws inline/toast/callout/actionable notifications on --cds-background-inverse, which
+ * this theme sets to the brand green (the same green as --cds-button-primary). The status icon
+ * and left border use the *-inverse support colors, which are meant for a dark surface; on the
+ * green they were 2.59:1 (error), below WCAG's 3:1 for non-text. So within a notification only,
+ * the inverse tokens are remapped to what a light surface needs. The tints are Carbon's own
+ * --cds-notification-background-* tokens (the same ones its low-contrast variant uses), so the
+ * `low-contrast` attribute is not needed and looks the same.
+ *
+ * Contrast of the accent (icon/border) on its tint: error 3.82, info 7.09, success 4.04,
+ * warning 4.53 (3:1 needed); text is --cds-text-primary on the tint, 16:1 or better.
+ *
+ * Success and warning use darker accents than --cds-support-success (#23a227, 3.04:1) and
+ * --cds-support-warning (#ab8c61, 2.86:1), which are too light on their tint. The dark theme is
+ * left alone: its --cds-background-inverse is already a light surface with dark text.
+ */
+[data-carbon-theme="brand"] :is(
+    cds-inline-notification,
+    cds-toast-notification,
+    cds-actionable-notification,
+    cds-callout-notification
+  ) {
+  --cds-text-inverse: var(--cds-text-primary);
+  --cds-icon-inverse: var(--cds-icon-primary);
+  --cds-link-inverse: var(--cds-link-primary);
+  --cds-support-error-inverse: var(--cds-support-error);
+  --cds-support-info-inverse: var(--cds-support-info);
+  --cds-support-success-inverse: #1e8a22;
+  --cds-support-warning-inverse: #8a6a3a;
+}
+
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="error"] {
+  --cds-background-inverse: var(--cds-notification-background-error, #fff1f1);
+}
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="info"] {
+  --cds-background-inverse: var(--cds-notification-background-info, #edf5ff);
+}
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="success"] {
+  --cds-background-inverse: var(--cds-notification-background-success, #defbe6);
+}
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="warning"],
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="warning-alt"] {
+  --cds-background-inverse: var(--cds-notification-background-warning, #fcf4d6);
+}

@@ -80,6 +80,7 @@ const GROUPS = [
       ["--cds-support-success", "#23a227"],
       ["--cds-support-warning", "#ab8c61"],
       ["--cds-support-info", "#0043ce"],
+      ["Notifications (scoped to cds-*-notification)", "light tint surface (--cds-notification-background-*) + dark text; accents error #f8000d, info #0043ce, success #1e8a22, warning #8a6a3a, all 3:1+ on their tint - see brand-theme.css"],
     ],
   },
 ];
