@@ -1,5 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { apiFetch } from "./client.js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 function mockFetchOnce(response) {
   global.fetch = vi.fn().mockResolvedValue(response);
@@ -7,8 +6,17 @@ function mockFetchOnce(response) {
 }
 
 describe("apiFetch", () => {
+  let apiFetch;
+
+  beforeEach(async () => {
+    vi.stubEnv("VITE_API_BASE_URL", "http://localhost:9080/gift-app/api");
+    vi.resetModules();
+    ({ apiFetch } = await import("./client.js"));
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     delete global.fetch;
   });
 
@@ -19,11 +27,11 @@ describe("apiFetch", () => {
       json: async () => ({ id: 1, name: "Alex" }),
     });
 
-    const result = await apiFetch("/people/1");
+    const result = await apiFetch("/user/1");
 
     expect(result).toEqual({ id: 1, name: "Alex" });
     expect(fetchMock).toHaveBeenCalledWith(
-      "http://localhost:9080/people/1",
+      "http://localhost:9080/gift-app/api/user/1",
       expect.objectContaining({ headers: expect.any(Headers) }),
     );
   });
@@ -35,7 +43,7 @@ describe("apiFetch", () => {
       json: async () => null,
     });
 
-    const result = await apiFetch("/people");
+    const result = await apiFetch("/user");
 
     expect(result).toBeNull();
   });
@@ -47,8 +55,8 @@ describe("apiFetch", () => {
       json: async () => ({ error: "not found" }),
     });
 
-    await expect(apiFetch("/people/missing")).rejects.toThrow(
-      "API request to /people/missing failed: 404",
+    await expect(apiFetch("/user/missing")).rejects.toThrow(
+      "API request to /user/missing failed: 404",
     );
   });
 
@@ -65,7 +73,7 @@ describe("apiFetch", () => {
   it("attaches a Bearer Authorization header when a token is given", async () => {
     const fetchMock = mockFetchOnce({ ok: true, status: 200, json: async () => ({}) });
 
-    await apiFetch("/people", { token: "abc123" });
+    await apiFetch("/user", { token: "abc123" });
 
     const [, options] = fetchMock.mock.calls[0];
     expect(options.headers.get("Authorization")).toBe("Bearer abc123");
@@ -74,7 +82,7 @@ describe("apiFetch", () => {
   it("forwards method and body options to fetch", async () => {
     const fetchMock = mockFetchOnce({ ok: true, status: 201, json: async () => ({ id: 2 }) });
 
-    await apiFetch("/people", { method: "POST", body: JSON.stringify({ name: "Sam" }) });
+    await apiFetch("/user", { method: "POST", body: JSON.stringify({ name: "Sam" }) });
 
     const [, options] = fetchMock.mock.calls[0];
     expect(options.method).toBe("POST");

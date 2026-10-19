@@ -1,5 +1,10 @@
+/* Carbon's shared colors, spacing, fonts, and accessible defaults. Imported here (rather
+   than in JS) so the browser can load it as a real stylesheet via a <link> tag in <head>,
+   which blocks first paint instead of flashing unstyled content while JS loads. */
+@import "@carbon/styles/css/styles.css";
+
 /* The page wrapper grows to at least the height of the browser window. */
-.no-scrolling {
+.fill-height {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -16,15 +21,4 @@
   padding: var(--End-margins, 16px) var(--Left-end-margin, 16px)
     var(--End-margins, 16px) var(--Right-end-margin, 16px);
   background: #fff;
-}
-
-/* Page-specific content inside gift-gradient-container. */
-.container-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-  gap: 16px;
-  height: 88px;
-  padding: 0 var(--Typography-Fluid-Heading-Heading-03-Size, 20px);
 }

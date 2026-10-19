@@ -18,23 +18,14 @@
 
         <liberty.var.http.port>9080</liberty.var.http.port>
         <liberty.var.https.port>9443</liberty.var.https.port>
+        <liberty.var.jwt.issuer>https://gift-app.oswego.edu</liberty.var.jwt.issuer>
         <liberty.var.app.context.root>gift-app</liberty.var.app.context.root>
         <liberty.var.cors.allowed.domain>http://localhost:5173</liberty.var.cors.allowed.domain>
-
-        <!--            TESTING                 -->
-        <arquillian.war.name>arquillian-managed.war</arquillian.war.name>
 
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.10.0.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -53,14 +44,14 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -69,16 +60,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>5.17.0</version>
-        <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.openliberty.arquillian</groupId>
-            <artifactId>arquillian-liberty-managed-jakarta-junit</artifactId>
-            <version>2.1.4</version>
-            <type>pom</type>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.17.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -92,6 +76,12 @@
             <artifactId>jersey-common</artifactId>
             <version>3.1.10</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.openliberty.api</groupId>
+            <artifactId>io.openliberty.jwt</artifactId>
+            <version>1.1.117</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
@@ -130,7 +120,6 @@
                 <configuration>
                     <systemPropertyVariables>
                         <wlp.home>${project.basedir}/target/liberty/wlp</wlp.home>
-                        <arquillian.war.name>${arquillian.war.name}</arquillian.war.name>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>

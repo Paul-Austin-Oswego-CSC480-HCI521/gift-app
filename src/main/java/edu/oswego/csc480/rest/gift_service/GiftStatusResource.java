@@ -4,6 +4,7 @@ import edu.oswego.csc480.entities.Gifts;
 import edu.oswego.csc480.entities.GiftStatus;
 import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -16,6 +17,7 @@ import static jakarta.ws.rs.core.Response.Status;
 
 @Path("user/{uid}/gift/{gid}/status")
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("user")
 public class GiftStatusResource {
 
     @Inject

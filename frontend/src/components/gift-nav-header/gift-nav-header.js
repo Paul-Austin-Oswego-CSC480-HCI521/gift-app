@@ -19,7 +19,9 @@ export class NavHeader extends LitElement {
   render() {
     return html`
       <cds-header aria-label="${this.productName} header">
-        <cds-header-name href="/" prefix="">${this.productName}</cds-header-name>
+        <cds-header-name href="/" prefix=""
+          >${this.productName}</cds-header-name
+        >
         <!-- A slot is an opening where the page can supply its own HTML. -->
         <slot></slot>
       </cds-header>
@@ -30,4 +32,3 @@ export class NavHeader extends LitElement {
 customElements.define("gift-nav-header", NavHeader);
 
 // This connects the HTML tag to the class above. Import this file before using the tag.
-

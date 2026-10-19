@@ -23,11 +23,16 @@ describe("gift-nav-header", () => {
     const header = await renderNavHeader('product-name="Test App"');
 
     expect(within(header.shadowRoot).getByText("Test App")).toBeInTheDocument();
-    expect(within(header.shadowRoot).queryByText("Gift App")).not.toBeInTheDocument();
+    expect(
+      within(header.shadowRoot).queryByText("Gift App"),
+    ).not.toBeInTheDocument();
   });
 
   it("projects slotted content through the default slot", async () => {
-    const header = await renderNavHeader("", '<span id="nav-link">Gifts</span>');
+    const header = await renderNavHeader(
+      "",
+      '<span id="nav-link">Gifts</span>',
+    );
 
     const slot = header.shadowRoot.querySelector("slot");
     const assigned = slot.assignedElements();
