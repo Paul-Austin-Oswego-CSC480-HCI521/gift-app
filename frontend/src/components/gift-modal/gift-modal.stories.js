@@ -17,8 +17,12 @@ export default {
 // (radio-button.js in @carbon/web-components), which axe's aria-allowed-attr rule rejects.
 // It is Carbon's own markup, always "false" here, and can't be changed from outside the shadow
 // root, so only that rule is disabled, only on stories that contain the radio group.
+// Happo's "accessibility" target runs its own axe pass and ignores the a11y config above (it has
+// no per-rule setting), so these stories skip that target and keep the visual one. The Storybook
+// test runner still checks every other axe rule on them.
 const carbonRadioAriaReadonly = {
   a11y: { config: { rules: [{ id: "aria-allowed-attr", enabled: false }] } },
+  happo: { targets: ["chrome-large"] },
 };
 
 export const Default = {

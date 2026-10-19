@@ -164,6 +164,15 @@ example Carbon's disabled password label, which isn't linked to its input), disa
 `color-contrast` rule on that disabled-state story via `parameters.a11y.config.rules`, with a comment
 saying why. See `gift-login-form.stories.js`. Don't turn off other rules or exempt enabled states.
 
+**Carbon radios (`cds-radio-button-group` / `cds-radio-button`):** Carbon renders
+`aria-readonly="false"` on the fieldset and each radio input, which axe's `aria-allowed-attr` rule
+rejects (3 violations per group). We can't change it from outside the shadow root. In any story that
+renders a radio group (including via `gift-modal`), disable only `aria-allowed-attr` with
+`parameters.a11y.config.rules` **and** set `parameters.happo.targets: ["chrome-large"]`, because
+Happo's `accessibility` target ignores the a11y config. Copy `carbonRadioAriaReadonly` from
+`gift-modal.stories.js`. Renaming or adding a story shows these as "new" violations in Happo until
+the exemption is on it.
+
 `npm run lint:carbon` fails if a component imports no Carbon component or renders a raw
 `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. Fix the
 design rather than adding an exemption. Exemptions are reviewed, and a vague reason will be
