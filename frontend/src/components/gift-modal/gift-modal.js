@@ -4,13 +4,18 @@ import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/radio-button/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "../../styles/brand-theme.css";
-import "../../styles/carbon-shape-overrides.js";
-import "../../styles/carbon-font-overrides.js";
 
-export class GiftAddGiftModal extends LitElement {
+// One generic modal shell; `type` picks which modal it is. Add a new modal by adding an entry
+// to MODALS (heading, submit label, and a method that renders its fields) and a story.
+const MODALS = {
+    "add-gift": { heading: "Add Gift", submitLabel: "Add Gift", fields: "_addGiftFields" },
+};
+const DEFAULT_TYPE = "add-gift";
+
+export class GiftModal extends LitElement {
     static properties = {
         open: { type: Boolean, reflect: true },
+        type: { type: String, reflect: true },
     };
 
     static styles = css`
@@ -61,6 +66,7 @@ export class GiftAddGiftModal extends LitElement {
     constructor() {
         super();
         this.open = false;
+        this.type = DEFAULT_TYPE;
     }
 //  Generic carbon block
 //     <div style="width: 300px;">
@@ -73,21 +79,8 @@ export class GiftAddGiftModal extends LitElement {
           this.open = false;
       }
 
-  render() {
+  _addGiftFields() {
     return html`
-      <cds-modal
-        ?open=${this.open}
-        size="sm"
-        aria-label="Add Gift"
-        @cds-modal-closed=${this._closeModal}
-      >
-        <cds-modal-header>
-          <cds-modal-close-button></cds-modal-close-button>
-          <cds-modal-heading>Add Gift</cds-modal-heading>
-        </cds-modal-header>
-
-        <cds-modal-body>
-          <form class="gift-form">
             <cds-text-input
               name="gift-name"
               label="Gift Name"
@@ -154,9 +147,29 @@ export class GiftAddGiftModal extends LitElement {
                 label-text="Purchased"
               ></cds-radio-button>
             </cds-radio-button-group>
+    `;
+  }
+
+  render() {
+    const modal = MODALS[this.type] ?? MODALS[DEFAULT_TYPE];
+    return html`
+      <cds-modal
+        ?open=${this.open}
+        size="sm"
+        aria-label=${modal.heading}
+        @cds-modal-closed=${this._closeModal}
+      >
+        <cds-modal-header>
+          <cds-modal-close-button></cds-modal-close-button>
+          <cds-modal-heading>${modal.heading}</cds-modal-heading>
+        </cds-modal-header>
+
+        <cds-modal-body>
+          <form class="gift-form">
+            ${this[modal.fields]()}
 
             <cds-button type="button" kind="primary">
-              Add Gift
+              ${modal.submitLabel}
               <svg
                 slot="icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,12 +185,10 @@ export class GiftAddGiftModal extends LitElement {
               </svg>
             </cds-button>
           </form>
-          </cds-modal-body>
+        </cds-modal-body>
       </cds-modal>
     `;
   }
 }
 
-customElements.define("gift-add-gift-modal", GiftAddGiftModal);
-
-        
+customElements.define("gift-modal", GiftModal);
