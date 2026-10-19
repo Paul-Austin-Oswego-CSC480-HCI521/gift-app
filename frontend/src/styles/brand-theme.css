@@ -152,6 +152,14 @@ cds-side-nav-link::part(link) {
   letter-spacing: 0;
 }
 
+/* Carbon's own hover rule for a standalone cds-side-nav-link uses a selector that never
+   matches inside its shadow root (it only works for links wrapped in cds-side-nav-item/-menu),
+   so links get no hover. Re-create it here with the same token Carbon would have used. The
+   current page keeps its active styling. */
+cds-side-nav-link:not([active]):hover::part(link) {
+  background-color: var(--cds-background-hover);
+}
+
 /* The title span carries Carbon's own heading-compact type, so it has to take the link's
    size instead. */
 cds-side-nav-link::part(title) {
@@ -250,6 +258,11 @@ body,
   --cds-layer-hover-03: #E0F0E8;
   --cds-field-hover-01: #EDEBE3;
   --cds-field-hover-02: #EDEBE3;
+
+  /* Side nav link hover (see the cds-side-nav-link:hover rule above). Carbon's default for
+     this token is a 12% translucent gray, nearly invisible on the cream --side-nav-background.
+     Same sage as layer-hover so hover matches the other surfaces. */
+  --cds-background-hover: #E0F0E8;
 
   /* Data table header (Gifts frame 1287:10113 "layer-accent (contextual)" = #D5EBE0). Carbon's
      table header reads --cds-layer-accent, which otherwise stays a cool #e0e0e0 gray. */
