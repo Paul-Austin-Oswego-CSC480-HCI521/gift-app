@@ -30,7 +30,7 @@ const swatch = ([name, token, rem, px, usage]) => html`
 export default {
   title: "Foundations/Border Radius",
   render: () => html`
-    <div data-carbon-theme="brand" class="cds--white" style="display: flex; flex-direction: column; gap: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
       <section class="page-section">
         <h3 class="page-section-heading">Radius tokens</h3>
         <div style="display: flex; gap: 2rem; flex-wrap: wrap;">${RADII.map(swatch)}</div>
