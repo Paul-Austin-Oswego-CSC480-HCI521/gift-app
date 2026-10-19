@@ -11,6 +11,15 @@ export default {
   },
 };
 
+// Carbon's cds-radio-button renders aria-readonly="false" on its inner <input type="radio">
+// (radio-button.js in @carbon/web-components), which axe's aria-allowed-attr rule rejects.
+// It is Carbon's own markup, always "false" here, and can't be changed from outside the shadow
+// root, so only that rule is disabled, only on stories that contain the radio group.
+const carbonRadioAriaReadonly = {
+  a11y: { config: { rules: [{ id: "aria-allowed-attr", enabled: false }] } },
+};
+
 export const Default = {
   render: () => html`<gift-modal type="add-gift" open></gift-modal>`,
+  parameters: carbonRadioAriaReadonly,
 };
