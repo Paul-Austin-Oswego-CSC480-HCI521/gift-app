@@ -58,30 +58,45 @@ Everything not listed above (frontend framework, CI/CD tooling, database, deploy
 
 ### Build and run locally
 
-```
+```bash
 # Clone the repo
 git clone https://github.com/Paul-Austin-Oswego-CSC480-HCI521/gift-app.git
-cd OZ-CSC-480-HCI-521-Fall-2026-Public
-
-The application reads the PostgreSQL password from the
-POSTGRES_PASSWORD environment variable.
-
-in a file named 'server.env', sitting right next to server.xml:
-  -add a new line --> POSTGRES_PASSWORD="passwd" 
-    without the quotes, enter the database password for the database user configured in server.xml
-
-
-# Build and start the server in dev mode (live reload, no manual rebuild/redeploy)
-mvn liberty:dev
-
-# Run integration tests
-    while open liberty is not open -> mvn clean verify
-    (use the provided wrapper for your OS, or if install just use mvn)
+cd gift-app
 ```
 
-Once running, the app is available at `http://localhost:9080` (or whatever port is configured in `server.xml`).
+#### Configure the backend environment
 
-> Fill in module-specific build/run instructions here as the project's services/modules take shape.
+Before starting Liberty, create `src/main/liberty/config/server.env`, in the same directory as `server.xml`. Use the two variable lines from the [environment template](server.env.md), then fill in the values provided by the backend team:
+
+```properties
+POSTGRES_PASSWORD=
+KEYSTORE_PASSWORD=
+```
+
+`POSTGRES_PASSWORD` is the password for the database user configured in `server.xml`. `KEYSTORE_PASSWORD` is the password for Liberty's keystore, which is needed for HTTPS and JWT signing.
+
+Use the uppercase names exactly as shown, with one `KEY=value` entry per line, no spaces around `=`, and no quotation marks around the values. Name the file `server.env`, not `.env` or `server.env.md`. Copy only the variable lines from the template, not its explanatory text.
+
+Keep the populated `server.env` private. It is already ignored by Git; do not commit passwords or put them in the template. Restart Liberty after changing this file because environment settings are read at startup. See the [Open Liberty server.env documentation](https://openliberty.io/docs/latest/reference/config/server-configuration-overview.html#server-env).
+
+#### Start the backend
+
+```bash
+# Build and start the server in dev mode (live reload, no manual rebuild/redeploy)
+./mvnw liberty:dev
+```
+
+Use `mvnw.cmd liberty:dev` on Windows, or `mvn liberty:dev` if Maven is installed. Stop the dev server with `Ctrl+C`.
+
+With Liberty stopped, run verification:
+
+```bash
+./mvnw clean verify
+```
+
+Use `mvnw.cmd clean verify` on Windows, or `mvn clean verify` if Maven is installed.
+
+Once running, the backend context root is `http://localhost:9080/gift-app` (ports and context root are configured through `pom.xml` and `server.xml`).
 
 ### Running with Docker
 
