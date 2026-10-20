@@ -1,6 +1,6 @@
 package resource_tests;
 
-import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
 import edu.oswego.csc480.rest.gift_service.UsersResource;
 import jakarta.ws.rs.core.Response;
@@ -25,27 +25,29 @@ public class UsersResourceTest {
         field.set(resource, userRepository);
     }
 
-    //all users 200 success
+    //GET all users tests
+    //GET all users, 200 success
     @Test
     public void getUsers_200() {
-        User user1 = new User();
-        User user2 = new User();
+        Users user1 = new Users();
+        Users user2 = new Users();
 
-        List<User> users = List.of(user1, user2);
+        List<Users> users = List.of(user1, user2);
         when(userRepository.findAll()).thenReturn(users.stream());
         Response response = resource.getUsers();
         assertEquals(200, response.getStatus());
-        List<User> result = (List<User>) response.getEntity();
+        List<Users> result = (List<Users>) response.getEntity();
         assertEquals(2, result.size());
         assertEquals(user1, result.get(0));
         assertEquals(user2, result.get(1));
         verify(userRepository).findAll();
     }
 
-    //single user 200 success
+    //GET single user tests
+    //GET single user, 200 success
     @Test
     public void getUser_200() {
-        User user = new User();
+        Users user = new Users();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.getUser(1);
         assertEquals(200, response.getStatus());
@@ -53,7 +55,7 @@ public class UsersResourceTest {
         verify(userRepository).findById(1);
     }
 
-    //single user 404 fail
+    //GET single user, 404, selected user entity does not exist
     @Test
     public void getUser_404() {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
@@ -62,10 +64,11 @@ public class UsersResourceTest {
         verify(userRepository).findById(1);
     }
 
-    //create user 201 success
+    //CREATE user tests
+    //CREATE new user, 201 success
     @Test
     public void createUser_201() {
-        User user = new User();
+        Users user = new Users();
         when(userRepository.save(user)).thenReturn(user);
         Response response = resource.createUser(user);
         assertEquals(201, response.getStatus());
@@ -73,43 +76,45 @@ public class UsersResourceTest {
         verify(userRepository).save(user);
     }
 
-    //create user 400 fail
+    //CREATE new user, 400, user entity does not exist (no attributes passed)
     @Test
     public void createUser_400() {
         Response response = resource.createUser(null);
         assertEquals(400, response.getStatus());
-        verify(userRepository, never()).save(any(User.class));
+        verify(userRepository, never()).save(any(Users.class));
     }
 
-    //update user 200 success
+    //UPDATE user tests
+    //UPDATE existing user, 200 success
     @Test
     public void updateUser_200() {
-        User existingUser = new User();
-        User updatedUser = new User();
+        Users existingUser = new Users();
+        Users updatedUser = new Users();
         when(userRepository.findById(1)).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+        when(userRepository.save(any(Users.class))).thenReturn(updatedUser);
         Response response = resource.updateUser(1, updatedUser);
         assertEquals(200, response.getStatus());
         assertEquals(updatedUser, response.getEntity());
         verify(userRepository).findById(1);
-        verify(userRepository).save(any(User.class));
+        verify(userRepository).save(any(Users.class));
     }
 
-    //update user 404 fail
+    //UPDATE existing user, 404, existing user does not exist
     @Test
     public void updateUser_404() {
-        User updatedUser = new User();
+        Users updatedUser = new Users();
         when(userRepository.findById(1)).thenReturn(Optional.empty());
         Response response = resource.updateUser(1, updatedUser);
         assertEquals(404, response.getStatus());
         verify(userRepository).findById(1);
-        verify(userRepository, never()).save(any(User.class));
+        verify(userRepository, never()).save(any(Users.class));
     }
 
-    //delete user 204 success
+    //DELETE user tests
+    //DELETE existing user, 204 success
     @Test
     public void deleteUser_204() {
-        User user = new User();
+        Users user = new Users();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.deleteUser(1);
         assertEquals(204, response.getStatus());
@@ -117,7 +122,7 @@ public class UsersResourceTest {
         verify(userRepository).deleteById(1);
     }
 
-    //delete user 404 fail
+    //DELETE existing user, 404, selected user does not exist
     @Test
     public void deleteUser_404() {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
