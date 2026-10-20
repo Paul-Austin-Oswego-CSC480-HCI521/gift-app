@@ -14,6 +14,14 @@ Frontend continuously deploys to Netlify to https://gift-app-project.netlify.app
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7223dba5-aa94-4430-836f-e8a77bbce185/deploy-status)](https://app.netlify.com/projects/gift-app-project/deploys)
 
+Pull requests get a Netlify Deploy Preview. Previews can show pages but cannot log in or call the API, because the backend's CORS allows only the production origin.
+
+### Backend
+The Open Liberty backend runs on Render as a Docker web service built from `Dockerfile.render`. Its API base is `https://gift-app-rppl.onrender.com/gift-app/api` (health check: `/gift-app/api/ping`). A sleeping instance can take about a minute to answer the first request. Setup, environment variables, and the Netlify connection are in [docs/render-deployment.md](docs/render-deployment.md).
+
+### Database
+PostgreSQL is hosted on Neon. The backend reads the password from the `POSTGRES_PASSWORD` environment variable.
+
 ### Storybook
 Storybook is continuously deployed to github pages: https://paul-austin-oswego-csc480-hci521.github.io/gift-app/
 
@@ -46,7 +54,7 @@ Helpful references from class:
 - [microprofile-starter sample app](https://github.com/ayoho/microprofile-starter)
 - [Open Liberty source](https://github.com/OpenLiberty/open-liberty)
 
-Everything not listed above (frontend framework, CI/CD tooling, database, deployment target) is still an open decision. It's tracked as ADRs on the wiki under [Decisions](../../wiki/Decisions), not decided here.
+Decided and recorded as ADRs on the wiki under [Decisions](../../wiki/Decisions): the frontend framework (Carbon Web Components), the database (Neon PostgreSQL), and the deployment target (Render backend, Netlify frontend). Still open: the repository-wide CI/CD policy, which checks are required to merge, and the final app name.
 
 ## Getting started
 
@@ -61,7 +69,7 @@ Everything not listed above (frontend framework, CI/CD tooling, database, deploy
 ```
 # Clone the repo
 git clone https://github.com/Paul-Austin-Oswego-CSC480-HCI521/gift-app.git
-cd OZ-CSC-480-HCI-521-Fall-2026-Public
+cd gift-app
 
 The application reads the PostgreSQL password from the
 POSTGRES_PASSWORD environment variable.
@@ -79,7 +87,7 @@ mvn liberty:dev
     (use the provided wrapper for your OS, or if install just use mvn)
 ```
 
-Once running, the app is available at `http://localhost:9080` (or whatever port is configured in `server.xml`).
+Once running, the app is available at `http://localhost:9080` (or whatever port is configured in `server.xml`); the API is under `http://localhost:9080/gift-app/api`. To run the frontend against it, see [frontend/README.md](frontend/README.md); the frontend's `VITE_API_BASE_URL` defaults to that local API URL.
 
 > Fill in module-specific build/run instructions here as the project's services/modules take shape.
 
@@ -95,6 +103,8 @@ docker run -p 9080:9080 -p 9443:9443 gift-app
 
 This is a packaging/deployment path, not a replacement for local dev — use `mvn liberty:dev` day-to-day for live reload.
 
+Production on Render uses a separate `Dockerfile.render`, which builds the WAR inside the image, includes the PostgreSQL driver, and leaves out the development-only `DBTest` endpoint. Runtime configuration for it lives in `deploy/render/overrides.xml` and Render environment variables (`POSTGRES_PASSWORD`, `FRONTEND_ORIGIN`, `KEYSTORE_PASSWORD`, `JWT_ISSUER`, `PORT`); never commit those values. See [docs/render-deployment.md](docs/render-deployment.md).
+
 ## Project structure
 
 This repo currently holds **two separate apps** rather than one combined Maven project:
@@ -109,6 +119,10 @@ This repo currently holds **two separate apps** rather than one combined Maven p
 │   └── test/            # Unit and integration tests
 ├── pom.xml              # Maven project config (backend)
 ├── Dockerfile           # Packages the backend into an Open Liberty container image
+├── Dockerfile.render    # Production image run on Render (see docs/render-deployment.md)
+├── deploy/render/       # Liberty config overrides for the Render deployment
+├── docs/                # Deployment documentation
+├── netlify.toml         # Netlify build settings for the frontend
 ├── frontend/            # Separate Node/Vite project (Carbon Web Components + Storybook);
 │                         # its own package.json, dev server, and README - talks to the
 │                         # backend over REST, not served from src/main/webapp
@@ -124,7 +138,7 @@ Testing isn't an afterthought. We're using Agile methodology and Test-Driven Dev
 - **Unit tests (TDD):** write tests alongside/before implementation; run via `mvn test`.
 - **System Verification Testing (SVT):** SVT acts as the "first customer" for the app. It doesn't test every combination, but validates that a full end-to-end flow works (e.g., a request traveling from the front end through the REST layer to the database and back), including any auth/token propagation. Include basic usability testing here too: can someone follow this README to get the app running from scratch?
 - **Load/stress testing:** tools like [JMeter](https://github.com/apache/jmeter) can be used to run multiple threads / stress-test the app, once there's a running service to point it at.
-- **CI/CD:** not finalized, see the [CI/CD Pipeline ADR](../../wiki/ADR-CI-CD-Pipeline) on the wiki. QA and Full Stack need to coordinate and decide together, so `.github/workflows/` is intentionally empty for now.
+- **CI/CD:** the repository-wide policy is not finalized, see the [CI/CD Pipeline ADR](../../wiki/ADR-CI-CD-Pipeline) on the wiki. Workflows under `.github/workflows/` currently run backend unit tests (`./mvnw test`), frontend checks (Carbon lint and unit tests), Happo visual regression, and the Storybook GitHub Pages deploy; see [the workflows README](.github/workflows/README.md). Netlify and Render also build from GitHub. QA and Full Stack still need to decide together which checks are required to merge.
 
 ## Repo roles
 

@@ -1,12 +1,13 @@
 # Deploy the backend to Render
 
-These files are prepared for review; the container has not yet been run on Render.
-Prepared on `codex/render-deployment`, based on current `main` as fetched on
-2026-10-20. The Render image excludes the development `DBTest` endpoint. Local
-development and the original Dockerfile are unchanged. The Docker-specific ignore
-file limits the build context; do not add secrets to the allowed source inputs.
-The server is not prewarmed during image build, so runtime secrets are not needed
-as Docker build arguments.
+The backend is deployed to Render at `https://gift-app-rppl.onrender.com/gift-app/api`
+(health check `/gift-app/api/ping`) and the production frontend on Netlify calls it. The
+Render service is owned by [@linthantaung-gif](https://github.com/linthantaung-gif).
+The Render image excludes the development `DBTest` endpoint. Local development and the
+original Dockerfile are unchanged. The Docker-specific ignore file limits the build
+context; do not add secrets to the allowed source inputs. The server is not prewarmed
+during image build, so runtime secrets are not needed as Docker build arguments.
+Netlify Deploy Previews cannot call this backend (CORS allows only the production origin).
 
 ## Before deploying
 
