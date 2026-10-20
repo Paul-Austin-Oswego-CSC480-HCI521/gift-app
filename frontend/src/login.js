@@ -1,7 +1,7 @@
 import { apiFetch } from "./api/client.js";
 import { setAccessToken } from "./auth/token-store.js";
 
-const POST_LOGIN_URL = "./dashboard.html";
+const POST_LOGIN_URL = "/dashboard";
 
 const form = document.querySelector("gift-login-form");
 

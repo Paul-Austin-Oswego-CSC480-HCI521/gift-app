@@ -47,14 +47,14 @@ it("navigates to the correct page when clicked", async () => {
 
   // Expected HTML file routes matching your component's navigation mapping
   const expectedRoutes = [
-    "dashboard.html",
-    "my-wishlist.html",
-    "people.html",
-    "upcoming-dates.html",
-    "all-gifts.html",
-    "settings.html",
-    "add-gift.html",
-    "add-recipient.html"
+    "/dashboard",
+    "/my-wishlist",
+    "/people",
+    "/upcoming-dates",
+    "/all-gifts",
+    "/settings",
+    "/add-gift",
+    "/add-recipient"
   ];
 
   for (let i = 0; i < controls.length; i++) {

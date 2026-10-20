@@ -36,14 +36,14 @@ export class SideNav extends LitElement {
       event.preventDefault();
 
       const routes = {
-        dashboard: "dashboard.html",
-        wishlist: "my-wishlist.html",
-        people: "people.html",
-        dates: "upcoming-dates.html",
-        gifts: "all-gifts.html",
-        settings: "settings.html",
-        "add-gift": "add-gift.html",
-        "add-recipient": "add-recipient.html"
+        dashboard: "/dashboard",
+        wishlist: "/my-wishlist",
+        people: "/people",
+        dates: "/upcoming-dates",
+        gifts: "/all-gifts",
+        settings: "/settings",
+        "add-gift": "/add-gift",
+        "add-recipient": "/add-recipient"
       };
 
       if (routes[item]) {

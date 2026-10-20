@@ -17,9 +17,14 @@ frontend/src/
 ```
 
 - **HTML entry points** — compose pages with normal HTML and custom element tags. This is where
-  page structure, content, links, and component slots are assembled. Any `*.html` file in
-  `frontend/` is built automatically (`vite.config.js` scans the folder), so a new page needs no
-  config change; keep pages at the top level of `frontend/`, not in subfolders.
+  page structure, content, links, and component slots are assembled. Any `*.html` file under
+  `frontend/` is built automatically (`vite.config.js` scans the folders, skipping generated and
+  non-page folders such as `src/`, `docs/`, `dist/` and `coverage/`), so a new page needs no config
+  change. Pages can be nested (for example `gifts/add-gift.html`).
+  - **URLs have no `.html`:** Netlify serves `people.html` at `/people`, and the dev server does the
+    same. Link and redirect to `/people`, not `./people.html`. Use root-absolute paths
+    (`/src/...`, `/dashboard`) in HTML and JS so they work at any depth.
+  - **Unknown paths** return `404.html`, which Netlify serves automatically.
 - **`components/<tag-name>/`** — a reusable piece of UI used across pages (e.g. the site header,
   footer, or the background-image panel behind page content), exported as a **web component** (a
   registered custom element), not a plain JS function. The folder name matches the custom element
