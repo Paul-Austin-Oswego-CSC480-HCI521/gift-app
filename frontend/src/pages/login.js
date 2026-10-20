@@ -1,5 +1,5 @@
-import { apiFetch } from "./api/client.js";
-import { setAccessToken } from "./auth/token-store.js";
+import { apiFetch } from "../api/client.js";
+import { setAccessToken } from "../auth/token-store.js";
 
 const POST_LOGIN_URL = "/dashboard";
 
