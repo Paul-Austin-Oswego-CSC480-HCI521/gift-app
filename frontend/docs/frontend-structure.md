@@ -17,7 +17,9 @@ frontend/src/
 ```
 
 - **HTML entry points** — compose pages with normal HTML and custom element tags. This is where
-  page structure, content, links, and component slots are assembled.
+  page structure, content, links, and component slots are assembled. Any `*.html` file in
+  `frontend/` is built automatically (`vite.config.js` scans the folder), so a new page needs no
+  config change; keep pages at the top level of `frontend/`, not in subfolders.
 - **`components/<tag-name>/`** — a reusable piece of UI used across pages (e.g. the site header,
   footer, or the background-image panel behind page content), exported as a **web component** (a
   registered custom element), not a plain JS function. The folder name matches the custom element

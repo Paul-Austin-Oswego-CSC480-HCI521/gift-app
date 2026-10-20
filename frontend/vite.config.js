@@ -2,8 +2,16 @@ import { defineConfig } from "vitest/config";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { fileURLToPath } from "node:url";
+import { readdirSync } from "node:fs";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
+
+// Every top-level *.html file is a build page, so new pages need no config change.
+const htmlInputs = Object.fromEntries(
+  readdirSync(dirname)
+    .filter((file) => file.endsWith(".html"))
+    .map((file) => [file.slice(0, -".html".length), fileURLToPath(new URL(file, import.meta.url))]),
+);
 
 export default defineConfig({
   //Relative paths, not absolute.
@@ -13,16 +21,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      input: {
-        main: fileURLToPath(new URL("./index.html", import.meta.url)),
-        createAccount: fileURLToPath(new URL("./create-account.html", import.meta.url)),
-        allGifts: fileURLToPath(new URL("./all-gifts.html", import.meta.url)),
-        dashboard: fileURLToPath(new URL("./dashboard.html", import.meta.url)),
-        myWishlist: fileURLToPath(new URL("./my-wishlist.html", import.meta.url)),
-        people: fileURLToPath(new URL("./people.html", import.meta.url)),
-        settings: fileURLToPath(new URL("./settings.html", import.meta.url)),
-        upcomingDates: fileURLToPath(new URL("./upcoming-dates.html", import.meta.url)),
-      },
+      input: htmlInputs,
     },
   },
   test: {
