@@ -7,6 +7,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  VITE_API_BASE_URL = "http://localhost:9080"

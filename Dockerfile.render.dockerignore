@@ -1,0 +1,17 @@
+# Only these inputs are required by Dockerfile.render. Keep local secrets out.
+**
+!pom.xml
+!src/
+!src/main/
+!src/main/java/
+!src/main/java/**
+!src/main/resources/
+!src/main/resources/**
+!src/main/liberty/
+!src/main/liberty/config/
+!src/main/liberty/config/server.xml
+!deploy/
+!deploy/render/
+!deploy/render/overrides.xml
+!Dockerfile.render
+!Dockerfile.render.dockerignore
