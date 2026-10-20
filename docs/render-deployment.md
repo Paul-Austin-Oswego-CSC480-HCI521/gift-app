@@ -51,7 +51,7 @@ must stay in environment settings, never in source files or build arguments.
 ## Connect Netlify after backend checks pass
 
 1. In Netlify, set `VITE_API_BASE_URL` to the actual Render HTTPS URL followed by
-   `/gift-app` (no trailing slash). Never leave the deployed build pointing to localhost.
+   `/gift-app/api` (no trailing slash). Never leave the deployed build pointing to localhost.
 2. Remove the conflicting localhost value from `netlify.toml` in the deployment PR
    and rebuild Netlify. Check the browser Network tab for the effective API address.
 3. Confirm CORS accepts the frontend origin. PR preview origins need explicit
