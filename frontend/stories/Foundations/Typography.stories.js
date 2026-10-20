@@ -78,7 +78,7 @@ const pageTitle = html`
 export default {
   title: "Foundations/Typography",
   render: () => html`
-    <div data-carbon-theme="brand" style="display: flex; flex-direction: column; gap: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
       <section class="page-section">
         <h3 class="page-section-heading">Page title</h3>
         <div class="type-sample-list">${pageTitle}</div>

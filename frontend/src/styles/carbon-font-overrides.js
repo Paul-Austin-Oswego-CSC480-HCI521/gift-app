@@ -41,9 +41,15 @@ function isCarbonElement(node) {
 }
 
 function upgrade(element) {
-  const root = element.shadowRoot;
-  if (root && !root.adoptedStyleSheets.includes(sheet)) {
-    root.adoptedStyleSheets = [...root.adoptedStyleSheets, sheet];
+  const root = element?.shadowRoot;
+  if (root) {
+    try {
+      const sheets = Array.from(root.adoptedStyleSheets ?? []);
+      if (!sheets.includes(sheet)) {
+        root.adoptedStyleSheets = [...sheets, sheet];
+      }
+    } catch {
+    }
   }
 }
 

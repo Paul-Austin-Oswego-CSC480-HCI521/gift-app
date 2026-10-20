@@ -1,8 +1,8 @@
-# Frontend agent instructions (Codex and other AI coding tools)
+# Frontend agent instructions (Codex, Claude, Copilot and other AI coding tools)
 
 The frontend is a Vite app built on **IBM Carbon Design System web components**
 (`@carbon/web-components`, built on Lit), plain JavaScript, with a project brand theme layered on
-top. Our own `gift-*` components are almost always **compositions of Carbon components**, not
+top. Our own `gift-*` components are almost always **compositions of Carbon  components**, not
 replacements for them. Read this before creating or editing any component.
 
 Why: Carbon provides the accessibility behavior (ARIA roles, keyboard handling, focus management,
@@ -68,7 +68,17 @@ domain event (`login-submit`).
 - Never hardcode colors, fonts, or spacing. Use Carbon tokens (`var(--cds-...)`) and the brand
   variables in `src/styles/brand-theme.css`. Add a new token there rather than a hex in a component.
 - Every page `<body>` needs `class="cds--white" data-carbon-theme="brand"` (dark: `cds--g100` and
-  `brand-dark`), or the brand colors do not apply.
+  `brand-dark`), or the brand colors do not apply. Put both attributes on `<body>` itself: do not
+  use a wrapping `<div data-carbon-theme>` and do not omit `cds--white`. `cds--white` supplies
+  Carbon's base tokens (page background and text color); `data-carbon-theme="brand"` layers the
+  brand overrides on top. Copy the body tag from `dashboard.html`:
+  `<body class="cds--white" data-carbon-theme="brand">`. Stories are the exception: the decorator in
+  `.storybook/preview.js` wraps each one in a `<div>` with the theme class and attribute (and the
+  toolbar switches light/dark), so do not add them in a story.
+- Headings use Outfit (`--font-family-heading`). `brand-theme.css` applies it to `h1`-`h6` and
+  `cds--type-heading-*` in the page, but those rules cannot reach inside a shadow root: a `gift-*`
+  component that renders its own heading must set `font-family: var(--font-family-heading)` (and
+  size/weight from tokens) in its `static styles`. See `gift-dashboard`.
 - Component styles use Lit `static styles = css\`...\``. No CSS Modules, no `<style>` in `render()`.
 - Shared page layouts (`.page-auth`, `.page-main`, side nav footer) live in
   `src/styles/page-templates.css`. Reuse them. Do not add per-page layout CSS.
@@ -112,12 +122,31 @@ Rules:
   `src/components/gift-nav-header/gift-nav-header.stories.js` (custom),
   `stories/Foundations/BorderRadius.stories.js` (foundation; `Brand.stories.js` is the logo).
 
+### Interactive stories (`play` functions)
+
+Add a `play` story when a component owns behavior a user triggers: a domain event it emits, validation
+or error display, state changes (open/close, disabled, selection), or keyboard/focus handling. Do not
+add one for static or visual stories (Foundations, Page Layouts, Nav Header) or for stock Carbon
+components with nothing of ours on top. Logic that needs no browser goes in `<tag-name>.test.js`.
+
+- Make it a separate named story for the behavior (`CloseWithX`, `LoadingBlocksActions`), not a `play`
+  on `Default`.
+- Import `expect, fn, userEvent, waitFor` from `storybook/test`. Capture emitted events with `fn()` args
+  bound in `render`, and hide those args with `argTypes: { onX: { table: { disable: true } } }`.
+- Use `step("...")` per phase. Get through shadow roots with `stories/helpers/shadow.js`, and await
+  `updateComplete` on the host and its Carbon children before interacting.
+- Assert on our component's own state and events (`host.open`, `invalidText`, `args.onX`), not just Carbon's.
+- Scope any axe exemption to the one story that needs it.
+
+Copy from `gift-login-form.stories.js`, `gift-modal.stories.js` and `gift-dashboard.stories.js`. Details:
+`docs/carbon-conventions.md#interactive-stories-play-functions`.
+
 ## Required for every component
 
 Each component lives in `src/components/<tag-name>/` and the folder, file and tag share one name:
 
 - `<tag-name>.js`: the component
-- `<tag-name>.stories.js`: a Storybook story under `Custom Components/` (see above; required by the PR checklist)
+- `<tag-name>.stories.js`: a Storybook story under `Custom Components/` (see above; required by the PR checklist). Add `play` stories for any user-triggered behavior (see Interactive stories)
 - `<tag-name>.test.js`: Vitest + Testing Library test
 
 Also: plain JavaScript (no TypeScript), keyboard operable, and every control has an accessible name.
@@ -129,7 +158,7 @@ Run from `frontend/`:
 ```sh
 npm run lint:carbon     # Carbon-first + Carbon attribute checks, also runs in CI and must pass to merge
 npm run test:unit
-npm run test:storybook  # runs every story in a browser, includes accessibility checks
+npm run test:storybook  # runs every story and its play function in a browser, includes accessibility checks
 npm run build
 ```
 
@@ -140,6 +169,15 @@ never "fix" a contrast failure on a disabled control by restyling it. If axe sti
 example Carbon's disabled password label, which isn't linked to its input), disable only the
 `color-contrast` rule on that disabled-state story via `parameters.a11y.config.rules`, with a comment
 saying why. See `gift-login-form.stories.js`. Don't turn off other rules or exempt enabled states.
+
+**Carbon radios (`cds-radio-button-group` / `cds-radio-button`):** Carbon renders
+`aria-readonly="false"` on the fieldset and each radio input, which axe's `aria-allowed-attr` rule
+rejects (3 violations per group). We can't change it from outside the shadow root. In any story that
+renders a radio group (including via `gift-modal`), disable only `aria-allowed-attr` with
+`parameters.a11y.config.rules` **and** set `parameters.happo.targets: ["chrome-large"]`, because
+Happo's `accessibility` target ignores the a11y config. Copy `carbonRadioAriaReadonly` from
+`gift-modal.stories.js`. Renaming or adding a story shows these as "new" violations in Happo until
+the exemption is on it.
 
 `npm run lint:carbon` fails if a component imports no Carbon component or renders a raw
 `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. Fix the

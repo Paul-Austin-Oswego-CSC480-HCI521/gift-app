@@ -13,8 +13,10 @@ This setup runs as **two Vitest projects** (`vite.config.js` → `test.projects`
   almost all new tests; see the walkthrough and recipe below.
 - **`storybook`** — powered by [`@storybook/addon-vitest`](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon),
   runs every existing Storybook story as a smoke test in a real headless Chromium browser (via
-  [Playwright](https://playwright.dev/)). You don't write these tests by hand — any component that
-  already has a `.stories.js` file gets one automatically. This is the one place Playwright shows
+  [Playwright](https://playwright.dev/)). Every story gets a render and accessibility smoke test
+  automatically. Stories with a `play` function also run that interaction, so a `play` story is how you
+  write a browser-level test for clicks, typing, keys and events. See
+  [Interactive stories](carbon-conventions.md#interactive-stories-play-functions) for when and how. This is the one place Playwright shows
   up in the frontend, and it's scoped to "does this story still render", not end-to-end app flows —
   that stays QA's territory.
 

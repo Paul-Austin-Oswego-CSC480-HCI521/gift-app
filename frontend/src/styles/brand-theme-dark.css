@@ -53,6 +53,9 @@
   --cds-layer-hover-02: #404E47;
   --cds-layer-hover-03: #596D63;
 
+  /* Side nav link hover (see brand-theme.css): same sage as layer-hover-01. */
+  --cds-background-hover: #2E3833;
+
   /* Data table header (see brand-theme.css): g100 #393939 / #474747 retinted to the layer-01 sage, same lightness. */
   --cds-layer-accent-01: #343E39;
   --cds-layer-accent-02: #404E47;

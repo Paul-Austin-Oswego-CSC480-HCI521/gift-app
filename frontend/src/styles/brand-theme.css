@@ -1,9 +1,10 @@
+@import "./fonts.css"; /* Outfit + Roboto, so every page that loads the brand theme gets the fonts */
 /*
  * Brand re-theme for Carbon Design System (@carbon/web-components).
  * Generated from carbon-token-map.json (Usability-Team-Figma-File, node 895:248).
  *
- * Apply by adding data-carbon-theme="brand" to a wrapping element, e.g.
- * <div data-carbon-theme="brand"> ... Carbon components ... </div>
+ * Apply by adding data-carbon-theme="brand" (with class="cds--white") to the page <body>:
+ * <body class="cds--white" data-carbon-theme="brand"> ... Carbon components ... </body>
  *
  * Tokens marked "warmed" below are a hand-tweak on top of that generated map: a few
  * neutrals (text-secondary/helper, icon-secondary, border-strong, button-secondary)
@@ -151,6 +152,14 @@ cds-side-nav-link::part(link) {
   letter-spacing: 0;
 }
 
+/* Carbon's own hover rule for a standalone cds-side-nav-link uses a selector that never
+   matches inside its shadow root (it only works for links wrapped in cds-side-nav-item/-menu),
+   so links get no hover. Re-create it here with the same token Carbon would have used. The
+   current page keeps its active styling. */
+cds-side-nav-link:not([active]):hover::part(link) {
+  background-color: var(--cds-background-hover);
+}
+
 /* The title span carries Carbon's own heading-compact type, so it has to take the link's
    size instead. */
 cds-side-nav-link::part(title) {
@@ -250,6 +259,11 @@ body,
   --cds-field-hover-01: #EDEBE3;
   --cds-field-hover-02: #EDEBE3;
 
+  /* Side nav link hover (see the cds-side-nav-link:hover rule above). Carbon's default for
+     this token is a 12% translucent gray, nearly invisible on the cream --side-nav-background.
+     Same sage as layer-hover so hover matches the other surfaces. */
+  --cds-background-hover: #E0F0E8;
+
   /* Data table header (Gifts frame 1287:10113 "layer-accent (contextual)" = #D5EBE0). Carbon's
      table header reads --cds-layer-accent, which otherwise stays a cool #e0e0e0 gray. */
   --cds-layer-accent-01: #D5EBE0;
@@ -311,4 +325,52 @@ body,
   --cds-support-success: #23a227;
   --cds-support-warning: #ab8c61;
   --cds-support-info: #0043ce;
+}
+
+/*
+ * Notifications (light theme): light tinted surface with dark text, instead of Carbon's default
+ * of --cds-background-inverse.
+ *
+ * Carbon draws inline/toast/callout/actionable notifications on --cds-background-inverse, which
+ * this theme sets to the brand green (the same green as --cds-button-primary). The status icon
+ * and left border use the *-inverse support colors, which are meant for a dark surface; on the
+ * green they were 2.59:1 (error), below WCAG's 3:1 for non-text. So within a notification only,
+ * the inverse tokens are remapped to what a light surface needs. The tints are Carbon's own
+ * --cds-notification-background-* tokens (the same ones its low-contrast variant uses), so the
+ * `low-contrast` attribute is not needed and looks the same.
+ *
+ * Contrast of the accent (icon/border) on its tint: error 3.82, info 7.09, success 4.04,
+ * warning 4.53 (3:1 needed); text is --cds-text-primary on the tint, 16:1 or better.
+ *
+ * Success and warning use darker accents than --cds-support-success (#23a227, 3.04:1) and
+ * --cds-support-warning (#ab8c61, 2.86:1), which are too light on their tint. The dark theme is
+ * left alone: its --cds-background-inverse is already a light surface with dark text.
+ */
+[data-carbon-theme="brand"] :is(
+    cds-inline-notification,
+    cds-toast-notification,
+    cds-actionable-notification,
+    cds-callout-notification
+  ) {
+  --cds-text-inverse: var(--cds-text-primary);
+  --cds-icon-inverse: var(--cds-icon-primary);
+  --cds-link-inverse: var(--cds-link-primary);
+  --cds-support-error-inverse: var(--cds-support-error);
+  --cds-support-info-inverse: var(--cds-support-info);
+  --cds-support-success-inverse: #1e8a22;
+  --cds-support-warning-inverse: #8a6a3a;
+}
+
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="error"] {
+  --cds-background-inverse: var(--cds-notification-background-error, #fff1f1);
+}
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="info"] {
+  --cds-background-inverse: var(--cds-notification-background-info, #edf5ff);
+}
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="success"] {
+  --cds-background-inverse: var(--cds-notification-background-success, #defbe6);
+}
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="warning"],
+[data-carbon-theme="brand"] :is(cds-inline-notification, cds-toast-notification, cds-actionable-notification, cds-callout-notification)[kind="warning-alt"] {
+  --cds-background-inverse: var(--cds-notification-background-warning, #fcf4d6);
 }
