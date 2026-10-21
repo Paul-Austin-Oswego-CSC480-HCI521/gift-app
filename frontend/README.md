@@ -2,7 +2,7 @@
 
 The gift-tracker web frontend: [IBM Carbon Design System](https://carbondesignsystem.com/) via its Web Components implementation (`@carbon/web-components`), plain JavaScript, built with [Vite](https://vite.dev/). See the wiki's [ADR: Frontend Framework](../../../wiki/ADR-Frontend-Framework) for why.
 
-This is a separate Node project from the Open Liberty backend (`/pom.xml`, `/src/main/java`) — it runs on its own dev server and talks to the backend over REST. See [docs/api-expectations.md](docs/api-expectations.md) for how the two are expected to connect (not wired up yet).
+This is a separate Node project from the Open Liberty backend (`/pom.xml`, `/src/main/java`) — it runs on its own dev server and talks to the backend over REST. See [docs/api-expectations.md](docs/api-expectations.md) for how the two connect locally and in production.
 
 ## Prerequisites
 
