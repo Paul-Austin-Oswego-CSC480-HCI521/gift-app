@@ -5,6 +5,7 @@ import edu.oswego.csc480.entities.People;
 import edu.oswego.csc480.entities.PeopleAttributes;
 import edu.oswego.csc480.repositories.UserRepository;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Path("user/{uid}/person/{pid}/attributes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
+@RolesAllowed("user")
 public class PeopleAttributesResource {
     @Inject
     private UserRepository userRepository;

@@ -34,7 +34,7 @@ public class Users implements Serializable {
     private List<People> people;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserWishedItem> wishlist;
+    private List<UsersWishedItem> wishlist;
 
     @Column(name = "email_address")
     private String email;
@@ -69,7 +69,7 @@ public class Users implements Serializable {
         return surname;
     }
 
-    public List<UserWishedItem> getWishlist() {
+    public List<UsersWishedItem> getWishlist() {
         return wishlist;
     }
 
@@ -110,7 +110,7 @@ public class Users implements Serializable {
         this.surname = surname;
     }
 
-    public void setWishlist(List<UserWishedItem> wishlist) {
+    public void setWishlist(List<UsersWishedItem> wishlist) {
         this.wishlist = wishlist;
     }
 

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="user_wishlist")
-public class UserWishedItem {
+public class UsersWishedItem {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_wishlist_id")
@@ -19,51 +19,36 @@ public class UserWishedItem {
     @Column(name="gift_name")
     private String giftName;
 
-    @Column(name="gift_type")
-    private String giftType;
+    @Column(name="value")
+    private String value;
 
-    @Column(name="gift_price")
-    private double price;
+    public UsersWishedItem(){}
 
-    public UserWishedItem(){}
-
+    //get
     public Integer getId() {
         return id;
     }
-
     public Users getUser() {
         return user;
     }
-
     public String getGiftName() {
         return giftName;
     }
-
-    public String getGiftType() {
-        return giftType;
+    public String getValue() {
+        return value;
     }
 
+    //set
     public void setId(Integer id) {
         this.id = id;
     }
-
     public void setUser(Users user) {
         this.user = user;
     }
-
     public void setGiftName(String giftName) {
         this.giftName = giftName;
     }
-
-    public void setGiftType(String giftType) {
-        this.giftType = giftType;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getPrice() {
-        return price;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
