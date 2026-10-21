@@ -1,0 +1,17 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Linked (not JS-imported) so these load as real stylesheets that block first paint,
+     avoiding a flash of unstyled content while the JS module graph loads. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/src/styles/fonts.css" />
+<link rel="stylesheet" href="/src/styles/app.css" />
+<link rel="stylesheet" href="/src/styles/brand-theme.css" />
+<link rel="stylesheet" href="/src/styles/page-templates.css" />
+<!-- Hide custom elements until their JS defines them, avoiding a flash of unstyled
+     <gift-*>/<cds-*> elements before they upgrade. -->
+<style>
+  :not(:defined) {
+    visibility: hidden;
+  }
+</style>

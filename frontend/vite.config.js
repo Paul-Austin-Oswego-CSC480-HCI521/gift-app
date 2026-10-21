@@ -4,6 +4,7 @@ import { playwright } from "@vitest/browser-playwright";
 import { fileURLToPath } from "node:url";
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { htmlPartials } from "./scripts/html-partials-plugin.mjs";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -55,7 +56,7 @@ const prettyUrls = () => ({
 export default defineConfig({
   // Absolute paths: the site is served from the domain root, and nested pages need that.
   base: "/",
-  plugins: [prettyUrls(), flattenPagesDir()],
+  plugins: [htmlPartials({ dir: join(dirname, PAGES_DIR, "_partials") }), prettyUrls(), flattenPagesDir()],
   server: {
     port: 5173,
   },

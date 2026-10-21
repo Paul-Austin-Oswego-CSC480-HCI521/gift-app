@@ -1,30 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- @include head -->
     <title>People and Gifts | Gift App</title>
-    <!-- Linked (not JS-imported) so these load as real stylesheets that block first paint,
-         avoiding a flash of unstyled content while the JS module graph loads. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="/src/styles/fonts.css" />
-    <link rel="stylesheet" href="/src/styles/app.css" />
-    <link rel="stylesheet" href="/src/styles/brand-theme.css" />
-    <link rel="stylesheet" href="/src/styles/page-templates.css" />
-    <!-- Hide custom elements until their JS defines them, avoiding a flash of unstyled
-         <gift-*>/<cds-*> elements before they upgrade. -->
-    <style>
-      :not(:defined) {
-        visibility: hidden;
-      }
-    </style>
   </head>
   <body class="cds--white" data-carbon-theme="brand">
-    <gift-nav-header product-name="Gift App">
-      <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
-    </gift-nav-header>
-    <gift-side-nav active="dashboard"></gift-side-nav>
+    <!-- @include app-shell active=dashboard -->
     <main class="page-main" aria-label="Page content">
       <gift-dashboard></gift-dashboard>
     </main>
