@@ -3,7 +3,7 @@
  * Brand re-theme for Carbon Design System (@carbon/web-components).
  * Generated from carbon-token-map.json (Usability-Team-Figma-File, node 895:248).
  *
- * Apply by adding data-carbon-theme="brand" (with class="cds--white") to the page <body>:
+ * Apply by adding data-carbon-theme="brand" to the page <body>:
  * <body data-carbon-theme="brand"> ... Carbon components ... </body>
  *
  * Tokens marked "warmed" below are a hand-tweak on top of that generated map: a few
@@ -165,11 +165,11 @@ cds-side-nav-link:not([active]):hover::part(link) {
 cds-side-nav-link::part(title) {
   font: inherit;
   letter-spacing: inherit;
-  color: var(--cds-button-primary);
+  color: var(--side-nav-link-color);
 }
 
 cds-side-nav-link::part(title-icon-container) {
-  color: var(--cds-button-primary);
+  color: var(--side-nav-link-color);
   margin-inline-end: 0.5rem;
 }
 
@@ -238,9 +238,12 @@ body,
   font-family: var(--font-family-body);
 }
 
-[data-carbon-theme="brand"] {
+/* :root prefix raises specificity above Carbon's .cds--white/.cds--g100 theme classes, so the
+   tokens win regardless of which stylesheet the bundler loads last. */
+:root [data-carbon-theme="brand"] {
   /* Backgrounds & layers */
   --cds-background: #FCFBF4;
+  --side-nav-link-color: #1C544A; /* brand green, same as --cds-button-primary; 8.4:1 on --side-nav-background */
   --side-nav-background: #FAF8F1; /* deliberately not --cds-background: the Navigation frame's side nav is its own tint, see cds-side-nav rule above */
   --cds-background-inverse: #1C544A; /* brand green, not brandHex #BBE4DF — 8.69:1 against white text-inverse/icon-inverse, see note above */
   --cds-layer-01: #EAF5F0; /* was #F3F5F4 - the original sage tint was too low-saturation to read as anything but gray next to the warm/rose palette elsewhere; boosted saturation, same lightness so contrast is unaffected */
@@ -258,6 +261,14 @@ body,
   --cds-layer-hover-03: #E0F0E8;
   --cds-field-hover-01: #EDEBE3;
   --cds-field-hover-02: #EDEBE3;
+  /* Carbon's theme classes (.cds--white) derive these unprefixed aliases from the -01 tokens above;
+     with no theme class on <body> nothing does, so components would fall back to Carbon's gray. */
+  --cds-layer: var(--cds-layer-01);
+  --cds-layer-hover: var(--cds-layer-hover-01);
+  --cds-layer-accent: var(--cds-layer-accent-01);
+  --cds-layer-accent-hover: var(--cds-layer-accent-hover-01);
+  --cds-field: var(--cds-field-01);
+  --cds-field-hover: var(--cds-field-hover-01);
 
   /* Side nav link hover (see the cds-side-nav-link:hover rule above). Carbon's default for
      this token is a 12% translucent gray, nearly invisible on the cream --side-nav-background.

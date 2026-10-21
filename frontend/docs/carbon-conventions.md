@@ -38,7 +38,7 @@ The project's brand re-theme lives in `src/styles/brand-theme.css` (light) and `
 
 For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `pages/index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).
 
-We're using the `white` theme (`class="cds--white"` on `<body>` / story wrapper) as the default. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
+We're using the `white` theme as the default; `data-carbon-theme="brand"` on `<body>` is all a page needs, with no extra `cds--*` theme class. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
 
 ## Carbon first
 
