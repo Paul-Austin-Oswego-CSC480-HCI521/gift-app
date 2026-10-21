@@ -75,12 +75,12 @@ domain event (`login-submit`).
 
 - Never hardcode colors, fonts, or spacing. Use Carbon tokens (`var(--cds-...)`) and the brand
   variables in `src/styles/brand-theme.css`. Add a new token there rather than a hex in a component.
-- Every page `<body>` needs `class="cds--white" data-carbon-theme="brand"` (dark: `cds--g100` and
+- Every page `<body>` needs `data-carbon-theme="brand"` (dark: `cds--g100` and
   `brand-dark`), or the brand colors do not apply. Put both attributes on `<body>` itself: do not
   use a wrapping `<div data-carbon-theme>` and do not omit `cds--white`. `cds--white` supplies
   Carbon's base tokens (page background and text color); `data-carbon-theme="brand"` layers the
   brand overrides on top. Copy the body tag from `pages/dashboard.html`:
-  `<body class="cds--white" data-carbon-theme="brand">`. Stories are the exception: the decorator in
+  `<body data-carbon-theme="brand">`. Stories are the exception: the decorator in
   `.storybook/preview.js` wraps each one in a `<div>` with the theme class and attribute (and the
   toolbar switches light/dark), so do not add them in a story.
 - Headings use Outfit (`--font-family-heading`). `brand-theme.css` applies it to `h1`-`h6` and

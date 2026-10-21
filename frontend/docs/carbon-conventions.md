@@ -33,7 +33,7 @@ Global styles come from the prebuilt CSS: `@carbon/styles/css/styles.css`, impor
 The project's brand re-theme lives in `src/styles/brand-theme.css` (light) and `src/styles/brand-theme-dark.css` (dark). It only takes effect when the matching attribute is present, so **every page's HTML must put `data-carbon-theme="brand"` on the `<body>` tag**, alongside the Carbon base theme class:
 
 ```html
-<body class="cds--white" data-carbon-theme="brand">
+<body data-carbon-theme="brand">
 ```
 
 For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `pages/index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).

@@ -4,7 +4,7 @@
  * Generated from carbon-token-map.json (Usability-Team-Figma-File, node 895:248).
  *
  * Apply by adding data-carbon-theme="brand" (with class="cds--white") to the page <body>:
- * <body class="cds--white" data-carbon-theme="brand"> ... Carbon components ... </body>
+ * <body data-carbon-theme="brand"> ... Carbon components ... </body>
  *
  * Tokens marked "warmed" below are a hand-tweak on top of that generated map: a few
  * neutrals (text-secondary/helper, icon-secondary, border-strong, button-secondary)

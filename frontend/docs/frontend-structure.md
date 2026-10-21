@@ -36,7 +36,7 @@ A logged-in page needs one HTML file and one script.
      <!-- @include head -->
      <title>People | Gift App</title>
    </head>
-   <body class="cds--white" data-carbon-theme="brand">
+   <body data-carbon-theme="brand">
      <!-- @include app-shell active=people -->
      <main class="page-main" aria-label="Page content"> ... </main>
      <script type="module" src="/src/pages/people.js"></script>
