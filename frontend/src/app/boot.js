@@ -7,5 +7,5 @@ import "../styles/carbon-shape-overrides.js";
 import "../styles/brand-theme.css";
 
 import "@carbon/web-components/es/components/ui-shell/index.js";
-import "../components/gift-nav-header/gift-nav-header.js";
-import "../components/gift-side-nav/gift-side-nav.js";
+import "../components/shared/gift-nav-header/gift-nav-header.js";
+import "../components/shared/gift-side-nav/gift-side-nav.js";

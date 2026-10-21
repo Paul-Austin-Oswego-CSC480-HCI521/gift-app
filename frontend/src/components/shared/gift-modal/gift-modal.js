@@ -9,11 +9,11 @@ import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/radio-button/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
-import "../../styles/brand-theme.css";
-import "../../styles/carbon-shape-overrides.js";
-import "../../styles/carbon-font-overrides.js";
-import { apiFetch } from "../../api/client.js";
-import { getAccessToken } from "../../auth/token-store.js";
+import "../../../styles/brand-theme.css";
+import "../../../styles/carbon-shape-overrides.js";
+import "../../../styles/carbon-font-overrides.js";
+import { apiFetch } from "../../../api/client.js";
+import { getAccessToken } from "../../../auth/token-store.js";
 
 const USER_ID = 1;
 

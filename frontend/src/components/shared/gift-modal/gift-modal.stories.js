@@ -1,6 +1,6 @@
 import { html } from "lit";
 import { expect, userEvent, waitFor } from "storybook/test";
-import { nativeInput } from "../../../stories/helpers/shadow.js";
+import { nativeInput } from "../../../../stories/helpers/shadow.js";
 import "./gift-modal.js";
 
 // One story per modal type; `type` selects which modal gift-modal renders. Add a story here

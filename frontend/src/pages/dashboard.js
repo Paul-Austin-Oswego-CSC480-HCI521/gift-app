@@ -4,7 +4,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/checkbox/index.js";
 import { apiFetch } from "../api/client.js";
 import "../components/gift-dashboard/gift-dashboard.js";
-import "../components/gift-modal/gift-modal.js";
+import "../components/shared/gift-modal/gift-modal.js";
 import { getAccessToken, clearAccessToken } from "../auth/token-store.js";
 
 const dashboard = document.querySelector("gift-dashboard");
