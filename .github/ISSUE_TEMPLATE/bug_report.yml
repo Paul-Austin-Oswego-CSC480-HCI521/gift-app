@@ -7,7 +7,16 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report a bug! Please fill out as much detail as you can. This helps QA reproduce and prioritize it.
-
+ 
+ - type: textarea
+    id: ID
+    attributes:
+      label: Issue serial ID
+      description: ID number of the issue
+      placeholder: 123ABC
+    validations:
+      required: true
+      
   - type: textarea
     id: description
     attributes:
