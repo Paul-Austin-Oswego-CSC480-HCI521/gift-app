@@ -79,7 +79,7 @@ domain event (`login-submit`).
   `brand-dark`), or the brand colors do not apply. Put both attributes on `<body>` itself: do not
   use a wrapping `<div data-carbon-theme>` and do not omit `cds--white`. `cds--white` supplies
   Carbon's base tokens (page background and text color); `data-carbon-theme="brand"` layers the
-  brand overrides on top. Copy the body tag from `dashboard.html`:
+  brand overrides on top. Copy the body tag from `pages/dashboard.html`:
   `<body class="cds--white" data-carbon-theme="brand">`. Stories are the exception: the decorator in
   `.storybook/preview.js` wraps each one in a `<div>` with the theme class and attribute (and the
   toolbar switches light/dark), so do not add them in a story.
