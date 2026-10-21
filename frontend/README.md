@@ -40,16 +40,28 @@ cp .env.example .env   # adjust VITE_API_BASE_URL if needed
 
 ```
 frontend/
+├── pages/              # every page's HTML (one file per page; nested folders allowed)
+│   └── _partials/      # shared <head> and header/side-nav shell, pulled in with <!-- @include -->
 ├── src/                # the actual app
-│   ├── index.js        # shared entry point — loads styles and registers Web Components
+│   ├── app/            # boot.js / boot-authed.js: the setup every page loads first
+│   ├── pages/          # one script per page (just that page's wiring)
 │   ├── components/     # one folder per component (tag name, .js, .test.js, .stories.js together)
+│   │   └── shared/     # app-wide components (nav header, side nav, modal, brand)
+│   ├── config/         # routes.js: the page route list
+│   ├── api/  auth/     # fetch wrapper for the backend; token storage and login guard
 │   ├── styles/         # global page layout and application styles
-│   └── api/            # fetch wrapper for talking to the backend
-├── index.html          # home page; future pages can have their own HTML entry file
-├── stories/         # Storybook story templates not tied to one of our own components
-├── .storybook/      # Storybook config
-└── docs/            # frontend-specific docs (this folder)
+│   └── index.js        # shared entry for the logged-out pages
+├── stories/            # Storybook stories for Carbon components, foundations, and page layouts
+├── scripts/            # lint checks and the HTML partials plugin
+├── .storybook/         # Storybook config
+└── docs/               # frontend-specific docs (this folder)
 ```
+
+### Adding a page
+
+Create `pages/<name>.html` (copy `pages/people.html`) and `src/pages/<name>.js` (start it with
+`import "../app/boot-authed.js";`). Nothing else needs configuring: every HTML file under `pages/` is built,
+and is served at `/<name>` with no `.html`. Details in [docs/frontend-structure.md](docs/frontend-structure.md).
 
 See [docs/README.md](docs/README.md) for the code references kept with the frontend and links to
 topics that belong in the project wiki.
