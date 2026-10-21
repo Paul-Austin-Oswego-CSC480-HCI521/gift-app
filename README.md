@@ -125,7 +125,9 @@ This repo currently holds **two separate apps** rather than one combined Maven p
 ├── netlify.toml         # Netlify build settings for the frontend
 ├── frontend/            # Separate Node/Vite project (Carbon Web Components + Storybook);
 │                         # its own package.json, dev server, and README - talks to the
-│                         # backend over REST, not served from src/main/webapp
+│                         # backend over REST, not served from src/main/webapp.
+│                         # Page HTML is in frontend/pages/, app code in frontend/src/
+│                         # (see frontend/README.md for the layout)
 └── README.md
 ```
 

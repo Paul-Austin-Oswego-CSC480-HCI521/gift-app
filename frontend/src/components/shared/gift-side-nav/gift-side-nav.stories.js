@@ -1,6 +1,6 @@
 import { html } from "lit";
 import "./gift-side-nav.js";
-import "../../styles/page-templates.css";
+import "../../../styles/page-templates.css";
 
 // The app's authenticated navigation: icon + label links, then Add Gift / Add Recipient and
 // Settings pinned to the bottom. A composition of cds-side-nav, styled by brand-theme.css and

@@ -1,10 +1,10 @@
 import { html } from "lit";
 import "@carbon/web-components/es/components/link/index.js";
 import "@carbon/web-components/es/components/ui-shell/index.js";
-import "../../src/components/gift-nav-header/gift-nav-header.js";
+import "../../src/components/shared/gift-nav-header/gift-nav-header.js";
 import "../../src/components/gift-image-container/gift-image-container.js";
-import "../../src/components/gift-brand/gift-brand.js";
-import "../../src/components/gift-side-nav/gift-side-nav.js";
+import "../../src/components/shared/gift-brand/gift-brand.js";
+import "../../src/components/shared/gift-side-nav/gift-side-nav.js";
 import "../../src/components/gift-login-form/gift-login-form.js";
 import "../../src/components/gift-dashboard/gift-dashboard.js";
 import "../../src/styles/brand-theme.css";

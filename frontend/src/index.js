@@ -17,11 +17,11 @@ import "./styles/carbon-font-overrides.js";
 
 // Importing a component runs its registration code. After these imports, the browser
 // knows what the two gift-* custom elements in index.html mean.
-import "./components/gift-nav-header/gift-nav-header.js";
+import "./components/shared/gift-nav-header/gift-nav-header.js";
 import "./components/gift-image-container/gift-image-container.js";
-import "./components/gift-side-nav/gift-side-nav.js";
+import "./components/shared/gift-side-nav/gift-side-nav.js";
 import "@carbon/web-components/es/components/link/index.js";
-import "./components/gift-brand/gift-brand.js";
+import "./components/shared/gift-brand/gift-brand.js";
 
 // This entry point registers the components used by index.html. Page authors can work in
 // HTML while component implementations keep their behavior and state in JavaScript.

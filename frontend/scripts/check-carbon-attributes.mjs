@@ -39,12 +39,12 @@ const REQUIRED = {
 
 const SKIP_DIRS = new Set(["node_modules", "dist", "coverage", "storybook-static"]);
 
-function* sourceFiles(dir) {
+function* sourceFiles(dir, matches = (name) => /\.js$/.test(name) && !/\.test\.js$/.test(name)) {
   for (const entry of readdirSync(dir)) {
     if (SKIP_DIRS.has(entry)) continue;
     const full = join(dir, entry);
-    if (statSync(full).isDirectory()) yield* sourceFiles(full);
-    else if (/\.js$/.test(entry) && !/\.test\.js$/.test(entry)) yield full;
+    if (statSync(full).isDirectory()) yield* sourceFiles(full, matches);
+    else if (matches(entry)) yield full;
   }
 }
 
@@ -91,7 +91,7 @@ function suggestion(name, valid) {
 
 const problems = [];
 
-const htmlPages = readdirSync(frontend).filter((f) => f.endsWith(".html")).map((f) => join(frontend, f));
+const htmlPages = [...sourceFiles(join(frontend, "pages"), (name) => name.endsWith(".html"))];
 const files = [...sourceFiles(join(frontend, "src")), ...sourceFiles(join(frontend, "stories")), ...htmlPages];
 
 for (const file of files) {

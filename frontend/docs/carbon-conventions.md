@@ -33,12 +33,12 @@ Global styles come from the prebuilt CSS: `@carbon/styles/css/styles.css`, impor
 The project's brand re-theme lives in `src/styles/brand-theme.css` (light) and `src/styles/brand-theme-dark.css` (dark). It only takes effect when the matching attribute is present, so **every page's HTML must put `data-carbon-theme="brand"` on the `<body>` tag**, alongside the Carbon base theme class:
 
 ```html
-<body class="cds--white" data-carbon-theme="brand">
+<body data-carbon-theme="brand">
 ```
 
-For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).
+For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `pages/index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).
 
-We're using the `white` theme (`class="cds--white"` on `<body>` / story wrapper) as the default. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
+We're using the `white` theme as the default; `data-carbon-theme="brand"` on `<body>` is all a page needs, with no extra `cds--*` theme class. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
 
 ## Carbon first
 
@@ -68,7 +68,7 @@ Storybook group a story belongs in is defined in [`../AGENTS.md`](../AGENTS.md#w
 
 Two worked examples of our own components, each co-located with its component and test:
 
-- `src/components/gift-nav-header/gift-nav-header.stories.js` — the standard `<cds-header>` configuration used on every page.
+- `src/components/shared/gift-nav-header/gift-nav-header.stories.js` — the standard `<cds-header>` configuration used on every page.
 - `src/components/gift-image-container/gift-image-container.stories.js` — a story for a custom (non-Carbon) component.
 
 ## Interactive stories (`play` functions)
@@ -127,7 +127,7 @@ folder, not a separate top-level styles directory.
 
 ## Using components in pages
 
-Pages are ordinary HTML files, such as `index.html`. They assemble reusable components with
+Pages are ordinary HTML files in `pages/`, such as `pages/index.html`. They assemble reusable components with
 custom element tags:
 
 ```html

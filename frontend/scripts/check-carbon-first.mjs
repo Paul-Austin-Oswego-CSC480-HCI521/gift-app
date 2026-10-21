@@ -39,16 +39,27 @@ function templatesOf(source) {
 const problems = [];
 const exempted = [];
 
-for (const dir of readdirSync(root, { withFileTypes: true })) {
-  if (!dir.isDirectory()) continue;
-  const file = join(root, dir.name, `${dir.name}.js`);
+// src/components/ holds component folders (gift-*) directly, or inside group folders such as
+// shared/ and feature folders. A folder not named gift-* is a group, so look inside it.
+function* componentDirs(dir, relative = "") {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const path = join(dir, entry.name);
+    const label = relative ? `${relative}/${entry.name}` : entry.name;
+    if (entry.name.startsWith("gift-")) yield { name: entry.name, path, label };
+    else yield* componentDirs(path, label);
+  }
+}
+
+for (const dir of componentDirs(root)) {
+  const file = join(dir.path, `${dir.name}.js`);
   if (!existsSync(file)) {
-    problems.push(`${dir.name}: expected ${dir.name}/${dir.name}.js (component file must match its folder name)`);
+    problems.push(`${dir.name}: expected ${dir.label}/${dir.name}.js (component file must match its folder name)`);
     continue;
   }
 
   const source = readFileSync(file, "utf8");
-  const label = `src/components/${dir.name}/${basename(file)}`;
+  const label = `src/components/${dir.label}/${basename(file)}`;
 
   const exemption = source.match(/\/\/\s*carbon-exempt:\s*(.*)/);
   if (exemption) {

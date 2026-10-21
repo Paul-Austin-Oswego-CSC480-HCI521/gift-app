@@ -68,9 +68,9 @@ alongside its Storybook story (see [frontend-structure.md](frontend-structure.md
 ```
 src/api/client.js
 src/api/client.test.js
-src/components/gift-nav-header/gift-nav-header.js
-src/components/gift-nav-header/gift-nav-header.test.js
-src/components/gift-nav-header/gift-nav-header.stories.js
+src/components/shared/gift-nav-header/gift-nav-header.js
+src/components/shared/gift-nav-header/gift-nav-header.test.js
+src/components/shared/gift-nav-header/gift-nav-header.stories.js
 ```
 
 `test/setup.js` wires up `@testing-library/jest-dom`'s matchers for every test file (configured via
@@ -135,7 +135,7 @@ describe("gift-badge", () => {
 ```
 
 Three things to always cover, following the existing tests as examples
-([gift-nav-header.test.js](../src/components/gift-nav-header/gift-nav-header.test.js),
+([gift-nav-header.test.js](../src/components/shared/gift-nav-header/gift-nav-header.test.js),
 [gift-image-container.test.js](../src/components/gift-image-container/gift-image-container.test.js)):
 
 - default rendering (no attributes/slotted content — the "empty" case)

@@ -4,37 +4,49 @@ import { playwright } from "@vitest/browser-playwright";
 import { fileURLToPath } from "node:url";
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { htmlPartials } from "./scripts/html-partials-plugin.mjs";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 
-// Top-level folders that hold generated output or non-page HTML.
-const NON_PAGE_DIRS = new Set([
-  "node_modules", "dist", "coverage", "storybook-static", "src", "stories", "docs", "scripts", "test", "public",
-]);
+const PAGES_DIR = "pages";
 
-const findPages = (dir = "") =>
+const findPages = (dir) =>
   readdirSync(join(dirname, dir), { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      const skip = entry.name.startsWith(".") || (dir === "" && NON_PAGE_DIRS.has(entry.name));
-      return skip ? [] : findPages(path);
-    }
+    if (entry.isDirectory()) return entry.name.startsWith(".") || entry.name.startsWith("_") ? [] : findPages(path);
     return entry.name.endsWith(".html") ? [path] : [];
   });
 
-// Every *.html file under frontend/ (outside NON_PAGE_DIRS) is a build page, so new pages need no config change.
+// Every *.html file under pages/ is a build page, so new pages need no config change.
+// Folders starting with "_" (such as _partials) hold fragments, not pages.
 const htmlInputs = Object.fromEntries(
-  findPages().map((page) => [page.slice(0, -".html".length).replaceAll("\\", "/"), join(dirname, page)]),
+  findPages(PAGES_DIR).map((page) => [
+    page.slice(PAGES_DIR.length + 1, -".html".length).replaceAll("\\", "/"),
+    join(dirname, page),
+  ]),
 );
 
-// Serve /name as name.html in dev, matching Netlify's extensionless URLs.
+// Vite writes pages/people.html to dist/pages/people.html. Netlify serves extensionless URLs
+// and 404.html from the publish root, so flatten the output to dist/people.html.
+const flattenPagesDir = () => ({
+  name: "flatten-pages-dir",
+  enforce: "post",
+  generateBundle(_options, bundle) {
+    for (const asset of Object.values(bundle)) {
+      if (asset.fileName.startsWith(`${PAGES_DIR}/`)) asset.fileName = asset.fileName.slice(PAGES_DIR.length + 1);
+    }
+  },
+});
+
+// Serve /name as pages/name.html in dev, matching Netlify's extensionless URLs.
 const prettyUrls = () => ({
   name: "pretty-page-urls",
   configureServer(server) {
     server.middlewares.use((req, _res, next) => {
       const [path, query] = req.url.split("?");
-      if (/^\/[\w\-/]+$/.test(path) && !path.endsWith("/") && existsSync(join(dirname, `${path}.html`))) {
-        req.url = `${path}.html${query ? `?${query}` : ""}`;
+      const name = path === "/" ? "/index" : path;
+      if (/^\/[\w\-/]+$/.test(name) && !name.endsWith("/") && existsSync(join(dirname, PAGES_DIR, `${name}.html`))) {
+        req.url = `/${PAGES_DIR}${name}.html${query ? `?${query}` : ""}`;
       }
       next();
     });
@@ -44,7 +56,7 @@ const prettyUrls = () => ({
 export default defineConfig({
   // Absolute paths: the site is served from the domain root, and nested pages need that.
   base: "/",
-  plugins: [prettyUrls()],
+  plugins: [htmlPartials({ dir: join(dirname, PAGES_DIR, "_partials") }), prettyUrls(), flattenPagesDir()],
   server: {
     port: 5173,
   },

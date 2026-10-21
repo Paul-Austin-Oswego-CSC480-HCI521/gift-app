@@ -1,13 +1,14 @@
 import { LitElement, html, nothing } from "lit";
 import "@carbon/web-components/es/components/ui-shell/index.js";
 import "@carbon/web-components/es/components/button/index.js";
+import { routes } from "../../../config/routes.js";
 
 const links = [
-  ["dashboard", "Dashboard", "M3 10 12 2l9 8M5 9v12h14V9M10 21v-7h4v7"],
-  ["wishlist", "My Wish List", "M3 4h3v3H3zM3 11h3v3H3zM3 18h3v3H3zM10 5h11M10 12h11M10 19h11"],
-  ["people", "People", "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 22v-4a7 7 0 0 1 14 0v4M17 3a4 4 0 0 1 0 8M19 13a6 6 0 0 1 3 5v4"],
-  ["dates", "Upcoming Dates", "M3 5h18v17H3zM7 2v6M17 2v6M3 10h18M7 14h2M15 14h2M7 18h2M15 18h2"],
-  ["gifts", "All Gifts", "M3 8h18v5H3zM5 13v9h14v-9M12 8v14M12 8H8a3 3 0 1 1 3-3l1 3ZM12 8h4a3 3 0 1 0-3-3l-1 3Z"],
+  ["dashboard", "M3 10 12 2l9 8M5 9v12h14V9M10 21v-7h4v7"],
+  ["wishlist", "M3 4h3v3H3zM3 11h3v3H3zM3 18h3v3H3zM10 5h11M10 12h11M10 19h11"],
+  ["people", "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 22v-4a7 7 0 0 1 14 0v4M17 3a4 4 0 0 1 0 8M19 13a6 6 0 0 1 3 5v4"],
+  ["dates", "M3 5h18v17H3zM7 2v6M17 2v6M3 10h18M7 14h2M15 14h2M7 18h2M15 18h2"],
+  ["gifts", "M3 8h18v5H3zM5 13v9h14v-9M12 8v14M12 8H8a3 3 0 1 1 3-3l1 3ZM12 8h4a3 3 0 1 0-3-3l-1 3Z"],
 ];
 const settingsPath = "M10 2h4l1 4 4-1 2 4-3 3 3 3-2 4-4-1-1 4h-4l-1-4-4 1-2-4 3-3-3-3 2-4 4 1 1-4ZM16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z";
 
@@ -33,23 +34,11 @@ export class SideNav extends LitElement {
   }
 
   _select(event, item) {
-      event.preventDefault();
-
-      const routes = {
-        dashboard: "/dashboard",
-        wishlist: "/my-wishlist",
-        people: "/people",
-        dates: "/upcoming-dates",
-        gifts: "/all-gifts",
-        settings: "/settings",
-        "add-gift": "/add-gift",
-        "add-recipient": "/add-recipient"
-      };
-
-      if (routes[item]) {
-        window.location.href = routes[item];
-      }
+    event.preventDefault();
+    if (routes[item]) {
+      window.location.href = routes[item].path;
     }
+  }
 
   _icon(path, slot = "title-icon") {
     return html`<svg slot=${slot} viewBox="0 0 24 24" width="20" height="20" fill="none"
@@ -57,12 +46,12 @@ export class SideNav extends LitElement {
       aria-hidden="true" focusable="false"><path d=${path}></path></svg>`;
   }
 
-  _link(item, label, path) {
+  _link(item, icon) {
     return html`
-      <cds-side-nav-link href="#${item}" ?active=${this.active === item}
+      <cds-side-nav-link href=${routes[item].path} ?active=${this.active === item}
         aria-current=${this.active === item ? "page" : nothing}
         @click=${event => this._select(event, item)}>
-        ${this._icon(path)}${label}
+        ${this._icon(icon)}${routes[item].label}
       </cds-side-nav-link>
     `;
   }
@@ -71,10 +60,10 @@ export class SideNav extends LitElement {
     return html`
       <cds-side-nav expanded collapse-mode="fixed" aria-label="Gift App sidebar">
         <cds-side-nav-items>
-          ${links.map(([item, label, path]) => this._link(item, label, path))}
+          ${links.map(([item, icon]) => this._link(item, icon))}
         </cds-side-nav-items>
         <div class="page-sidenav-footer">
-          <cds-side-nav-items>${this._link("settings", "Settings", settingsPath)}</cds-side-nav-items>
+          <cds-side-nav-items>${this._link("settings", settingsPath)}</cds-side-nav-items>
         </div>
       </cds-side-nav>
     `;

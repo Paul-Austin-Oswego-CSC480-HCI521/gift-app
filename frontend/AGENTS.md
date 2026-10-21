@@ -9,6 +9,14 @@ Why: Carbon provides the accessibility behavior (ARIA roles, keyboard handling, 
 contrast) that this course requires. A hand-built element throws that away. `<gift-side-nav>` was
 originally built from raw `<nav>`/`<a>` and was rebuilt on `cds-side-nav` for exactly this reason.
 
+## Adding a page
+
+One HTML file in `pages/` and one script in `src/pages/`. The HTML includes the shared head and shell with
+`<!-- @include head -->` and `<!-- @include app-shell active=<key> -->`, and the script starts with
+`import "../app/boot-authed.js";` for logged-in pages. Do not copy a `<head>`, stylesheet links, theme
+imports or `require-auth` into a page: they come from the partials and `src/app/`. Add the route to
+`src/config/routes.js` if it appears in the side nav. Full recipe: `docs/frontend-structure.md`.
+
 ## The rule: Carbon first
 
 Before writing any new element, work through these in order and stop at the first that works:
@@ -59,7 +67,7 @@ domain event (`login-submit`).
 - Forward accessible names (`label`, `aria-label`) to the Carbon element. Never drop them.
 - Reach inside a Carbon component only through its documented slots and `::part()` names.
 - Navigation that exists on every page belongs in one shared component, not copied per page. See
-  `src/components/gift-side-nav/`: it wraps Carbon's `cds-side-nav` and renders into the light DOM
+  `src/components/shared/gift-side-nav/`: it wraps Carbon's `cds-side-nav` and renders into the light DOM
   (`createRenderRoot() { return this; }`) so the page-level brand theme and overrides still reach
   it. Do this when theme rules target a Carbon element from outside a shadow root.
 
@@ -67,12 +75,12 @@ domain event (`login-submit`).
 
 - Never hardcode colors, fonts, or spacing. Use Carbon tokens (`var(--cds-...)`) and the brand
   variables in `src/styles/brand-theme.css`. Add a new token there rather than a hex in a component.
-- Every page `<body>` needs `class="cds--white" data-carbon-theme="brand"` (dark: `cds--g100` and
-  `brand-dark`), or the brand colors do not apply. Put both attributes on `<body>` itself: do not
-  use a wrapping `<div data-carbon-theme>` and do not omit `cds--white`. `cds--white` supplies
-  Carbon's base tokens (page background and text color); `data-carbon-theme="brand"` layers the
-  brand overrides on top. Copy the body tag from `dashboard.html`:
-  `<body class="cds--white" data-carbon-theme="brand">`. Stories are the exception: the decorator in
+- Every page `<body>` needs `data-carbon-theme="brand"` (dark: `cds--g100` and
+  `brand-dark`), or the brand colors do not apply. Put the attribute on `<body>` itself: do not
+  use a wrapping `<div data-carbon-theme>`. The light theme needs no `cds--white` class;
+  `data-carbon-theme="brand"` alone supplies the brand tokens (page background and text color).
+  Copy the body tag from `pages/dashboard.html`:
+  `<body data-carbon-theme="brand">`. Stories are the exception: the decorator in
   `.storybook/preview.js` wraps each one in a `<div>` with the theme class and attribute (and the
   toolbar switches light/dark), so do not add them in a story.
 - Headings use Outfit (`--font-family-heading`). `brand-theme.css` applies it to `h1`-`h6` and
@@ -97,7 +105,7 @@ these four, or you should ask a maintainer before adding a fifth.
 | --- | --- | --- |
 | `Foundations/...` | A **foundational override** of Carbon's variables, shown visually: color tokens, border radius, typography, spacing, and brand assets such as the logo (`gift-brand`). If you change a `--cds-*` token or add a brand variable in `brand-theme.css`, log it here so the team can see it. | `stories/Foundations/<Name>.stories.js` |
 | `Carbon Components/...` | An **unchanged Carbon component with our theming applied**, e.g. Button, Tag, Tile, Modal. Plain `cds-*` markup only, no `gift-*` elements and no app-specific text. Used to review the brand theme against Carbon itself. | `stories/CarbonComponents/<Name>.stories.js` |
-| `Custom Components/...` | A **component specific to our app**: any `gift-*` element, such as a side nav with our links, a login form, a nav header. Usually a composition of Carbon components with app-specific content and behavior. | `src/components/<tag-name>/<tag-name>.stories.js`, next to the component |
+| `Custom Components/...` | A **component specific to our app**: any `gift-*` element, such as a side nav with our links, a login form, a nav header. Usually a composition of Carbon components with app-specific content and behavior. | `src/components/<tag-name>/<tag-name>.stories.js` (inside `shared/` for app-wide components), next to the component |
 | `Page Layouts/...` | Whole-page templates assembled from the above (`.page-auth`, header + side nav + `.page-main`). | `stories/PageLayouts/<Name>.stories.js` |
 
 Quick test: *Is it a token, variable or brand asset (logo, wordmark)?* Foundations. *Is it a stock Carbon component
@@ -119,7 +127,7 @@ Rules:
   already loads them. Import only what the story itself needs, such as `page-templates.css`.
 - Don't scatter new "example", "demo" or "template" files. Existing patterns to copy:
   `stories/CarbonComponents/Button.stories.js` (Carbon),
-  `src/components/gift-nav-header/gift-nav-header.stories.js` (custom),
+  `src/components/shared/gift-nav-header/gift-nav-header.stories.js` (custom),
   `stories/Foundations/BorderRadius.stories.js` (foundation; `Brand.stories.js` is the logo).
 
 ### Interactive stories (`play` functions)
@@ -143,7 +151,8 @@ Copy from `gift-login-form.stories.js`, `gift-modal.stories.js` and `gift-dashbo
 
 ## Required for every component
 
-Each component lives in `src/components/<tag-name>/` and the folder, file and tag share one name:
+Each component lives in `src/components/<tag-name>/` (or in a group folder such as `src/components/shared/<tag-name>/`
+for app-wide components) and the folder, file and tag share one name:
 
 - `<tag-name>.js`: the component
 - `<tag-name>.stories.js`: a Storybook story under `Custom Components/` (see above; required by the PR checklist). Add `play` stories for any user-triggered behavior (see Interactive stories)
@@ -195,7 +204,7 @@ attribute. The check is `scripts/check-carbon-attributes.mjs`.
 ## More context
 
 - `docs/carbon-conventions.md`: how we use Carbon, theming, stories, styling
-- `docs/frontend-structure.md`: folder layout
+- `docs/frontend-structure.md`: folder layout and how to add a page
 - `docs/frontend-testing.md`: testing approach
 - Wiki (rationale): ADR-Frontend-Framework, Carbon-Design-System-in-Figma, Storybook-Guide
 - Per course policy, say in the PR that an AI tool was used and for what. You own the result.
