@@ -27,7 +27,7 @@ async function loadData() {
   } catch (error) {
     if (error.status === 401) {
       clearAccessToken();
-      window.location.replace("./index.html");
+      window.location.replace("/");
       return;
     }
     dashboard.user = null;
