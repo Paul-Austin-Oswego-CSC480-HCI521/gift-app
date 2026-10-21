@@ -8,13 +8,14 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.Optional;
 
 @Path("user/{uid}/attributes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
+@RolesAllowed("user")
 public class UsersAttributesResource {
     @Inject
     private UserRepository userRepository;
