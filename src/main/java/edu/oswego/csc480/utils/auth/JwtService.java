@@ -32,9 +32,7 @@ public class JwtService {
         }
     }
     public String mintLongerAccessToken(int uid, List<String> roles, String email){
-
-        long days3 = 3L * 24 * 60 * 60 * 1000;
-
+        long days3 = 3L * 24 * 60 * 60 + (System.currentTimeMillis()/1000);
         try{
             JwtBuilder builder = JwtBuilder.create("myBuilder");
             return builder
