@@ -1,19 +1,43 @@
 import { LitElement, html, css, nothing } from "lit";
-import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/inline-loading/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
-import "@carbon/web-components/es/components/structured-list/index.js";
-import "@carbon/web-components/es/components/tag/index.js";
-import "@carbon/web-components/es/components/tile/index.js";
+import "./dashboard-card.js"; // adjust paths to wherever you save these
+import "./dashboard-row.js";
 import { notificationTheme } from "../../styles/notification-theme.js";
 
-const EMPTY = "—";
+const MAX_ROWS = 7;
 
-// The dashboard's page content: one Carbon tile per person, each listing that person's gifts in a
-// cds-structured-list. It only renders what it is given (`user`, `loading`, `error`) so stories and
-// tests need no network; the page script fetches the data and listens for the two events:
-//   add-gift          the Add Gift button was pressed
-//   dashboard-reload  the Reload data button was pressed
+function ordinal(n) {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+// Date-only strings (2026-10-23) parse as UTC and can show up a day early locally,
+// so pin them to local midnight.
+function toDate(value) {
+  if (!value) return null;
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? new Date(`${value}T00:00:00`)
+    : new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+// "October 23rd, 2026", matching the mockup
+function formatDate(value) {
+  const d = toDate(value);
+  if (!d) return "";
+  const month = d.toLocaleDateString("en-US", { month: "long" });
+  return `${month} ${ordinal(d.getDate())}, ${d.getFullYear()}`;
+}
+
+// The dashboard's page content: three summary cards (People, Gifts to Buy, Upcoming Dates).
+// It only renders what it is given (`user`, `loading`, `error`) so stories and tests need no
+// network; the page script fetches the data and listens for these events:
+//   add-person   the Add Person button was pressed
+//   add-gift     the Add Gift button was pressed
+//   add-date     the Add Date button was pressed
+//   gift-toggle  a gift checkbox changed; detail: { gift, checked }
 export class GiftDashboard extends LitElement {
   static properties = {
     user: { type: Object },
@@ -24,57 +48,34 @@ export class GiftDashboard extends LitElement {
   static styles = [
     notificationTheme,
     css`
-    :host {
-      display: flex;
-      flex-direction: column;
-      gap: var(--cds-spacing-06, 1.5rem);
-    }
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cds-spacing-06, 1.5rem);
+      }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--cds-spacing-05, 1rem);
-    }
+      /* brand-theme.css's heading rules can't reach into this shadow root. */
+      h1 {
+        margin: 0;
+        font-family: var(--font-family-heading);
+        font-size: var(--page-title-font-size);
+        line-height: var(--page-title-line-height);
+        font-weight: var(--page-title-font-weight);
+      }
 
-    /* The page-level heading rules in brand-theme.css and Carbon's cds--type-* classes cannot
-       reach into this shadow root, so the heading font and sizes are set here from the brand
-       tokens (the h1 matches .page-title). */
-    h1,
-    h2 {
-      margin: 0;
-      font-family: var(--font-family-heading);
-    }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        align-items: start;
+      }
 
-    h1 {
-      font-size: var(--page-title-font-size);
-      line-height: var(--page-title-line-height);
-      font-weight: var(--page-title-font-weight);
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      line-height: 2rem;
-      font-weight: 400;
-    }
-
-    .people {
-      display: flex;
-      flex-direction: column;
-      gap: var(--cds-spacing-06, 1.5rem);
-    }
-
-    cds-tile {
-      display: flex;
-      flex-direction: column;
-      gap: var(--cds-spacing-05, 1rem);
-    }
-
-    .empty {
-      margin: 0;
-      color: var(--cds-text-secondary);
-    }
-  `,
+      @media (max-width: 66rem) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
   ];
 
   constructor() {
@@ -84,80 +85,54 @@ export class GiftDashboard extends LitElement {
     this.error = "";
   }
 
-  _emit(name) {
-    this.dispatchEvent(new CustomEvent(name, { bubbles: true, composed: true }));
+  _emit(name, detail) {
+    this.dispatchEvent(
+      new CustomEvent(name, { bubbles: true, composed: true, detail })
+    );
   }
 
-  _gifts(person) {
-    return html`
-      <cds-structured-list aria-label=${`Gifts for ${person.fullName}`}>
-        <cds-structured-list-head>
-          <cds-structured-list-header-row>
-            <cds-structured-list-header-cell>Gift</cds-structured-list-header-cell>
-            <cds-structured-list-header-cell>Type</cds-structured-list-header-cell>
-            <cds-structured-list-header-cell>Status</cds-structured-list-header-cell>
-            <cds-structured-list-header-cell>Occasion</cds-structured-list-header-cell>
-            <cds-structured-list-header-cell>Occasion date</cds-structured-list-header-cell>
-            <cds-structured-list-header-cell>Purchase date</cds-structured-list-header-cell>
-          </cds-structured-list-header-row>
-        </cds-structured-list-head>
-        <cds-structured-list-body>
-          ${person.gifts.map(
-            (gift) => html`
-              <cds-structured-list-row>
-                <cds-structured-list-cell>${gift.name}</cds-structured-list-cell>
-                <cds-structured-list-cell>${gift.type ?? EMPTY}</cds-structured-list-cell>
-                <cds-structured-list-cell>
-                  ${gift.status?.stage
-                    ? html`<cds-tag type="gray" size="sm">${gift.status.stage}</cds-tag>`
-                    : EMPTY}
-                </cds-structured-list-cell>
-                <cds-structured-list-cell>${gift.occasion?.name ?? EMPTY}</cds-structured-list-cell>
-                <cds-structured-list-cell>${gift.occasion?.date ?? EMPTY}</cds-structured-list-cell>
-                <cds-structured-list-cell>${gift.purchaseDate ?? EMPTY}</cds-structured-list-cell>
-              </cds-structured-list-row>
-            `
-          )}
-        </cds-structured-list-body>
-      </cds-structured-list>
-    `;
-  }
+  // All three cards come from user.people[].gifts[]
+  _derive() {
+    const people = this.user?.people ?? [];
+    const gifts = people.flatMap((p) => p.gifts ?? []);
 
-  _person(person) {
-    const gifts = person.gifts ?? [];
-    return html`
-      <cds-tile>
-        <h2>${person.fullName}</h2>
-        ${gifts.length
-          ? this._gifts({ ...person, gifts })
-          : html`<p class="empty">No gifts yet.</p>`}
-      </cds-tile>
-    `;
+    // Add-gift modal saves "need to buy" as stage "updated", so filter on not-purchased.
+    const toBuy = gifts.filter((g) => g.status?.stage !== "purchased");
+
+    // Unique upcoming occasions, soonest first. Only finds occasions that have a gift
+    // attached; swap for an occasions endpoint if the backend has one.
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const seen = new Map();
+    for (const g of gifts) {
+      const d = toDate(g.occasion?.date);
+      if (!g.occasion || !d || d < today) continue;
+      seen.set(`${g.occasion.name}|${g.occasion.date}`, g.occasion);
+    }
+    const dates = [...seen.values()].sort(
+      (a, b) => toDate(a.date) - toDate(b.date)
+    );
+
+    return { people, toBuy, dates };
   }
 
   render() {
-    const people = this.user?.people ?? [];
-    const heading = this.user?.fullName
-      ? `${this.user.fullName}'s people and gifts`
-      : "People and gifts";
+    const { people, toBuy, dates } = this._derive();
 
     return html`
-      <h1>${heading}</h1>
-      <div class="actions">
-        <cds-button kind="primary" ?disabled=${this.loading} @click=${() => this._emit("add-gift")}>
-          Add Gift
-        </cds-button>
-        <cds-button kind="tertiary" ?disabled=${this.loading} @click=${() => this._emit("dashboard-reload")}>
-          Reload data
-        </cds-button>
-      </div>
+      <h1>Welcome!</h1>
+
       <div role="status" aria-live="polite">
         ${this.loading
-          ? html`<cds-inline-loading status="active" assistive-text="Loading people and gifts">
+          ? html`<cds-inline-loading
+              status="active"
+              assistive-text="Loading people and gifts"
+            >
               Loading…
             </cds-inline-loading>`
           : nothing}
       </div>
+
       ${this.error
         ? html`<cds-inline-notification
             kind="error"
@@ -166,15 +141,71 @@ export class GiftDashboard extends LitElement {
             hide-close-button
           ></cds-inline-notification>`
         : nothing}
-      ${!this.loading && !this.error && this.user && people.length === 0
-        ? html`<cds-inline-notification
-            kind="info"
-            title="No people found"
-            subtitle="Add a person to start tracking gifts."
-            hide-close-button
-          ></cds-inline-notification>`
-        : nothing}
-      <div class="people">${people.map((person) => this._person(person))}</div>
+
+      <div class="grid">
+        <dashboard-card
+          heading="People"
+          description="View and manage your people"
+          add-label="Add Person"
+          .total=${people.length}
+          @add-click=${() => this._emit("add-person")}
+        >
+          <svg slot="icon" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <!-- paste people icon path -->
+          </svg>
+          ${people.slice(0, MAX_ROWS).map(
+            (p) => html`
+              <dashboard-row
+                heading=${p.fullName ?? "Unnamed person"}
+                subtitle=${p.relationship ?? ""}
+              ></dashboard-row>
+            `
+          )}
+        </dashboard-card>
+
+        <dashboard-card
+          heading="Gifts to Buy"
+          description="See what still needs to be purchased"
+          add-label="Add Gift"
+          .total=${toBuy.length}
+          @add-click=${() => this._emit("add-gift")}
+        >
+          <svg slot="icon" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <!-- paste gift icon path -->
+          </svg>
+          ${toBuy.slice(0, MAX_ROWS).map(
+            (g) => html`
+              <dashboard-row
+                variant="checkbox"
+                heading=${g.name}
+                subtitle=${formatDate(g.occasion?.date)}
+                @item-toggle=${(e) =>
+                  this._emit("gift-toggle", { gift: g, checked: e.detail.checked })}
+              ></dashboard-row>
+            `
+          )}
+        </dashboard-card>
+
+        <dashboard-card
+          heading="Upcoming Dates"
+          description="Keep track of important events"
+          add-label="Add Date"
+          .total=${dates.length}
+          @add-click=${() => this._emit("add-date")}
+        >
+          <svg slot="icon" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <!-- paste calendar icon path -->
+          </svg>
+          ${dates.slice(0, MAX_ROWS).map(
+            (d) => html`
+              <dashboard-row
+                heading=${d.name}
+                subtitle=${formatDate(d.date)}
+              ></dashboard-row>
+            `
+          )}
+        </dashboard-card>
+      </div>
     `;
   }
 }
