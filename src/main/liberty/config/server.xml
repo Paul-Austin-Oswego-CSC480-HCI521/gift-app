@@ -12,9 +12,8 @@
         <feature>jwt-1.0</feature> <!-- Added by TJ for jwt config -->
     </featureManager>
 
-    <!--
-    <keyStore password=""/>
-    -->
+    <keyStore id="defaultKeyStore" password="${keystore.password}"/>
+    <ltpa keysPassword="${keystore.password}"/>
 
     <!-- Empty on purpose. jakartaee-11.0 requires a registry. Real users live in the database and log in with JWT. -->
     <basicRegistry id="basic" realm="BasicRealm">
@@ -33,14 +32,6 @@
             issuer="${jwt.issuer}"
             jwksUri="https://localhost:${https.port}/jwt/ibm/api/myBuilder/jwk"
     />
-
-    <!--                        saved: /target/liberty/wlp/usr/.logs  -->
-    <logging
-            maxFileSize="10"
-            maxFiles="5"
-            logDirectory="${wlp.user.dir}/.logs"
-    />
-
 
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
@@ -62,8 +53,6 @@
     <library id="PostgreSQL">
         <fileset dir="${shared.resource.dir}" includes="postgresql-*.jar"/>
     </library>
-
-
 
     <dataSource jndiName="jdbc/giftapp">
         <jdbcDriver libraryRef="PostgreSQL"/>
