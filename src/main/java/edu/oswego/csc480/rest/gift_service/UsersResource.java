@@ -28,7 +28,7 @@ public class UsersResource {
     private UserRepository userRepository;
 
     @Inject
-    JsonWebToken token;
+    private JsonWebToken token;
 
     //Returns all users
     //maybe should not allow "user" to access it?
