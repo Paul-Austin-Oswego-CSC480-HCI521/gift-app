@@ -8,7 +8,7 @@ body:
       value: |
         Thanks for taking the time to report a bug! Please fill out as much detail as you can. This helps QA reproduce and prioritize it.
  
- - type: textarea
+  - type: textarea
     id: ID
     attributes:
       label: Issue serial ID
