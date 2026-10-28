@@ -21,7 +21,7 @@ public class Person {
     private String firstName;
     @Column(name="last_name")
     private String lastName;
-    @Column(name="full_name")
+    @Column(name = "full_name", insertable = false, updatable = false)
     private String fullName;
 
     @OneToOne(mappedBy="person",cascade=CascadeType.ALL, orphanRemoval = true)
