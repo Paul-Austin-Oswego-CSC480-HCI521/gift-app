@@ -19,6 +19,7 @@ liberty-plugin-config.xml
 release.properties
 buildNumber.properties
 .mvn/timing.properties
+.logs
 
 # Node (frontend tooling, if used)
 node_modules/

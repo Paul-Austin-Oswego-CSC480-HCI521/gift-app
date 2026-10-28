@@ -34,6 +34,14 @@
             jwksUri="https://localhost:${https.port}/jwt/ibm/api/myBuilder/jwk"
     />
 
+    <!--                        saved: /target/liberty/wlp/usr/.logs  -->
+    <logging
+            maxFileSize="10"
+            maxFiles="5"
+            logDirectory="${wlp.user.dir}/.logs"
+    />
+
+
     <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
     <httpEndpoint id="defaultHttpEndpoint"
 
