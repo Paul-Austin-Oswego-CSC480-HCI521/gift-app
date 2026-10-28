@@ -1,6 +1,6 @@
 package edu.oswego.csc480.rest.auth;
 
-import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
 import edu.oswego.csc480.security.PasswordService;
 import edu.oswego.csc480.utils.auth.JwtService;
@@ -42,7 +42,7 @@ public class AuthResource {
                     Map.of("message", "Email and password are required."));
         }
 
-        User user = users.findByEmail(request.email.strip()).orElse(null);
+        Users user = users.findByEmail(request.email.strip()).orElse(null);
         String storedHash = user == null ? null : user.getPasswordHash();
         String hashToVerify = storedHash == null ? DUMMY_HASH : storedHash;
         boolean verified;

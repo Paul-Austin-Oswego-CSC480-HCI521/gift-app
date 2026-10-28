@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @include head -->
+    <title>Log in | Gift App</title>
+    <meta name="description" content="Log in to your Gift App account." />
+  </head>
+  <body data-carbon-theme="brand">
+    <div class="fill-height page-auth">
+      <!-- @include nav-header -->
+      <gift-image-container>
+        <main class="page-auth__main">
+          <section class="page-auth__panel" aria-labelledby="login-heading">
+            <gift-brand></gift-brand>
+            <header class="page-auth__intro">
+              <h1 id="login-heading" class="cds--type-heading-05">Welcome back</h1>
+              <p class="cds--type-body-01">Log in for more thoughtful gift-giving.</p>
+            </header>
+
+            <div id="login-form-container">
+              <gift-login-form></gift-login-form>
+            </div>
+            <p class="cds--type-body-01">
+              New to Gift App?
+              <cds-link id="create-account-link" href="/create-account">Create account</cds-link>
+            </p>
+          </section>
+        </main>
+      </gift-image-container>
+
+    </div>
+    <script type="module" src="/src/index.js"></script>
+    <script type="module" src="/src/pages/login.js"></script>
+  </body>
+</html>

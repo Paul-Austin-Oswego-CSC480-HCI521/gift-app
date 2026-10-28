@@ -3,8 +3,8 @@ import "../../src/styles/brand-theme.css";
 import "../../src/styles/carbon-page-layout.css";
 import "../../src/styles/page-templates.css";
 
-// Documents the tokens brand-theme.css overrides on top of Carbon's defaults (applied via
-// data-carbon-theme="brand"). Keep this list in sync with src/styles/brand-theme.css - it's
+// Documents the tokens brand-theme.css overrides on top of Carbon's defaults (applied by the
+// .storybook/preview.js decorator). Keep this list in sync with src/styles/brand-theme.css - it's
 // a visual reference for that file, not a source of truth.
 const GROUPS = [
   {
@@ -80,6 +80,7 @@ const GROUPS = [
       ["--cds-support-success", "#23a227"],
       ["--cds-support-warning", "#ab8c61"],
       ["--cds-support-info", "#0043ce"],
+      ["Notifications (scoped to cds-*-notification)", "light tint surface (--cds-notification-background-*) + dark text; accents error #f8000d, info #0043ce, success #1e8a22, warning #8a6a3a, all 3:1+ on their tint - see brand-theme.css"],
     ],
   },
 ];
@@ -95,7 +96,7 @@ const swatch = ([token, value]) => html`
 export default {
   title: "Foundations/Colors",
   render: () => html`
-    <div data-carbon-theme="brand" style="display: flex; flex-direction: column; gap: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
       ${GROUPS.map(
         (group) => html`
           <section class="page-section">

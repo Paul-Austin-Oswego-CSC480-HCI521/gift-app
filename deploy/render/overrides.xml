@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+    <!-- Render terminates public HTTPS and forwards to this internal listener. -->
+    <variable name="http.port" value="${env.PORT}" />
+    <variable name="https.port" value="9443" />
+    <variable name="app.context.root" value="gift-app" />
+    <variable name="cors.allowed.domain" value="${env.FRONTEND_ORIGIN}" />
+    <variable name="jwt.issuer" value="${env.JWT_ISSUER}" />
+    <!-- Keep Liberty TLS available for the existing local JWT JWK URL. -->
+    <keyStore id="defaultKeyStore" password="${env.KEYSTORE_PASSWORD}" />
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="${env.PORT}" httpsPort="9443" />
+</server>

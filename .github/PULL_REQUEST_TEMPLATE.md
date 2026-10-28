@@ -22,6 +22,22 @@ Closes #
 - [ ] Verified manually against a full end-to-end flow (SVT style: front end through REST layer to database and back), including auth/token propagation where relevant
 - [ ] Not applicable, explain why:
 
+## How to review
+
+Tell reviewers how to review this PR: where to start, what to run, and what to look for. For example:
+
+1. Check out this branch and run the app (or Storybook, for component changes)
+2. Steps to reach the changed behavior, and what you should see
+3. Files or areas that deserve the closest look, and anything intentionally left out of scope
+
+## Screenshots (optional, for frontend PRs)
+
+Delete this section if the PR has no visible UI changes. Otherwise add before/after screenshots or a short recording, and include different viewport sizes or themes where relevant.
+
+| Before | After |
+| ------ | ----- |
+|        |       |
+
 ## Checklist
 
 - [ ] My changes follow the branching and PR conventions on the wiki

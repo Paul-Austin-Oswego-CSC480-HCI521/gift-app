@@ -11,6 +11,12 @@
  * carries Carbon's own cds--g100 class, e.g.
  * <div class="cds--g100" data-carbon-theme="brand-dark"> ... Carbon components ... </div>
  *
+ * Unlike the light theme, the cds--g100 class is REQUIRED: this file only overrides the brand
+ * tokens, and g100 supplies the ~100 other dark tokens (text-disabled, overlay, field/layer
+ * aliases, link hover, tags, ...) that Carbon does not define without it. Without the class the
+ * page background goes dark but inputs render light gray. The :root prefix on the selector below
+ * keeps these overrides winning over g100 whatever order the stylesheets load in.
+ *
  * Tokens Carbon does NOT vary between its own themes (button-primary, button-
  * danger-*, link-primary, support-info) are copied verbatim from brand-theme.css
  * rather than re-derived, since Carbon's own light/dark values are identical for
@@ -35,8 +41,11 @@
  * Carbon's default until checked against every consumer.
  */
 
-[data-carbon-theme="brand-dark"] {
+/* :root prefix raises specificity above Carbon's .cds--white/.cds--g100 theme classes, so the
+   tokens win regardless of which stylesheet the bundler loads last. */
+:root [data-carbon-theme="brand-dark"] {
   /* Backgrounds & layers */
+  --side-nav-link-color: #8CC4B6; /* lightened brand green, same as --card-heading: #1C544A is 2:1 on the dark side nav */
   --side-nav-background: #191813; /* same as --cds-background in the dark theme */
   --cds-background: #191813; /* subtle warm-cream tint of g100 #161616, same lightness */
   --cds-background-inverse: #f4f4f4; /* Carbon default — pairs correctly with dark text-inverse below, see note above */
@@ -52,6 +61,9 @@
   --cds-layer-hover-01: #2E3833;
   --cds-layer-hover-02: #404E47;
   --cds-layer-hover-03: #596D63;
+
+  /* Side nav link hover (see brand-theme.css): same sage as layer-hover-01. */
+  --cds-background-hover: #2E3833;
 
   /* Data table header (see brand-theme.css): g100 #393939 / #474747 retinted to the layer-01 sage, same lightness. */
   --cds-layer-accent-01: #343E39;

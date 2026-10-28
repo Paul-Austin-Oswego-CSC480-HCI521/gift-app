@@ -1,0 +1,16 @@
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /build
+COPY pom.xml ./
+COPY src/main/java ./src/main/java
+COPY src/main/resources ./src/main/resources
+RUN rm -f src/main/java/edu/oswego/csc480/rest/dev/DBTest.java
+RUN mvn -B -DskipTests package dependency:copy-dependencies -DincludeArtifactIds=postgresql -DoutputDirectory=/build/jdbc
+
+FROM icr.io/appcafe/open-liberty:kernel-slim-java21-openj9-ubi-minimal
+COPY --chown=1001:0 src/main/liberty/config/server.xml /config/server.xml
+COPY --chown=1001:0 deploy/render/overrides.xml /config/configDropins/overrides/render.xml
+RUN features.sh
+COPY --from=build --chown=1001:0 /build/target/gift-app.war /config/apps/gift-app.war
+COPY --from=build --chown=1001:0 /build/jdbc/ /opt/ol/wlp/usr/shared/resources/
+# Do not prewarm the server during the build: TLS/database secrets are runtime-only.
+EXPOSE 10000

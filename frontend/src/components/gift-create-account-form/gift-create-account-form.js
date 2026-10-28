@@ -3,6 +3,7 @@ import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/password-input/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
+import { notificationTheme } from "../../styles/notification-theme.js";
 
 export class CreateAccountForm extends LitElement {
   static properties = {
@@ -11,7 +12,9 @@ export class CreateAccountForm extends LitElement {
     _errors: { state: true },
   };
 
-  static styles = css`
+  static styles = [
+    notificationTheme,
+    css`
     :host {
       display: block;
     }
@@ -26,7 +29,8 @@ export class CreateAccountForm extends LitElement {
     cds-button {
       align-self: flex-start;
     }
-  `;
+  `,
+  ];
 
   constructor() {
     super();

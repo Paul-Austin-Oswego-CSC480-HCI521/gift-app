@@ -1,5 +1,5 @@
 import { html } from "lit";
-import "../../src/components/gift-brand/gift-brand.js";
+import "../../src/components/shared/gift-brand/gift-brand.js";
 
 // The Gift App logo and wordmark: a brand foundation, not an app feature.
 export default {

@@ -1,11 +1,12 @@
 import { html } from "lit";
 import "@carbon/web-components/es/components/link/index.js";
 import "@carbon/web-components/es/components/ui-shell/index.js";
-import "../../src/components/gift-nav-header/gift-nav-header.js";
+import "../../src/components/shared/gift-nav-header/gift-nav-header.js";
 import "../../src/components/gift-image-container/gift-image-container.js";
-import "../../src/components/gift-brand/gift-brand.js";
-import "../../src/components/gift-side-nav/gift-side-nav.js";
+import "../../src/components/shared/gift-brand/gift-brand.js";
+import "../../src/components/shared/gift-side-nav/gift-side-nav.js";
 import "../../src/components/gift-login-form/gift-login-form.js";
+import "../../src/components/gift-dashboard/gift-dashboard.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/brand-theme-dark.css";
 import "../../src/styles/page-templates.css";
@@ -65,7 +66,7 @@ export const Unauthenticated = {
 };
 
 // The Navigation frame (Usability-Team-Figma-File 1323:4981): header, the gift-side-nav component and an
-// empty .page-main region. Page content frames (Dashboard, Gifts, ...) are not built yet.
+// empty .page-main region. Page content frames other than the Dashboard are not built yet.
 export const Authenticated = {
   render: () =>
     frame(html`
@@ -77,6 +78,40 @@ export const Authenticated = {
              takes a matching margin-inline-start (--side-nav-width) instead. -->
         <gift-side-nav></gift-side-nav>
         <main class="page-main" aria-label="Page content"></main>
+      </div>
+    `),
+};
+
+// dashboard.html: the Authenticated template with <gift-dashboard> as the page content.
+export const Dashboard = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="dashboard"></gift-side-nav>
+        <main class="page-main" aria-label="Page content">
+          <gift-dashboard
+            .user=${{
+              fullName: "Test User 1",
+              people: [
+                {
+                  fullName: "Alex Rivera",
+                  gifts: [
+                    {
+                      name: "Pour-over coffee set",
+                      type: "Physical",
+                      status: { stage: "Need to buy" },
+                      occasion: { name: "Birthday", date: "2026-11-14" },
+                    },
+                  ],
+                },
+                { fullName: "Sam Patel", gifts: [] },
+              ],
+            }}
+          ></gift-dashboard>
+        </main>
       </div>
     `),
 };

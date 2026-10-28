@@ -4,6 +4,7 @@ import "@carbon/web-components/es/components/password-input/index.js";
 import "@carbon/web-components/es/components/checkbox/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
+import { notificationTheme } from "../../styles/notification-theme.js";
 
 export class LoginForm extends LitElement {
   static properties = {
@@ -13,7 +14,9 @@ export class LoginForm extends LitElement {
     _passwordError: { state: true },
   };
 
-  static styles = css`
+  static styles = [
+    notificationTheme,
+    css`
     :host {
       display: block;
     }
@@ -28,7 +31,8 @@ export class LoginForm extends LitElement {
     cds-button {
       align-self: flex-start;
     }
-  `;
+  `,
+  ];
 
   constructor() {
     super();
