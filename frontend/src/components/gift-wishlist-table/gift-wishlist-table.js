@@ -26,7 +26,13 @@ export class WishlistTable extends LitElement {
   };
   static styles = css`
     :host { display: block; min-width: 0; }
-    cds-tile { background: var(--card-background); border-radius: var(--radius-large); }
+    cds-tile, cds-modal { --cds-layer: var(--card-background); --cds-layer-01: var(--card-background); }
+    cds-tile, cds-modal::part(dialog) {
+      background: var(--card-background);
+      border-radius: var(--radius-large);
+      box-shadow: var(--cds-spacing-02, .25rem) var(--cds-spacing-02, .25rem) 0 var(--cds-button-danger-primary);
+    }
+    cds-modal::part(dialog) { overflow: hidden; }
     h2 { margin: 0 0 var(--cds-spacing-05, 1rem); font-family: var(--font-family-heading); font-size: var(--cds-heading-03-font-size, 1.25rem); }
     .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-spacing-04, 0.75rem); margin-bottom: var(--cds-spacing-05, 1rem); }
     cds-search { flex: 1; min-width: min(12rem, 100%); }
