@@ -1,0 +1,71 @@
+.upcoming-dates-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-05, 1rem);
+  inline-size: 100%;
+  max-inline-size: 64rem;
+}
+
+.upcoming-dates-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--cds-spacing-05, 1rem);
+}
+
+.upcoming-dates-metrics gift-tile {
+  inline-size: 100%;
+  max-inline-size: none;
+}
+
+.date-metric {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 7rem;
+  font-family: var(--font-family-body);
+}
+
+.date-metric__title,
+.date-metric__value,
+.date-metric__description {
+  margin: 0;
+}
+
+.date-metric__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--cds-heading-03-font-size, 1.25rem);
+  line-height: var(--cds-heading-03-line-height, 1.75rem);
+  font-weight: 400;
+}
+
+.date-metric__value {
+  margin-block-start: var(--cds-spacing-03, 0.5rem);
+  font-family: var(--font-family-heading);
+  font-size: var(--cds-heading-04-font-size, 1.75rem);
+  line-height: var(--cds-heading-04-line-height, 2.25rem);
+}
+
+.date-metric__description,
+.date-metric__action {
+  font-size: var(--cds-label-01-font-size, 0.875rem);
+  line-height: var(--cds-label-01-line-height, 1rem);
+}
+
+.date-metric__description {
+  color: var(--cds-text-secondary);
+}
+
+.date-metric__action {
+  margin-block-start: auto;
+  padding-block-start: var(--cds-spacing-03, 0.5rem);
+  color: var(--cds-link-primary);
+}
+
+.upcoming-dates-search {
+  inline-size: min(50rem, 100%);
+}
+
+@media (max-width: 62rem) {
+  .upcoming-dates-metrics {
+    grid-template-columns: 1fr;
+  }
+}

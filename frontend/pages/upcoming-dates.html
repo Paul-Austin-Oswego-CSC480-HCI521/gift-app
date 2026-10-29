@@ -3,10 +3,57 @@
   <head>
     <!-- @include head -->
     <title>Upcoming Dates | Gift App</title>
+    <link rel="stylesheet" href="/src/styles/upcoming-dates.css" />
   </head>
   <body data-carbon-theme="brand">
     <!-- @include app-shell active=dates -->
     <main class="page-main" aria-label="Upcoming dates">
+      <section class="upcoming-dates-summary" aria-labelledby="upcoming-dates-title">
+        <h1 class="page-title" id="upcoming-dates-title">Upcoming Dates</h1>
+
+        <div class="upcoming-dates-metrics">
+          <gift-tile>
+            <article class="date-metric">
+              <h2 class="date-metric__title">Dates in next 30 days</h2>
+              <p class="date-metric__value">4</p>
+              <p class="date-metric__description">2 birthdays, 1 holiday, 1 other</p>
+              <span class="date-metric__action">View dates →</span>
+            </article>
+          </gift-tile>
+
+          <gift-tile>
+            <article class="date-metric">
+              <h2 class="date-metric__title">Gifts still to buy</h2>
+              <p class="date-metric__value">2</p>
+              <p class="date-metric__description">Across 1 upcoming date</p>
+              <span class="date-metric__action">Go to gifts →</span>
+            </article>
+          </gift-tile>
+
+          <gift-tile>
+            <article class="date-metric">
+              <h2 class="date-metric__title">Dates with no gift planned</h2>
+              <p class="date-metric__value">2</p>
+              <p class="date-metric__description">Add ideas before they arrive</p>
+              <span class="date-metric__action">Plan gifts →</span>
+            </article>
+          </gift-tile>
+        </div>
+      </section>
+
+      <div class="upcoming-dates-search">
+        <cds-search
+          autocomplete="off"
+          close-button-label-text="Clear search input"
+          label-text="Search dates or people"
+          placeholder="Search dates or people"
+          size="md"
+          type="text"
+          role="searchbox"
+          value=""
+        ></cds-search>
+      </div>
+
       <gift-dates-table></gift-dates-table>
     </main>
 

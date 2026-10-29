@@ -3,6 +3,7 @@ import "@carbon/web-components/es/components/data-table/index.js";
 import "@carbon/web-components/es/components/icon-button/index.js";
 import "@carbon/web-components/es/components/tag/index.js";
 
+
 // SVG path data from the installed @carbon/icons package.
 const ICON_PATHS = {
   anniversary:
