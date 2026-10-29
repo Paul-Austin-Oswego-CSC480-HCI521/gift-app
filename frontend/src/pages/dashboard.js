@@ -36,6 +36,7 @@ dashboard.addEventListener("add-gift", () => {
   addGiftModal.open = true;
 });
 dashboard.addEventListener("dashboard-reload", loadData);
+addGiftModal.addEventListener("gift-added", loadData);
 
 if (getAccessToken()) {
   loadData();
