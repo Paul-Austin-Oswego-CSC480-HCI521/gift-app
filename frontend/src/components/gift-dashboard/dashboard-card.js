@@ -52,7 +52,7 @@ export class DashboardCard extends LitElement {
           <div>
             <h2>${this.heading}</h2>
             <p>${this.description}</p>
-            <cds-button size="sm" ?disabled=${this.disabled} @click=${this._add}>
+            <cds-button size="sm" ?disabled=${this.disabled} @click=${this._add}>${this.addLabel}</cds-button>
           </div>
         </header>
 
