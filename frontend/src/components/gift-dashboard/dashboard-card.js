@@ -12,6 +12,7 @@ export class DashboardCard extends LitElement {
     addLabel: { type: String, attribute: "add-label" },
     total: { type: Number },
     viewAllHref: { type: String, attribute: "view-all-href" },
+    disabled: { type: Boolean },
   };
 
   static styles = css`
@@ -51,7 +52,7 @@ export class DashboardCard extends LitElement {
           <div>
             <h2>${this.heading}</h2>
             <p>${this.description}</p>
-            <cds-button size="sm" @click=${this._add}>${this.addLabel}</cds-button>
+            <cds-button size="sm" ?disabled=${this.disabled} @click=${this._add}>
           </div>
         </header>
 

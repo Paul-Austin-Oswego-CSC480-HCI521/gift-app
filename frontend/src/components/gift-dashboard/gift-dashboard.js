@@ -149,6 +149,7 @@ export class GiftDashboard extends LitElement {
           add-label="Add Person"
           .total=${people.length}
           @add-click=${() => this._emit("add-person")}
+          ?disabled=${this.loading}
         >
           <svg slot="icon" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -172,6 +173,7 @@ export class GiftDashboard extends LitElement {
           add-label="Add Gift"
           .total=${toBuy.length}
           @add-click=${() => this._emit("add-gift")}
+          ?disabled=${this.loading}
         >
           <svg slot="icon" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -198,6 +200,7 @@ export class GiftDashboard extends LitElement {
           add-label="Add Date"
           .total=${dates.length}
           @add-click=${() => this._emit("add-date")}
+          ?disabled=${this.loading}
         >
           <svg slot="icon" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="29" height="31" viewBox="0 0 29 31" fill="none">
