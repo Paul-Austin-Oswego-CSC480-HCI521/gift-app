@@ -63,11 +63,14 @@ public class PeopleResource {
     //Create a new person for the current user
     @POST
     public Response createPerson(@PathParam("user_id") Integer uid, People person) {
+        log.info("User {} requested creation of new person.", uid);
         if (person == null) {
+            log.debug("Request does not provide a person.");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
