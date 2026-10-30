@@ -41,7 +41,7 @@ export class GiftTile extends LitElement {
        gets it except preference, which stays a plain Carbon tile in Figma. */
     :host(:not([type="preference"])) cds-tile,
     :host(:not([type="preference"])) cds-clickable-tile {
-      --cds-layer: var(--cds-background);
+      --cds-layer: var(--card-background);
       border-radius: var(--tile-radius);
       box-shadow: 6px 5px 4px 0 var(--cds-border-interactive); /* Figma: x6 y5 blur4 */
     }

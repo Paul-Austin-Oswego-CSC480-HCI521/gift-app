@@ -76,7 +76,7 @@ cds-table {
    background) keeps the hover fill working. cds-clickable-tile is its own element, not a cds-tile. */
 cds-tile,
 cds-clickable-tile {
-  --cds-layer: var(--cds-background);
+  --cds-layer: var(--card-background);
   border-radius: var(--tile-radius);
   box-shadow: 6px 5px 4px 0 var(--cds-border-interactive); /* Figma: x6 y5 blur4 */
 }
@@ -150,6 +150,10 @@ cds-dropdown::part(trigger-button) {
  * carbon-shape-overrides.js. Links expose part="link"/"title"/"title-icon-container".
  */
 cds-side-nav {
+  --cds-background: var(--side-nav-background);
+}
+
+cds-header {
   --cds-background: var(--side-nav-background);
 }
 
@@ -261,13 +265,13 @@ body,
    tokens win regardless of which stylesheet the bundler loads last. */
 :root [data-carbon-theme="brand"] {
   /* Backgrounds & layers */
-  --cds-background: #FCFBF4;
+  --cds-background: #FFFFFF;
   --side-nav-link-color: #1C544A; /* brand green, same as --cds-button-primary; 8.4:1 on --side-nav-background */
   --side-nav-background: #FAF8F1; /* deliberately not --cds-background: the Navigation frame's side nav is its own tint, see cds-side-nav rule above */
   --cds-background-inverse: #1C544A; /* brand green, not brandHex #BBE4DF — 8.69:1 against white text-inverse/icon-inverse, see note above */
   --cds-layer-01: #EAF5F0; /* was #F3F5F4 - the original sage tint was too low-saturation to read as anything but gray next to the warm/rose palette elsewhere; boosted saturation, same lightness so contrast is unaffected */
   --cds-layer-02: #F1F8F5; /* was Carbon default #ffffff - same sage tint as layer-01, one step lighter to keep it visibly "elevated" above layer-01 */
-  --cds-field-01: #F3F2ED; /* was Carbon default #f4f4f4, then white per earlier feedback, now a shade darker than --cds-background per design feedback - same warm-neutral family as the page background, not the sage tile tint */
+  --cds-field-01: #F3F2ED; /* a warm neutral below the white page background, not the sage tile tint */
   --cds-field-02: #F1F0EA; /* same warm-neutral family as field-01, one step darker to stay a shade below --cds-layer-02 the way field-01 sits below the page background */
 
   /* Layer/field hover states - Carbon's own accordion/tile/field :hover rules read these
@@ -301,9 +305,8 @@ body,
   --cds-layer-accent-hover-01: #C8E3D7;
   --cds-layer-accent-hover-02: #D0E8DD;
 
-  /* Dashboard cards and pop-ups (Dashboard 1476:6134, Gifts 2 - pop up 1323:2392) sit on #FCFBF4
-     on a white page, i.e. the same value as --cds-background. Kept as its own token so a card
-     stays that colour if the page background ever moves, like --side-nav-background. */
+  /* Dashboard cards and pop-ups (Dashboard 1476:6134, Gifts 2 - pop up 1323:2392) use a warm
+     surface distinct from the white page background. Kept as its own token like --side-nav-background. */
   --card-background: #FCFBF4;
   --card-heading: #1C544A; /* 8.38:1 on --card-background; the brand green, same as --cds-button-primary */
 

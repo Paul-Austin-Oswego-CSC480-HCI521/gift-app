@@ -25,8 +25,8 @@ const card = ({ heading, items }) => html`
 
 export default {
   title: "Carbon Components/Card",
-  // The card shares its #FCFBF4 with --cds-background in light mode (Figma shows it on a white
-  // page), so the canvas gets a white surround in light mode or the radius would be invisible.
+  // The warm card surface sits on a white page in light mode, so the canvas gets a white surround
+  // or the radius would be invisible.
   render: (_args, { globals }) => html`
     <div style="padding: 1.5rem; background: ${globals.theme === "dark" ? "var(--cds-background)" : "#fff"};">
       ${card({
