@@ -1,6 +1,7 @@
 //This is a unofficial bandaid fix to auth. The token will stay in memory, butttt its also readble
 //via scripts. So we will need to find a better solution then this. This is purely to get things rolling.
 const KEY = "accessToken";
+const USER_ID_KEY = "userId";
 
 export const getAccessToken = () => {
   try {
@@ -14,12 +15,31 @@ export const setAccessToken = (token) => {
   try {
     sessionStorage.setItem(KEY, token);
   } catch {
+    // storage unavailable; token just won't persist
+  }
+};
+
+export const getUserId = () => {
+  try {
+    return sessionStorage.getItem(USER_ID_KEY);
+  } catch {
+    return null;
+  }
+};
+
+export const setUserId = (id) => {
+  try {
+    sessionStorage.setItem(USER_ID_KEY, String(id));
+  } catch {
+    // storage unavailable; id just won't persist
   }
 };
 
 export const clearAccessToken = () => {
   try {
     sessionStorage.removeItem(KEY);
+    sessionStorage.removeItem(USER_ID_KEY);
   } catch {
+    // storage unavailable; nothing to clear
   }
 };
