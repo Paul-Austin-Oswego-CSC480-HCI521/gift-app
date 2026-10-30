@@ -43,8 +43,10 @@ public class PeopleResource {
     @Path("/{pid}")
     public Response getPerson(@PathParam("user_id") Integer uid,
                               @PathParam("pid") Integer pid) {
+        log.info("User {} requested person {}.", uid, pid);
         Optional<Users> user = userRepository.findById(uid);
         if (user.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         People person = user.get().getPeople().stream()
@@ -52,6 +54,7 @@ public class PeopleResource {
                 .findFirst()
                 .orElse(null);
         if (person == null) {
+            log.debug("Person {} does not exist.", pid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(person).build();
