@@ -66,6 +66,20 @@ export class GiftTile extends LitElement {
       overflow-wrap: anywhere;
     }
 
+    /* The add button sits dead centre of the tile, whatever height the grid row gives it. */
+    :host([type="add"]) {
+      block-size: 100%;
+    }
+
+    :host([type="add"]) cds-tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      block-size: 100%;
+      min-block-size: 5.5rem;
+    }
+
     .content {
       display: flex;
       flex-direction: column;
