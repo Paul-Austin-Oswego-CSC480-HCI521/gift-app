@@ -1,4 +1,6 @@
 import { LitElement, html, css } from "lit";
+import "@carbon/web-components/es/components/tile/tile.js";
+import "@carbon/web-components/es/components/tile/clickable-tile.js";
 
 export class GiftTile extends LitElement {
   static properties = {
@@ -12,47 +14,21 @@ export class GiftTile extends LitElement {
       max-inline-size: 24rem;
     }
 
-    .tile {
-      box-sizing: border-box;
-      block-size: 100%;
-      padding: 1.5rem;
-      background: var(--card-background, #fcfbf4);
-      color: var(--cds-text-primary, #0a0a0a);
-      border-radius: var(--radius-large, 0.75rem);
-      box-shadow: 4px 6px 4px #7f0302;
-      font-family: var(--font-family-heading, inherit);
-      text-decoration: none;
-      display: block;
-    }
-
-    :host([centered]) .tile {
+    .content[centered] {
       display: grid;
       place-items: center;
-      min-block-size: 8rem;
-    }
-
-    a.tile:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: 5px 7px 4px var(--card-shadow-color, #7f0302);
-    }
-    a.tile:focus-visible {
-      outline: 2px solid var(--cds-focus, #7f0302);
-      outline-offset: 2px;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .tile {
-        transition: transform 100ms, box-shadow 100ms;
-      }
+      min-block-size: var(--cds-spacing-12);
+      text-align: center;
     }
   `;
 
   render() {
+    const content = html`<div class="content" ?centered=${this.centered}><slot></slot></div>`;
+
     return this.href
-      ? html`<a class="tile" href=${this.href}><slot></slot></a>`
-      : html`<div class="tile"><slot></slot></div>`;
+      ? html`<cds-clickable-tile href=${this.href} link-role="link">${content}</cds-clickable-tile>`
+      : html`<cds-tile>${content}</cds-tile>`;
   }
 }
 
-
-  customElements.define("gift-tile", GiftTile);
+customElements.define("gift-tile", GiftTile);
