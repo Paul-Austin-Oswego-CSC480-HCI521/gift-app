@@ -88,6 +88,7 @@ export class GiftTile extends LitElement {
     return html`
       <div class="content">
         <slot name="title"></slot>
+        <slot name="metric"></slot>
         <slot name="description"></slot>
         <slot></slot>
         ${isAdd
