@@ -51,6 +51,15 @@ export class GiftTile extends LitElement {
       overflow: hidden;
     }
 
+    /* Person (Figma "Long name"): a long name is cut to two lines with an ellipsis, not wrapped on. */
+    :host([type="person"]) ::slotted(:not([slot])) {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
     .content {
       display: flex;
       flex-direction: column;
