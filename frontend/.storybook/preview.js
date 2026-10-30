@@ -8,8 +8,9 @@ import "../src/styles/carbon-shape-overrides.js";
 import "../src/styles/carbon-font-overrides.js";
 
 const THEMES = {
-  light: { carbonClass: "cds--white", brandTheme: "brand" },
-  dark: { carbonClass: "cds--g100", brandTheme: "brand-dark" },
+  light: { carbonClass: "cds--white", brandTheme: "brand", background: "transparent" },
+  // Dark keeps Carbon's themed background, otherwise light text has nothing dark behind it.
+  dark: { carbonClass: "cds--g100", brandTheme: "brand-dark", background: "var(--cds-background)" },
 };
 
 /** @type { import('@storybook/web-components-vite').Preview } */
@@ -46,11 +47,11 @@ const preview = {
   },
   decorators: [
     (story, context) => {
-      const { carbonClass, brandTheme } = THEMES[context.globals.theme] ?? THEMES.light;
+      const { carbonClass, brandTheme, background } = THEMES[context.globals.theme] ?? THEMES.light;
       return html`<div
         data-carbon-theme="${brandTheme}"
         class="${carbonClass}"
-        style="padding: 1rem;"
+        style="padding: 1rem; background-color: ${background};"
       >
         ${story()}
       </div>`;
