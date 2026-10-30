@@ -30,8 +30,10 @@ public class UsersAttributesResource {
 
     @GET
     public Response getUserAttributes() {
+        log.info("User {} requested their own attributes", uid);
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(user.get().getAttributes()).build();
@@ -49,6 +51,7 @@ public class UsersAttributesResource {
 
         Optional<Users>user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -62,7 +65,7 @@ public class UsersAttributesResource {
         attribute.setUser(currentUser);
         currentUser.getAttributes().add(attribute);
         userRepository.save(currentUser);
-
+        log.info("User {} created a new attribute.", uid);
         return Response.status(Response.Status.CREATED)
                 .entity(attribute)
                 .build();
@@ -81,12 +84,14 @@ public class UsersAttributesResource {
 
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
+            log.debug("User {} does not have attributes.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -95,13 +100,14 @@ public class UsersAttributesResource {
                 .findFirst()
                 .orElse(null);
         if(existing == null) {
+            log.debug("User attribute {} does not exist.", aid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         existing.setAttribute_Name(attribute.getAttribute_Name());
         existing.setValue(attribute.getValue());
         userRepository.save(currentUser);
-
+        log.info("User {} updated user attribute {}.", uid, aid);
         return Response.noContent().build();
     }
 
@@ -109,13 +115,16 @@ public class UsersAttributesResource {
     @Path("/{aid}")
     public Response deleteAttribute(@PathParam("aid") Integer aid) {
         Optional<Users> user = userRepository.findById(uid);
+        log.info("User {} is trying to delete attribute {}", uid, aid);
         if(user.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
+            log.debug("User {} does not have attributes", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -125,6 +134,7 @@ public class UsersAttributesResource {
                 .orElse(null);
 
         if(existing == null) {
+            log.debug("User attribute {} does not exist.", aid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
