@@ -10,7 +10,7 @@ export class GiftPreferencesHeader extends LitElement {
     h2 { margin: 0; font-family: var(--font-family-heading); font-size: var(--cds-heading-compact-01-font-size, 1rem); font-weight: var(--cds-heading-compact-01-font-weight, 600); }
     p { margin: var(--cds-spacing-03, .5rem) 0 var(--cds-spacing-05, 1rem); }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: var(--cds-spacing-05, 1rem); }
-    .card { position: relative; padding-inline-end: var(--cds-spacing-07, 2rem); background: var(--card-background); border-radius: var(--radius-small); }
+    .card { position: relative; padding-inline-end: var(--cds-spacing-07, 2rem); background: var(--cds-background); border-radius: var(--radius-small); }
     h3 { margin: 0 0 var(--cds-spacing-03, .5rem); font-family: var(--font-family-heading); font-size: var(--cds-label-01-font-size, .75rem); font-weight: var(--cds-heading-compact-01-font-weight, 600); }
     cds-link { position: absolute; inset-inline-end: var(--cds-spacing-04, .75rem); inset-block-end: var(--cds-spacing-05, 1rem); }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
