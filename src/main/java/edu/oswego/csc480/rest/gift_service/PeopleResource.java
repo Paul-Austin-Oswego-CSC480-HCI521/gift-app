@@ -117,8 +117,10 @@ public class PeopleResource {
     @Path("/{pid}")
     public Response deletePerson(@PathParam("user_id") Integer uid,
                                  @PathParam("pid") Integer pid) {
+        log.info("User {} is trying to delete person {}", uid, pid);
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -127,6 +129,7 @@ public class PeopleResource {
                 .findFirst()
                 .orElse(null);
         if (person == null) {
+            log.debug("Person {} does not exist.", pid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         user.getPeople().remove(person);
