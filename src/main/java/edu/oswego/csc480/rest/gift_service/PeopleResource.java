@@ -8,6 +8,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +23,15 @@ public class PeopleResource {
     @Inject
     private UserRepository userRepository;
 
+    private Logger log = LoggerFactory.getLogger(PeopleResource.class);
+
     //Returns all people belonging to the current user
     @GET
     public Response getPeople(@PathParam("user_id") Integer uid) {
+        log.info("User {} requested a list of all their people", uid);
         Optional<Users> user = userRepository.findById(uid);
         if (user.isEmpty()) {
+            log.debug("User {} does not exist", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         List<People> people = user.get().getPeople();
@@ -36,8 +43,10 @@ public class PeopleResource {
     @Path("/{pid}")
     public Response getPerson(@PathParam("user_id") Integer uid,
                               @PathParam("pid") Integer pid) {
+        log.info("User {} requested person {}.", uid, pid);
         Optional<Users> user = userRepository.findById(uid);
         if (user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         People person = user.get().getPeople().stream()
@@ -45,6 +54,7 @@ public class PeopleResource {
                 .findFirst()
                 .orElse(null);
         if (person == null) {
+            log.debug("Person {} does not exist.", pid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(person).build();
@@ -53,11 +63,14 @@ public class PeopleResource {
     //Create a new person for the current user
     @POST
     public Response createPerson(@PathParam("user_id") Integer uid, People person) {
+        log.info("User {} requested creation of new person.", uid);
         if (person == null) {
+            log.debug("Request does not provide a person.");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -76,8 +89,10 @@ public class PeopleResource {
     public Response updatePerson(@PathParam("user_id") Integer uid,
                                  @PathParam("pid") Integer pid,
                                  People updatedPerson) {
+        log.info("User {} is attempting to update person {}.", uid, pid);
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -86,6 +101,7 @@ public class PeopleResource {
                 .findFirst()
                 .orElse(null);
         if (existingPerson == null) {
+            log.debug("Person {} does not exist.", pid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedPerson.setId(pid);
@@ -101,8 +117,10 @@ public class PeopleResource {
     @Path("/{pid}")
     public Response deletePerson(@PathParam("user_id") Integer uid,
                                  @PathParam("pid") Integer pid) {
+        log.info("User {} is trying to delete person {}", uid, pid);
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -111,6 +129,7 @@ public class PeopleResource {
                 .findFirst()
                 .orElse(null);
         if (person == null) {
+            log.debug("Person {} does not exist.", pid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         user.getPeople().remove(person);
