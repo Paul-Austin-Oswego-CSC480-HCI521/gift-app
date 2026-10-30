@@ -5,10 +5,10 @@ afterEach(() => {
   document.body.replaceChildren();
 });
 
-async function renderGiftTile({ href, centered = false } = {}) {
+async function renderGiftTile({ href, type } = {}) {
   const tile = document.createElement("gift-tile");
   if (href !== undefined) tile.href = href;
-  tile.centered = centered;
+  if (type) tile.type = type;
   tile.innerHTML = "<span>Gift tile content</span>";
   document.body.append(tile);
   await tile.updateComplete;
@@ -21,7 +21,7 @@ describe("gift-tile", () => {
 
     expect(tile.shadowRoot.querySelector("cds-tile")).not.toBeNull();
     expect(tile.shadowRoot.querySelector("cds-clickable-tile")).toBeNull();
-    expect(tile.shadowRoot.querySelector(".content slot").assignedElements()[0].textContent).toBe(
+    expect(tile.shadowRoot.querySelector(".content slot:not([name])").assignedElements()[0].textContent).toBe(
       "Gift tile content"
     );
   });
@@ -36,9 +36,27 @@ describe("gift-tile", () => {
     expect(tile.shadowRoot.querySelector("cds-tile")).toBeNull();
   });
 
-  it("centers its content when centered is set", async () => {
-    const tile = await renderGiftTile({ centered: true });
+  it("defaults to the base type and reflects type for sizing", async () => {
+    const tile = await renderGiftTile();
+    expect(tile).toHaveAttribute("type", "base");
 
-    expect(tile.shadowRoot.querySelector(".content")).toHaveAttribute("centered");
+    tile.type = "person";
+    await tile.updateComplete;
+    expect(tile).toHaveAttribute("type", "person");
+  });
+
+  it("renders an add button that emits gift-tile-add for the add type", async () => {
+    const tile = await renderGiftTile({ type: "add" });
+    let added = false;
+    tile.addEventListener("gift-tile-add", () => (added = true));
+
+    tile.shadowRoot.querySelector("cds-icon-button").click();
+
+    expect(added).toBe(true);
+  });
+
+  it("does not render the add button for other types", async () => {
+    const tile = await renderGiftTile({ type: "person" });
+    expect(tile.shadowRoot.querySelector("cds-icon-button")).toBeNull();
   });
 });
