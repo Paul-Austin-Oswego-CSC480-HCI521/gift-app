@@ -46,9 +46,15 @@ export class GiftTile extends LitElement {
       box-shadow: 6px 5px 4px 0 var(--cds-border-interactive); /* Figma: x6 y5 blur4 */
     }
 
-    /* The clickable tile's inner link is square and would cover the rounded border. */
+    /* The clickable tile's inner link is square and would cover the rounded corners. The 1px border is
+       reserved at rest so the hover border does not resize the tile. */
     cds-clickable-tile {
       overflow: hidden;
+      border: 1px solid transparent;
+    }
+
+    :host(:not([type="preference"])) cds-clickable-tile:hover {
+      border-color: var(--cds-button-primary-active);
     }
 
     /* Person (Figma "Long name"): a long name is cut to two lines with an ellipsis, not wrapped on. */
