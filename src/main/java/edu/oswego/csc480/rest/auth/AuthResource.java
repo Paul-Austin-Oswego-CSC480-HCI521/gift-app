@@ -13,6 +13,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,8 @@ public class AuthResource {
     private PasswordService passwords;
 
     private JwtService tokens = JwtService.getInstance();
+
+    private Logger log = LoggerFactory.getLogger(AuthResource.class);
 
     @POST
     @Path("/login")

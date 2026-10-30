@@ -11,7 +11,7 @@ public class PasswordService {
     private static final int COST = 10;
     private static final int MIN_PASSWORD_LENGTH= 6;
 
-    private Logger log = LoggerFactory.getLogger(JwtService.class);
+    private Logger log = LoggerFactory.getLogger(PasswordService.class);
 
     public String hash(String password){
         log.info("hashing password...");
