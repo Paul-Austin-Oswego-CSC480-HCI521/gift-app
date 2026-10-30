@@ -8,10 +8,13 @@ import "../src/styles/carbon-shape-overrides.js";
 import "../src/styles/carbon-font-overrides.js";
 
 const THEMES = {
-  light: { carbonClass: "cds--white", brandTheme: "brand", background: "transparent" },
-  // Dark keeps Carbon's themed background, otherwise light text has nothing dark behind it.
-  dark: { carbonClass: "cds--g100", brandTheme: "brand-dark", background: "var(--cds-background)" },
+  light: { carbonClass: "cds--white", brandTheme: "brand" },
+  dark: { carbonClass: "cds--g100", brandTheme: "brand-dark" },
 };
+
+// Only Foundations and tile/card stories get an explicit white background in light mode. Dark keeps
+// the themed background, otherwise light text has nothing dark behind it.
+const showsPageBackground = (title) => /^Foundations\/|(^|\/)[^/]*(Tile|Card)/.test(title);
 
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
@@ -47,7 +50,13 @@ const preview = {
   },
   decorators: [
     (story, context) => {
-      const { carbonClass, brandTheme, background } = THEMES[context.globals.theme] ?? THEMES.light;
+      const { carbonClass, brandTheme } = THEMES[context.globals.theme] ?? THEMES.light;
+      const background =
+        context.globals.theme === "dark"
+          ? "var(--cds-background)"
+          : showsPageBackground(context.title)
+            ? "#fff"
+            : "transparent";
       return html`<div
         data-carbon-theme="${brandTheme}"
         class="${carbonClass}"
