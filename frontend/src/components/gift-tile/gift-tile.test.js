@@ -36,6 +36,19 @@ describe("gift-tile", () => {
     expect(tile.shadowRoot.querySelector("cds-tile")).toBeNull();
   });
 
+  it("makes every type clickable when href is set", async () => {
+    for (const type of ["base", "section", "metric", "preference", "person"]) {
+      const tile = await renderGiftTile({ href: "/gifts", type });
+      expect(tile.shadowRoot.querySelector("cds-clickable-tile")).toHaveAttribute("href", "/gifts");
+      tile.remove();
+    }
+  });
+
+  it("renders the metric slot", async () => {
+    const tile = await renderGiftTile({ type: "metric", href: "/gifts" });
+    expect(tile.shadowRoot.querySelector('slot[name="metric"]')).not.toBeNull();
+  });
+
   it("defaults to the base type and reflects type for sizing", async () => {
     const tile = await renderGiftTile();
     expect(tile).toHaveAttribute("type", "base");
