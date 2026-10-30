@@ -53,6 +53,7 @@
      (Radius/Small = 4, Radius/Large = 12). See Foundations/Border Radius. */
   --radius-small: 0.25rem; /* $border-radius-04 from @carbon/layout */
   --radius-large: 0.75rem;
+  --tile-radius: 1rem; /* Figma tile radius, 16px (Radius/Large in the theme above is 12px) */
   /* Compact side nav (12rem, including its 1px right border). Applied to cds-side-nav's inner panel by carbon-shape-overrides.js. */
   --side-nav-width: 12rem;
 
@@ -69,9 +70,27 @@ cds-table {
   --cds-border-subtle: var(--cds-border-subtle-01);
 }
 
-/* Tile/Card (Figma Tile and Card components, Radius/Large). Applies to every cds-tile. */
-cds-tile {
-  border-radius: var(--radius-large);
+/* Tile/Card (Figma "Tile (brand themed)" 12:406 and Gift Tile): Background/background surface,
+   16px corners and the hard offset shadow. Hover (--cds-layer-hover) and focus (--cds-focus) already
+   come from the tokens above. Carbon paints the tile from --cds-layer, so setting that (not
+   background) keeps the hover fill working. cds-clickable-tile is its own element, not a cds-tile. */
+cds-tile,
+cds-clickable-tile {
+  --cds-layer: var(--cds-background);
+  border-radius: var(--tile-radius);
+  box-shadow: 6px 5px 4px 0 var(--cds-border-interactive); /* Figma: x6 y5 blur4 */
+}
+
+/* Carbon paints a clickable tile's hover fill on a square inner link inside its shadow root, which
+   the host's border-radius alone does not round. Clipping the host does; the shadow is outside the
+   box so it is not clipped, and the focus outline is drawn inside the link. */
+cds-clickable-tile {
+  overflow: hidden;
+  border: 1px solid transparent; /* reserved at rest so the hover border does not resize the tile */
+}
+
+cds-clickable-tile:hover {
+  border-color: var(--cds-button-primary-active);
 }
 
 .gift-card {

@@ -20,3 +20,14 @@ export default {
 };
 
 export const Default = {};
+
+export const Clickable = {
+  render: ({ label, value }) => html`
+    <cds-clickable-tile href="#" link-role="link" style="min-width: 10rem;">
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <span style="font-size: 0.75rem; color: var(--cds-text-secondary);">${label}</span>
+        <span style="font-size: 1.5rem; font-weight: 600;">${value}</span>
+      </div>
+    </cds-clickable-tile>
+  `,
+};
