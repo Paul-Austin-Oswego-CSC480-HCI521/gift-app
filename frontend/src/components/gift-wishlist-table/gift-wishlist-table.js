@@ -3,7 +3,7 @@ import "@carbon/web-components/es/components/data-table/index.js";
 import "@carbon/web-components/es/components/search/index.js";
 import "@carbon/web-components/es/components/pagination/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/tile/index.js";
+import "../gift-tile/gift-tile.js";
 import "@carbon/web-components/es/components/modal/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/select/index.js";
@@ -26,13 +26,8 @@ export class WishlistTable extends LitElement {
   };
   static styles = css`
     :host { display: block; min-width: 0; }
-    cds-tile, cds-modal { --cds-layer: var(--card-background); --cds-layer-01: var(--card-background); }
-    cds-tile, cds-modal::part(dialog) {
-      background: var(--card-background);
-      border-radius: var(--radius-large);
-      box-shadow: var(--cds-spacing-02, .25rem) var(--cds-spacing-02, .25rem) 0 var(--cds-button-danger-primary);
-    }
-    cds-modal::part(dialog) { overflow: hidden; }
+    gift-tile { max-inline-size: none; } /* the table needs the full width, not the tile's card width */
+    gift-tile, cds-modal { --cds-layer: var(--card-background); --cds-layer-01: var(--card-background); }
     h2 { margin: 0 0 var(--cds-spacing-05, 1rem); font-family: var(--font-family-heading); font-size: var(--cds-heading-03-font-size, 1.25rem); }
     .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-spacing-04, 0.75rem); margin-bottom: var(--cds-spacing-05, 1rem); }
     cds-search { flex: 1; min-width: min(12rem, 100%); }
@@ -134,7 +129,7 @@ export class WishlistTable extends LitElement {
   render() {
     const rows = this.filteredItems;
     const page = Math.min(this._page, Math.max(1, Math.ceil(rows.length / this._pageSize)));
-    return html`<cds-tile><h2>My Wish List</h2>
+    return html`<gift-tile><h2>My Wish List</h2>
       <div class="toolbar">
         <cds-search label-text="Search wish list" close-button-label-text="Clear search" placeholder="Search items" .value=${this._query}
           @cds-search-input=${event => { this._query = event.detail.value; this._page = 1; }}></cds-search>
@@ -170,7 +165,7 @@ export class WishlistTable extends LitElement {
         @cds-page-sizes-select-changed=${event => { this._pageSize = event.detail.pageSize; this._page = 1; }}>
         ${[7, 14, 28].map(size => html`<cds-select-item value=${size}>${size}</cds-select-item>`)}
       </cds-pagination></div>
-    </cds-tile>${this._editor()}`;
+    </gift-tile>${this._editor()}`;
   }
 }
 customElements.define("gift-wishlist-table", WishlistTable);
