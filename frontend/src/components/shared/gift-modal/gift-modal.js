@@ -13,9 +13,7 @@ import "../../../styles/brand-theme.css";
 import "../../../styles/carbon-shape-overrides.js";
 import "../../../styles/carbon-font-overrides.js";
 import { apiFetch } from "../../../api/client.js";
-import { getAccessToken } from "../../../auth/token-store.js";
-
-const USER_ID = 1;
+import { getAccessToken, getUserId } from "../../../auth/token-store.js";
 
 const STAGES = {
   "need-to-buy": "updated",
@@ -128,7 +126,7 @@ export class GiftAddGiftModal extends LitElement {
 
     try {
     //Send a json out to database
-      await apiFetch(`/user/${USER_ID}/gift/person/${this._personId}`, {
+      await apiFetch(`/user/${getUserId()}/gift/person/${this._personId}`, {
             token: getAccessToken(),
             method: "POST",
             headers: { "Content-Type": "application/json" },
