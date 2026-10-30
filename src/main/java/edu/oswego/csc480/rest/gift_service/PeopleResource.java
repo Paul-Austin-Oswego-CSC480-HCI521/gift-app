@@ -28,8 +28,10 @@ public class PeopleResource {
     //Returns all people belonging to the current user
     @GET
     public Response getPeople(@PathParam("user_id") Integer uid) {
+        log.info("User {} requested a list of all their people", uid);
         Optional<Users> user = userRepository.findById(uid);
         if (user.isEmpty()) {
+            log.debug("User {} does not exist", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         List<People> people = user.get().getPeople();
