@@ -42,6 +42,7 @@ public class AuthResource {
     public Response login(LoginRequest request) {
         if (request == null || request.email == null || request.email.isBlank()
                 || request.password == null || request.password.isEmpty()) {
+            log.debug("Request form invalid.");
             return reply(Response.Status.BAD_REQUEST,
                     Map.of("message", "Email and password are required."));
         }
@@ -51,17 +52,21 @@ public class AuthResource {
         String hashToVerify = storedHash == null ? DUMMY_HASH : storedHash;
         boolean verified;
         try {
+            log.info("Auth request for user {} has been received.", user.getId());
             verified = passwords.verify(request.password, hashToVerify);
         } catch (IllegalArgumentException invalidHashOrPassword) {
+            log.error("Invalid hash or password.", invalidHashOrPassword);
             verified = false;
         }
 
         if (user == null || storedHash == null || !verified) {
+            log.info("Auth request failed. email: {}", request.email);
             return reply(Response.Status.UNAUTHORIZED,
                     Map.of("message", "Invalid email or password."));
         }
 
         String token = tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
+        log.info("Auth Request successful for user {}.", user.getId());
         return reply(Response.Status.OK, new LoginResponse(token, user.getId()));
     }
 
