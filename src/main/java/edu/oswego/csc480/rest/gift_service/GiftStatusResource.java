@@ -35,7 +35,7 @@ public class GiftStatusResource {
         log.info("User {} requested status for gift {}",uid, gid);
         Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
         Gifts gift = OccasionResource.getGift(user.get(), gid);
@@ -55,7 +55,7 @@ public class GiftStatusResource {
 
         Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
         Gifts gift = OccasionResource.getGift(user.get(), gid);
@@ -76,7 +76,7 @@ public class GiftStatusResource {
 
         Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
         Gifts gift = OccasionResource.getGift(user.get(), gid);

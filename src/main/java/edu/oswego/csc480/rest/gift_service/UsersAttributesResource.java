@@ -33,7 +33,7 @@ public class UsersAttributesResource {
         log.info("User {} requested their own attributes", uid);
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(user.get().getAttributes()).build();
@@ -51,7 +51,7 @@ public class UsersAttributesResource {
 
         Optional<Users>user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -84,7 +84,7 @@ public class UsersAttributesResource {
 
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -117,7 +117,7 @@ public class UsersAttributesResource {
         Optional<Users> user = userRepository.findById(uid);
         log.info("User {} is trying to delete attribute {}", uid, aid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 

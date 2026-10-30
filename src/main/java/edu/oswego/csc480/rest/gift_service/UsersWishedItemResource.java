@@ -33,7 +33,7 @@ public class UsersWishedItemResource {
         Optional<Users> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -53,7 +53,7 @@ public class UsersWishedItemResource {
         Optional<Users> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -88,7 +88,7 @@ public class UsersWishedItemResource {
 
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -120,7 +120,7 @@ public class UsersWishedItemResource {
     public Response deleteWishedItem(@PathParam("wid") Integer wid) {
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 

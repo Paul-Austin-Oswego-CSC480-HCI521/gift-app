@@ -71,7 +71,7 @@ public class UsersResource {
         Users existingUser = userRepository.findById(id)
                 .orElse(null);
         if(existingUser == null) {
-            log.info("User {} was not found in database.", id);
+            log.warn("User {} does not exist.", id);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedUser.setId(id);
@@ -88,7 +88,7 @@ public class UsersResource {
         Users existingUser = userRepository.findById(id)
                 .orElse(null);
         if(existingUser == null) {
-            log.warn("User deletion for user {} was invalid. User does not exist.", id);
+            log.warn("User {} does not exist.", id);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         userRepository.deleteById(id);

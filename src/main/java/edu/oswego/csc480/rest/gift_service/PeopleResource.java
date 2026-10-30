@@ -46,7 +46,7 @@ public class PeopleResource {
         log.info("User {} requested person {}.", uid, pid);
         Optional<Users> user = userRepository.findById(uid);
         if (user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         People person = user.get().getPeople().stream()
@@ -70,7 +70,7 @@ public class PeopleResource {
         }
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -92,7 +92,7 @@ public class PeopleResource {
         log.info("User {} is attempting to update person {}.", uid, pid);
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -120,7 +120,7 @@ public class PeopleResource {
         log.info("User {} is trying to delete person {}", uid, pid);
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();

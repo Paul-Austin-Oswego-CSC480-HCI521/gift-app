@@ -142,7 +142,7 @@ public class GiftsResource {
         log.info("User {} requested update of gift {}.", uid, gid);
         Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -174,7 +174,7 @@ public class GiftsResource {
         log.info("User {} has chosen to delete every gift.", uid);
         Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -220,7 +220,7 @@ public class GiftsResource {
         log.info("User {} has decided to delete every gift from Person {}", uid, pid);
         Optional<Users> user = uRepo.findById(uid);
         if (user.isEmpty()){
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 

@@ -46,7 +46,7 @@ public class PeopleAttributesResource {
         log.info("User {} requested attributes from person {}.", uid, pid);
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -81,7 +81,7 @@ public class PeopleAttributesResource {
         Optional<Users> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -158,7 +158,7 @@ public class PeopleAttributesResource {
         log.info("User {} requested deletion of Person {}'s attributes.", uid, pid);
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
-            log.debug("User {} does not exist.", uid);
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
