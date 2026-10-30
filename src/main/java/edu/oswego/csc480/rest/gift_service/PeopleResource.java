@@ -89,8 +89,10 @@ public class PeopleResource {
     public Response updatePerson(@PathParam("user_id") Integer uid,
                                  @PathParam("pid") Integer pid,
                                  People updatedPerson) {
+        log.info("User {} is attempting to update person {}.", uid, pid);
         Optional<Users> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
+            log.debug("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         Users user = optUser.get();
@@ -99,6 +101,7 @@ public class PeopleResource {
                 .findFirst()
                 .orElse(null);
         if (existingPerson == null) {
+            log.debug("Person {} does not exist.", pid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedPerson.setId(pid);
