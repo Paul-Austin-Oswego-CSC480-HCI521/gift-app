@@ -153,7 +153,8 @@ cds-side-nav {
   --cds-background: var(--side-nav-background);
 }
 
-cds-header {
+/* cds-header sits in gift-nav-header's shadow root, so the tint is set on the host and inherited in. */
+gift-nav-header {
   --cds-background: var(--side-nav-background);
 }
 
