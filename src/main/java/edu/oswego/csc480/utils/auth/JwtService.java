@@ -15,7 +15,7 @@ public class JwtService {
     private JwtService(){
     }
 
-    private Logger log = LoggerFactory.getLogger(UsersAttributesResource.class);
+    private Logger log = LoggerFactory.getLogger(JwtService.class);
 
     public static JwtService getInstance(){
         if (instance == null){
