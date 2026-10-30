@@ -8,6 +8,7 @@ import edu.oswego.csc480.rest.auth.LoginResponse;
 import edu.oswego.csc480.security.PasswordService;
 import edu.oswego.csc480.utils.auth.JwtService;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -160,7 +161,15 @@ public class AuthResourceTest {
         try (Response response = resource.login(request(EMAIL, PASSWORD))) {
             assertEquals(200, response.getStatus());
             LoginResponse result = assertInstanceOf(LoginResponse.class, response.getEntity());
-            assertEquals("test-token", result.getToken());
+            NewCookie cookie = response.getCookies().get("gift_access_token");
+            assertNotNull(cookie);
+            assertEquals("test-token", cookie.getValue());
+            assertTrue(cookie.isHttpOnly());
+            assertTrue(cookie.isSecure());
+            assertEquals(NewCookie.SameSite.STRICT, cookie.getSameSite());
+            assertEquals("/", cookie.getPath());
+            assertNull(cookie.getDomain());
+            assertEquals(NewCookie.DEFAULT_MAX_AGE, cookie.getMaxAge());
             assertEquals(Integer.valueOf(42), result.getUserId());
             assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
             assertEquals("no-store", response.getHeaderString("Cache-Control"));

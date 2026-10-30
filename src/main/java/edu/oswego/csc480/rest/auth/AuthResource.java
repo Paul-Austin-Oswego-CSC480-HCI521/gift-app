@@ -12,6 +12,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
+    private static final String COOKIE_NAME = "gift_access_token";
     private static final String DUMMY_HASH = new PasswordService().hash("dummy-password");
 
     @Inject
@@ -58,7 +60,21 @@ public class AuthResource {
         }
 
         String token = tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
-        return reply(Response.Status.OK, new LoginResponse(token, user.getId()));
+        return Response.ok(new LoginResponse(user.getId()), MediaType.APPLICATION_JSON_TYPE)
+                .header("Cache-Control", "no-store")
+                .cookie(authCookie(token).build()).build();
+    }
+
+    @POST
+    @Path("/logout")
+    public Response logout() {
+        return Response.noContent().header("Cache-Control", "no-store")
+                .cookie(authCookie("").maxAge(0).build()).build();
+    }
+
+    private NewCookie.Builder authCookie(String value) {
+        return new NewCookie.Builder(COOKIE_NAME).value(value).path("/")
+                .httpOnly(true).secure(true).sameSite(NewCookie.SameSite.STRICT);
     }
 
     private Response reply(Response.Status status, Object body) {
