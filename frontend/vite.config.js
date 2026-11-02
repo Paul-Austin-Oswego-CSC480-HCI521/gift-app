@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import { loadEnv } from "vite";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { fileURLToPath } from "node:url";
@@ -9,6 +10,8 @@ import { htmlPartials } from "./scripts/html-partials-plugin.mjs";
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 
 const PAGES_DIR = "pages";
+
+const apiProxyTarget = loadEnv(process.env.NODE_ENV ?? "development", dirname, "VITE_").VITE_API_PROXY_TARGET;
 
 const findPages = (dir) =>
   readdirSync(join(dirname, dir), { withFileTypes: true }).flatMap((entry) => {
@@ -59,6 +62,11 @@ export default defineConfig({
   plugins: [htmlPartials({ dir: join(dirname, PAGES_DIR, "_partials") }), prettyUrls(), flattenPagesDir()],
   server: {
     port: 5173,
+    // Lets the dev server reach a remote backend without CORS: set VITE_API_BASE_URL=/gift-app/api
+    // and VITE_API_PROXY_TARGET to the backend's origin.
+    proxy: apiProxyTarget
+      ? { "/gift-app/api": { target: apiProxyTarget, changeOrigin: true } }
+      : undefined,
   },
   build: {
     rollupOptions: {
