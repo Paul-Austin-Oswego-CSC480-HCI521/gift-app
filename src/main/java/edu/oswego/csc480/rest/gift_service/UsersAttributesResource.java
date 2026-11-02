@@ -9,6 +9,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.annotation.security.RolesAllowed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -23,10 +26,14 @@ public class UsersAttributesResource {
     @PathParam("uid")
     private Integer uid;
 
+    private Logger log = LoggerFactory.getLogger(UsersAttributesResource.class);
+
     @GET
     public Response getUserAttributes() {
+        log.info("User {} requested their own attributes", uid);
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(user.get().getAttributes()).build();
@@ -44,6 +51,7 @@ public class UsersAttributesResource {
 
         Optional<Users>user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -57,7 +65,7 @@ public class UsersAttributesResource {
         attribute.setUser(currentUser);
         currentUser.getAttributes().add(attribute);
         userRepository.save(currentUser);
-
+        log.info("User {} created a new attribute.", uid);
         return Response.status(Response.Status.CREATED)
                 .entity(attribute)
                 .build();
@@ -76,12 +84,14 @@ public class UsersAttributesResource {
 
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
+            log.debug("User {} does not have attributes.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -90,13 +100,14 @@ public class UsersAttributesResource {
                 .findFirst()
                 .orElse(null);
         if(existing == null) {
+            log.debug("User attribute {} does not exist.", aid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         existing.setAttribute_Name(attribute.getAttribute_Name());
         existing.setValue(attribute.getValue());
         userRepository.save(currentUser);
-
+        log.info("User {} updated user attribute {}.", uid, aid);
         return Response.noContent().build();
     }
 
@@ -104,13 +115,16 @@ public class UsersAttributesResource {
     @Path("/{aid}")
     public Response deleteAttribute(@PathParam("aid") Integer aid) {
         Optional<Users> user = userRepository.findById(uid);
+        log.info("User {} is trying to delete attribute {}", uid, aid);
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
+            log.debug("User {} does not have attributes", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -120,6 +134,7 @@ public class UsersAttributesResource {
                 .orElse(null);
 
         if(existing == null) {
+            log.debug("User attribute {} does not exist.", aid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
