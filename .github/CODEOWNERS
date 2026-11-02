@@ -4,7 +4,8 @@
 # GitHub auto-requests a review from the matching owner(s) when a PR touches
 # a given path.
 #
-# For now, every path requires review from Shauna (GitHub admin) or Lin
-# (build coordinator) - at least one of them must approve before a PR can
-# merge. Revisit this once the team splits into per-team ownership.
-*                               @shkeating @linthantaung-gif
+# Default owners for paths outside the frontend.
+*                               @RiverSimard @ttanner04 @AndrewFKerfienTorres @benkim0
+
+# Frontend changes are owned by River and Shauna.
+/frontend/                      @RiverSimard @shkeating
