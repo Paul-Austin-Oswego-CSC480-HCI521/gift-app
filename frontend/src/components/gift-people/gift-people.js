@@ -1,5 +1,7 @@
-import { LitElement, html, nothing, unsafeCSS } from "lit";
-import peopleStyles from "../../styles/people.css?inline";
+import { LitElement, html, nothing, css } from "lit";
+
+// Gift Tile from Figma team 
+import "../gift-tile/gift-tile.js";
 
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/search/index.js";
@@ -15,8 +17,15 @@ export class GiftPeople extends LitElement {
     search: { type: String },
     showForm: { type: Boolean },
   };
+  static styles = css`
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+`;
 
-  static styles = unsafeCSS(peopleStyles);
+
 
   constructor() {
     super();
@@ -101,13 +110,13 @@ export class GiftPeople extends LitElement {
       ${!this.loading && !this.error ? html`
         <div class="grid">
           ${this.filteredPeople.map((person) => html`
-            <cds-tile class="person-card">
-              <span>${person.fullName || [person.firstName, person.lastName].filter(Boolean).join(" ")}</span>
-              <span aria-hidden="true">→</span>
-            </cds-tile>
+            <gift-tile type="person">
+              <span>
+                ${person.fullName || [person.firstName, person.lastName].filter(Boolean).join(" ")}
+              </span>
+            </gift-tile>
           `)}
-          <button class="add-card" type="button" aria-label="Add Person" @click=${this.openForm}>+</button>
-        </div>
+          <gift-tile type="add" add-label="Add person" @gift-tile-add=${this.openForm} ></gift-tile>
         ${this.filteredPeople.length === 0 ? html`
           <p class="message">${this.search ? "No matching people found." : "No people yet. Add your first person."}</p>
         ` : nothing}
