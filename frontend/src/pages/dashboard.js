@@ -1,11 +1,8 @@
 import "../app/boot-authed.js";
-import { LitElement, html } from "lit";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/checkbox/index.js";
 import { apiFetch } from "../api/client.js";
 import "../components/gift-dashboard/gift-dashboard.js";
 import "../components/shared/gift-modal/gift-modal.js";
-import { getAccessToken, clearAccessToken } from "../auth/token-store.js";
+import { getAccessToken, getUserId, clearAccessToken } from "../auth/token-store.js";
 
 const dashboard = document.querySelector("gift-dashboard");
 const addGiftModal = document.getElementById("add-gift-modal");
@@ -15,7 +12,7 @@ async function loadData() {
   dashboard.error = "";
 
   try {
-    const userData = await apiFetch("/user/1", { token: getAccessToken() });
+    const userData = await apiFetch(`/user/${getUserId()}`, { token: getAccessToken() });
     dashboard.user = userData;
 
     addGiftModal.people = userData.people ?? [];
@@ -37,6 +34,6 @@ dashboard.addEventListener("add-gift", () => {
 });
 dashboard.addEventListener("dashboard-reload", loadData);
 
-if (getAccessToken()) {
+if (getAccessToken() && getUserId()) {
   loadData();
 }
