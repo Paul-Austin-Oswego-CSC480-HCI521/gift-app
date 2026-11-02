@@ -1,14 +1,15 @@
 import { LitElement, html, nothing, css } from "lit";
-
-// Gift Tile from Figma team 
-import "../gift-tile/gift-tile.js";
-
 import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/inline-loading/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/search/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
-import "@carbon/web-components/es/components/tile/index.js";
-import "@carbon/web-components/es/components/notification/index.js";
+import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
+import Add16 from "@carbon/icons/es/add/16.js";
+import "../gift-tile/gift-tile.js";
 
+// Figma "People" frame (5:26022): title, a search + Add Person toolbar, then a wrapping grid of
+// gift-tile cards. Page padding comes from .page-main, so the host adds none.
 export class GiftPeople extends LitElement {
   static properties = {
     people: { type: Array },
@@ -17,15 +18,85 @@ export class GiftPeople extends LitElement {
     search: { type: String },
     showForm: { type: Boolean },
   };
+
   static styles = css`
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.5rem;
-  }
-`;
+    :host {
+      display: flex;
+      inline-size: 100%;
+      flex-direction: column;
+      gap: var(--cds-spacing-07, 2rem); /* Figma: 32 between header, toolbar and grid */
+      color: var(--cds-text-primary);
+    }
 
+    h1 {
+      margin: 0;
+      font-family: var(--font-family-heading);
+      font-size: 3.375rem;
+      font-weight: 300;
+      line-height: 4rem;
+    }
 
+    h2 {
+      margin: 0;
+      font-family: var(--font-family-heading);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--cds-spacing-05);
+    }
+
+    cds-search {
+      inline-size: 22.375rem; /* Figma: 358 */
+      max-inline-size: 100%;
+    }
+
+    .grid {
+      display: grid;
+      inline-size: 100%;
+      box-sizing: border-box;
+      grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr)); /* Figma tile: 250 minimum */
+      row-gap: 1.5rem; /* Figma: 24 vertical */
+      column-gap: 1.125rem; /* Figma: 18 horizontal */
+      /* room for the tile's offset shadow so the page does not clip it */
+      padding: 2px 8px 8px 2px;
+    }
+
+    /* gift-tile caps its width at the Figma card size; here the cards stretch to fill their grid column. */
+    gift-tile {
+      max-inline-size: none;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--cds-spacing-05);
+      padding: 1.25rem; /* 20px */
+      background: var(--cds-layer-01);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: var(--cds-spacing-05);
+    }
+
+    .message {
+      margin: 0;
+    }
+
+    @media (max-width: 500px) {
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      cds-search {
+        inline-size: 100%;
+      }
+    }
+  `;
 
   constructor() {
     super();
@@ -77,7 +148,7 @@ export class GiftPeople extends LitElement {
 
   render() {
     return html`
-      <h1 class="cds--type-heading-05">People</h1>
+      <h1>People</h1>
 
       <div class="toolbar">
         <cds-search
@@ -86,7 +157,9 @@ export class GiftPeople extends LitElement {
           .value=${this.search}
           @input=${(event) => { this.search = event.target.value ?? ""; }}
         ></cds-search>
-        <cds-button @click=${this.openForm}>Add Person +</cds-button>
+        <cds-button @click=${this.openForm}>
+          Add Person ${iconLoader(Add16, { slot: "icon" })}
+        </cds-button>
       </div>
 
       ${this.showForm ? html`
@@ -105,18 +178,19 @@ export class GiftPeople extends LitElement {
         <cds-inline-notification kind="error" title="Error" subtitle=${this.error}></cds-inline-notification>
       ` : nothing}
 
-      ${this.loading ? html`<p class="message" role="status">Loading people...</p>` : nothing}
+      ${this.loading ? html`<div role="status" aria-live="polite">
+          <cds-inline-loading status="active" assistive-text="Loading people">Loading people…</cds-inline-loading>
+        </div>` : nothing}
 
       ${!this.loading && !this.error ? html`
         <div class="grid">
           ${this.filteredPeople.map((person) => html`
-            <gift-tile type="person">
-              <span>
-                ${person.fullName || [person.firstName, person.lastName].filter(Boolean).join(" ")}
-              </span>
+            <gift-tile type="person" href="#">
+              <span>${person.fullName || [person.firstName, person.lastName].filter(Boolean).join(" ")}</span>
             </gift-tile>
           `)}
-          <gift-tile type="add" add-label="Add person" @gift-tile-add=${this.openForm} ></gift-tile>
+          <gift-tile type="add" add-label="Add person" @gift-tile-add=${this.openForm}></gift-tile>
+        </div>
         ${this.filteredPeople.length === 0 ? html`
           <p class="message">${this.search ? "No matching people found." : "No people yet. Add your first person."}</p>
         ` : nothing}
