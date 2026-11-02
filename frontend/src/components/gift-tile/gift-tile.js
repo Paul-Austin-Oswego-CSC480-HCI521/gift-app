@@ -75,11 +75,11 @@ export class GiftTile extends LitElement {
 
     :host([type="person"]) .content {
       flex-direction: row;
-      gap: var(--cds-spacing-04);
+      gap: var(--cds-spacing-03); /* Figma: 8 between name and arrow */
     }
 
-    /* Person: the name is Outfit Regular 24px (Figma). A long name stays on one line and is cut with an
-       ellipsis (max 170px). */
+    /* Person: the name is Outfit Regular 24px, max 170px wide. A long name is cut to two lines with an
+       ellipsis (Figma "Long name": text truncation ending, max 2 lines). */
     :host([type="person"]) ::slotted(:not([slot])) {
       font-family: var(--font-family-heading);
       font-size: 1.5rem;
@@ -87,9 +87,11 @@ export class GiftTile extends LitElement {
       line-height: normal;
       color: var(--cds-text-primary);
       max-inline-size: 10.625rem;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      overflow-wrap: anywhere;
     }
 
     .arrow {
