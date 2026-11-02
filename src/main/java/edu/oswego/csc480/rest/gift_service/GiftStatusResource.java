@@ -84,10 +84,12 @@ public class GiftStatusResource {
             log.debug("Gift {} does not exist.", gid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        String oldStatus = gift.getStatus().getStage();
-        gift.setStatus(status);
-        log.info("User {} has updated the status ({}) for gift {} from {} to {}",
-                uid, status.getId(), gift.getId(), oldStatus, status.getStage());
+        if(gift.getStatus() != null){
+            String oldStatus = gift.getStatus().getStage();
+            gift.setStatus(status);
+            log.info("User {} has updated the status ({}) for gift {} from {} to {}",
+                    uid, status.getId(), gift.getId(), oldStatus, status.getStage());
+        }
         uRepo.save(user.get());
 
         return Response.noContent().build();
