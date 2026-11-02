@@ -52,7 +52,10 @@ public class AuthResource {
         String hashToVerify = storedHash == null ? DUMMY_HASH : storedHash;
         boolean verified;
         try {
-            log.info("Auth request for user {} has been received.", user.getId());
+            if (user != null && user.getId() != null){
+                log.info("Auth request for user {} has been received.", user.getId());
+            }
+
             verified = passwords.verify(request.password, hashToVerify);
         } catch (IllegalArgumentException invalidHashOrPassword) {
             log.error("Invalid hash or password.", invalidHashOrPassword);
