@@ -17,6 +17,73 @@ One HTML file in `pages/` and one script in `src/pages/`. The HTML includes the 
 imports or `require-auth` into a page: they come from the partials and `src/app/`. Add the route to
 `src/config/routes.js` if it appears in the side nav. Full recipe: `docs/frontend-structure.md`.
 
+### How a page's content is composed
+
+Copy `gift-dashboard`, `gift-people` and `gift-upcoming-dates`. They all follow one recipe, so a new
+page should need **no page CSS file and no `<style>`**:
+
+1. **The HTML is thin**: `<main class="page-main" aria-label="..."><gift-<page>></gift-<page>></main>`
+   plus the page script. No layout markup, no `<link>` to a stylesheet. `.page-main` (from
+   `page-templates.css`) supplies the padding and side-nav offset.
+2. **One `gift-<page>` component owns the page content** (title, sections, toolbar, list, states) in
+   `src/components/gift-<page>/`. Its `static styles` is
+   `[notificationTheme, pageContentStyles, css\`...\`]`. Import both from `src/styles/`:
+   - `pageContentStyles` (`page-content.js`): the full-width column with the Figma 32px gap and the
+     page `h1` (title tokens). Render the title as a plain `<h1>`. Do not restyle it.
+   - `notificationTheme` (`notification-theme.js`): needed whenever the component renders a
+     `cds-*-notification`.
+   The component's own `css` should be small: a grid for the section and a few Figma-specific sizes
+   (comment each one with its Figma value). If a rule would help a second page, put it in a shared
+   module in `src/styles/` instead, as above.
+3. **The component only renders what it is given** (`loading`, `error`, and data as properties) and
+   emits domain events. It does no `fetch`. This keeps stories and unit tests offline.
+4. **The page script does the I/O**: `import "../app/boot-authed.js"`, fetch with `apiFetch`, assign
+   properties, handle `401` with `clearAccessToken()` and a redirect to `/`, and set `error` for
+   anything else. Copy `src/pages/people.js`.
+5. **Standard states, always**: `cds-inline-loading` inside a `role="status"` region while loading,
+   `cds-inline-notification kind="error"` for a failed load, `kind="info"` for empty or no search
+   results. Do not invent your own.
+6. **Reuse the building blocks**: summary cards are `gift-tile` (`type="metric"` / `section` /
+   `person`) with `cds-link` for any action; lists and tables use `cds-table` / `cds-data-table`
+   (see `gift-dates-table`); search is `cds-search`; paging is `cds-pagination` (its
+   `cds-pagination-changed-current` and `cds-page-sizes-select-changed` events carry
+   `{ page, pageSize }`). Navigation targets come from `src/config/routes.js`.
+7. **Pure data shaping lives in a `<page>-model.js` next to the component** (API response to display
+   rows, counts for metric tiles) with a Vitest test. Mock rows for stories and tests live in
+   `src/mocks/` and use the same shape as the model's output.
+8. **Add the page to `stories/PageLayouts/PageLayouts.stories.js`** (header, `gift-side-nav active=...`,
+   `.page-main` with the component), a `Custom Components/<Name>` story with `play` stories for search
+   or filter behavior, and a unit test.
+
+### Pictograms and icons
+
+Pictograms come from the **`@carbon/pictograms`** package (a devDependency). Never export a pictogram
+from Figma as an SVG, paste SVG paths, or link a Figma asset URL.
+
+- Find the pictogram by its Figma layer name (`birthday--cake`, `wedding--cake`, `bat--01`, `pencil`);
+  the package folder has the same name. List them with `ls node_modules/@carbon/pictograms/es`.
+- Import **one pictogram per path**, then render it with `iconLoader` like a Carbon icon:
+
+  ```js
+  import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
+  import BirthdayCakePictogram from "@carbon/pictograms/es/birthday--cake/index.js";
+
+  iconLoader(BirthdayCakePictogram, { width: 32, height: 32, "aria-hidden": "true" });
+  ```
+
+  Never import the package root, `lib/`, or `svg/`. Pictograms are 64px by default, so pass the Figma
+  size as `width` and `height`. They use `currentColor`, so set the color with a token (for example
+  `color: var(--cds-icon-interactive)`), not a hex.
+- Small UI glyphs (add, arrow, checkmark, filter) are icons: `@carbon/icons/es/<name>/<size>.js`.
+- **Accessible names:** a pictogram has none of its own. If the meaning is already in nearby text, mark
+  it decorative (`"aria-hidden": "true"`). If it stands alone, put the name on its container (a button's
+  `tooltip-content` slot or `aria-label`), not on the SVG.
+
+`npm run lint:carbon` runs `scripts/check-pictograms.mjs`. It fails on a pictogram import that is not
+`@carbon/pictograms/es/<name>` (or `.../<name>/index.js`) or names a pictogram that does not exist, on a pictogram
+rendered with neither `"aria-hidden": "true"` nor an `aria-label`, on any imported
+`.svg` file, and on `<img>` pointing at an `.svg`. It only lists inline `<svg>` markup as a warning.
+
 ## The rule: Carbon first
 
 Before writing any new element, work through these in order and stop at the first that works:
@@ -188,7 +255,8 @@ Happo's `accessibility` target ignores the a11y config. Copy `carbonRadioAriaRea
 `gift-modal.stories.js`. Renaming or adding a story shows these as "new" violations in Happo until
 the exemption is on it.
 
-`npm run lint:carbon` fails if a component imports no Carbon component or renders a raw
+`npm run lint:carbon` fails if a component imports neither a Carbon component nor another `gift-*`
+component (a page that only composes existing `gift-*` components needs no exemption), or renders a raw
 `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. Fix the
 design rather than adding an exemption. Exemptions are reviewed, and a vague reason will be
 rejected.

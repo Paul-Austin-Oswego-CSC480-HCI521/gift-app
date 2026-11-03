@@ -2,11 +2,13 @@
 <html lang="en">
   <head>
     <!-- @include head -->
-    <title>My Wishlist | Gift App</title>
+    <title>My Wish List | Gift App</title>
   </head>
   <body data-carbon-theme="brand">
     <!-- @include app-shell active=wishlist -->
-
-  <script type="module" src="/src/pages/my-wishlist.js"></script>
+    <main class="page-main" aria-label="My wish list">
+      <gift-my-wishlist></gift-my-wishlist>
+    </main>
+    <script type="module" src="/src/pages/my-wishlist.js"></script>
   </body>
 </html>

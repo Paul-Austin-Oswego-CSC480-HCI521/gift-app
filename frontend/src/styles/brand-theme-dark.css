@@ -48,6 +48,7 @@
   --side-nav-link-color: #8CC4B6; /* lightened brand green, same as --card-heading: #1C544A is 2:1 on the dark side nav */
   --side-nav-background: #191813; /* same as --cds-background in the dark theme */
   --cds-background: #191813; /* subtle warm-cream tint of g100 #161616, same lightness */
+  --page-background: var(--cds-background);
   --cds-background-inverse: #f4f4f4; /* Carbon default — pairs correctly with dark text-inverse below, see note above */
   --cds-layer-01: #222A26; /* subtle brand-green tint of g100 #262626, same lightness */
   --cds-layer-02: #343E39; /* was g100 default #393939 - a whisper of layer-01's sage tint (same lightness); see brand-theme.css for the same fix in light */

@@ -7,6 +7,12 @@ import "../../src/components/shared/gift-brand/gift-brand.js";
 import "../../src/components/shared/gift-side-nav/gift-side-nav.js";
 import "../../src/components/gift-login-form/gift-login-form.js";
 import "../../src/components/gift-dashboard/gift-dashboard.js";
+import "../../src/components/gift-people/gift-people.js";
+import "../../src/components/gift-upcoming-dates/gift-upcoming-dates.js";
+import { people } from "../../src/mocks/people.js";
+import { upcomingDates } from "../../src/mocks/upcoming-dates.js";
+import { wishlistItems } from "../../src/mocks/wishlist.js";
+import "../../src/components/gift-my-wishlist/gift-my-wishlist.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/brand-theme-dark.css";
 import "../../src/styles/page-templates.css";
@@ -111,6 +117,54 @@ export const Dashboard = {
               ],
             }}
           ></gift-dashboard>
+        </main>
+      </div>
+    `),
+};
+
+// upcoming-dates.html: the Authenticated template with <gift-upcoming-dates> as the page content.
+export const UpcomingDates = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="dates"></gift-side-nav>
+        <main class="page-main" aria-label="Upcoming dates">
+          <gift-upcoming-dates .dates=${upcomingDates}></gift-upcoming-dates>
+        </main>
+      </div>
+    `),
+};
+
+// my-wishlist.html: the Authenticated template with <gift-my-wishlist> as the page content.
+export const Wishlist = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="wishlist"></gift-side-nav>
+        <main class="page-main" aria-label="My wish list">
+          <gift-my-wishlist .items=${wishlistItems}></gift-my-wishlist>
+        </main>
+      </div>
+    `),
+};
+
+// people.html: the Authenticated template with <gift-people> as the page content.
+export const People = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="people"></gift-side-nav>
+        <main class="page-main" aria-label="People page">
+          <gift-people .people=${people}></gift-people>
         </main>
       </div>
     `),

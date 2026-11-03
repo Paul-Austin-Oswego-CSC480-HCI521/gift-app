@@ -12,6 +12,10 @@ const THEMES = {
   dark: { carbonClass: "cds--g100", brandTheme: "brand-dark" },
 };
 
+// Only Foundations and tile/card stories get an explicit white background in light mode. Dark keeps
+// the themed background, otherwise light text has nothing dark behind it.
+const showsPageBackground = (title) => /^Foundations\/|(^|\/)[^/]*(Tile|Card)/.test(title);
+
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
   parameters: {
@@ -47,10 +51,16 @@ const preview = {
   decorators: [
     (story, context) => {
       const { carbonClass, brandTheme } = THEMES[context.globals.theme] ?? THEMES.light;
+      const background =
+        context.globals.theme === "dark"
+          ? "var(--cds-background)"
+          : showsPageBackground(context.title)
+            ? "#fff"
+            : "transparent";
       return html`<div
         data-carbon-theme="${brandTheme}"
         class="${carbonClass}"
-        style="padding: 1rem;"
+        style="padding: 1rem; background-color: ${background};"
       >
         ${story()}
       </div>`;

@@ -2,7 +2,7 @@ name: Happo Workflow
 
 on:
   push: { branches: [main] }
-  pull_request: { branches: [main] }
+  pull_request: { branches: [main, develop] }
 
 permissions:
   contents: read
@@ -10,6 +10,8 @@ permissions:
 jobs:
   happo:
     runs-on: ubuntu-latest
+    # Happo screenshot quota is exhausted until 11/18; remove this to make the check blocking again.
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v4
