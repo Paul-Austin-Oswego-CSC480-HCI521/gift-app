@@ -17,7 +17,7 @@
     "test:coverage": "vitest run --coverage",
     "test:a11y": "test-storybook",
     "test:happo": "happo",
-    "lint:carbon": "node scripts/check-carbon-first.mjs && node scripts/check-carbon-attributes.mjs",
+    "lint:carbon": "node scripts/check-carbon-first.mjs && node scripts/check-carbon-attributes.mjs && node scripts/check-pictograms.mjs",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "lit": "^3.3.3"
   },
   "devDependencies": {
+    "@carbon/pictograms": "^12.87.0",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-vitest": "^10.6.0",
     "@storybook/test-runner": "^0.24.5",
