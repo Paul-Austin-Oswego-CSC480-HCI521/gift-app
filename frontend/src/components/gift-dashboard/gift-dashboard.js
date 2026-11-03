@@ -145,6 +145,15 @@ export class GiftDashboard extends LitElement {
           ></cds-inline-notification>`
         : nothing}
 
+      ${this.user && !this.loading && !this.error && people.length === 0
+        ? html`<cds-inline-notification
+            kind="info"
+            title="No people found"
+            subtitle="Add a person to start tracking gifts."
+            hide-close-button
+          ></cds-inline-notification>`
+        : nothing}
+
       <div class="grid">
         <dashboard-card
           heading="People"
