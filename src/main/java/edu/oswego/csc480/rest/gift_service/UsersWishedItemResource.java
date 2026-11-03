@@ -8,6 +8,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.annotation.security.RolesAllowed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,11 +25,15 @@ public class UsersWishedItemResource {
     @PathParam("uid")
     private Integer uid;
 
+    private Logger log = LoggerFactory.getLogger(UsersWishedItemResource.class);
+
     @GET
     public Response getWishedItems() {
+        log.info("User {} requested their wished items list.", uid);
         Optional<Users> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -46,18 +53,22 @@ public class UsersWishedItemResource {
         Optional<Users> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
 
         if(currentUser.getWishlist() == null) {
+            log.debug("Created an empty wishlist for user {}.", uid);
             currentUser.setWishlist(new ArrayList<>());
         }
 
         item.setId(null);
         item.setUser(currentUser);currentUser.getWishlist().add(item);
         userRepository.save(currentUser);
+
+        log.info("User {} added an item to their wishlist.", uid);
 
         return Response.status(Response.Status.CREATED)
                 .entity(item)
@@ -77,11 +88,13 @@ public class UsersWishedItemResource {
 
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
         if(currentUser.getWishlist() == null) {
+            log.debug("Cannot update wished item as wishlist does not exist for user {}.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -91,12 +104,13 @@ public class UsersWishedItemResource {
                 .orElse(null);
 
         if(existing == null) {
+            log.debug("Wished item {} does not exist.", wid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         existing.setGiftName(item.getGiftName());
         existing.setValue(item.getValue());
-
+        log.info("User {} updated wished item {} in their wishlist.", uid, wid);
         userRepository.save(currentUser);
         return Response.noContent().build();
     }
@@ -106,12 +120,14 @@ public class UsersWishedItemResource {
     public Response deleteWishedItem(@PathParam("wid") Integer wid) {
         Optional<Users> user = userRepository.findById(uid);
         if(user.isEmpty()) {
+            log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         Users currentUser = user.get();
 
         if(currentUser.getWishlist() == null) {
+            log.debug("User {} does not have a wishlist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -121,12 +137,13 @@ public class UsersWishedItemResource {
                 .orElse(null);
 
         if(existing == null) {
+            log.debug("Wished item {} does not exist.", wid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         currentUser.getWishlist().remove(existing);
         userRepository.save(currentUser);
-
+        log.info("User {} deleted wished item {} from their wishlist.", uid, wid);
         return Response.noContent().build();
     }
 }
