@@ -42,9 +42,6 @@ public class Users implements Serializable {
     @Column(name = "username")
     private String username;
 
-    // Make sure there is a dummy constructor for persistence to work
-    // also getters and setters for everything.
-
     @JsonbTransient     //makes sure the pw hash isn't visible when api calls GET for user
     @Column(name = "password")
     private String passwordHash;

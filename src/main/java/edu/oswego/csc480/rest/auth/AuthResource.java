@@ -73,8 +73,19 @@ public class AuthResource {
         return reply(Response.Status.OK, new LoginResponse(token, user.getId()));
     }
 
+    @POST
+    @Path("/signup")
+    public Response signup(){
+        return null;
+    }
+
     private Response reply(Response.Status status, Object body) {
         return Response.status(status).type(MediaType.APPLICATION_JSON_TYPE)
                 .header("Cache-Control", "no-store").entity(body).build();
     }
+
+    private record signupForm(String firstName, String surname,
+                              String email, String username,
+                              String password){};
+
 }
