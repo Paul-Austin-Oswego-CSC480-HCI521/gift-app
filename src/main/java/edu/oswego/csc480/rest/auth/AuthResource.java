@@ -100,6 +100,7 @@ public class AuthResource {
         }
 
         user = uRepo.save(user);
+        tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
         return Response.created(UriBuilder.fromPath("user/" + user.getId()).build()).build();
     }
 
