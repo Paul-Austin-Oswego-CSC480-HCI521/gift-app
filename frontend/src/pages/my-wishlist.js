@@ -1,9 +1,8 @@
 import "../app/boot-authed.js";
-import "../components/gift-preferences-header/gift-preferences-header.js";
-import "../components/gift-wishlist-table/gift-wishlist-table.js";
+import "../components/gift-my-wishlist/gift-my-wishlist.js";
 import { loadWishlist, saveWishlistItem } from "../api/wishlist.js";
 
-const table = document.querySelector("gift-wishlist-table");
+const table = document.querySelector("gift-my-wishlist");
 // Temporary, page-session-only metadata. Replace when the backend exposes these fields.
 const metadata = new Map();
 const decorate = items => items.map(item => ({ ...item, ...metadata.get(item.id) }));
