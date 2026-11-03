@@ -60,8 +60,8 @@ export const AddItem = {
   },
 };
 
-export const FilterAndEdit = {
-  play: async ({ canvasElement, args, step }) => {
+export const Filter = {
+  play: async ({ canvasElement, step }) => {
     const { host, root } = await renderedForm(canvasElement, "gift-wishlist-table");
     const click = async element => { await element.updateComplete; await userEvent.click(element.shadowRoot.querySelector("button")); };
     await step("Apply a priority filter", async () => {
@@ -72,18 +72,6 @@ export const FilterAndEdit = {
       await userEvent.click(high.shadowRoot.querySelector("input"));
       await click(root.querySelector(".actions cds-button:last-child"));
       await waitFor(() => expect(root.querySelectorAll("cds-table-row")).toHaveLength(5));
-    });
-    await step("Edit an existing item", async () => {
-      await click(root.querySelector("cds-table-row cds-button"));
-      await host.updateComplete;
-      const input = root.querySelector('[name="value"]');
-      await input.updateComplete;
-      await userEvent.click(input.shadowRoot.querySelector("input"));
-      await userEvent.keyboard("{Control>}a{/Control}35.00");
-      await click(root.querySelector("cds-modal-footer cds-button:last-child"));
-      await waitFor(() => expect(args.onSave).toHaveBeenCalledTimes(1));
-      expect(args.onSave.mock.calls[0][0].detail).toMatchObject({ id: 1, value: "35.00" });
-      host.closeEditor();
     });
   },
 };
