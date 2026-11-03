@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="user_attributes")
-public class UsersAttributes implements Serializable {
+public class UserAttribute implements Serializable {
 
     @Id
     @Column(name="user_attribute_id")
@@ -17,7 +17,7 @@ public class UsersAttributes implements Serializable {
     @ManyToOne
     @JoinColumn(name="user_id")
     @JsonbTransient
-    private Users user;
+    private User user;
 
     @Column(name="attribute_name")
     private String attribute_name;
@@ -25,7 +25,7 @@ public class UsersAttributes implements Serializable {
     @Column(name="value")
     private String value;
 
-    public UsersAttributes(){}
+    public UserAttribute(){}
 
     //get
     public Integer getId() {
@@ -37,7 +37,7 @@ public class UsersAttributes implements Serializable {
     public String getValue() {
         return value;
     }
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -51,7 +51,7 @@ public class UsersAttributes implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

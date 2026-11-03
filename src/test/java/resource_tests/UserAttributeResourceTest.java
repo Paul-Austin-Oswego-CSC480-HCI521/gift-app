@@ -1,13 +1,13 @@
 package resource_tests;
 
-import edu.oswego.csc480.entities.Users;
-import edu.oswego.csc480.entities.UsersAttributes;
+import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.UserAttribute;
 import edu.oswego.csc480.repositories.UserRepository;
-import edu.oswego.csc480.rest.gift_service.UsersAttributesResource;
+import edu.oswego.csc480.rest.gift_service.UserAttributeResource;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,19 +15,19 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UsersAttributesResourceTest {
+public class UserAttributeResourceTest {
     private UserRepository userRepository;
-    private UsersAttributesResource resource;
+    private UserAttributeResource resource;
 
     @BeforeEach
     public void setUp() throws Exception {
         userRepository = mock(UserRepository.class);
-        resource = new UsersAttributesResource();
-        java.lang.reflect.Field repoField = UsersAttributesResource.class.getDeclaredField("userRepository");
+        resource = new UserAttributeResource();
+        java.lang.reflect.Field repoField = UserAttributeResource.class.getDeclaredField("userRepository");
         repoField.setAccessible(true);
         repoField.set(resource, userRepository);
 
-        java.lang.reflect.Field uidField = UsersAttributesResource.class.getDeclaredField("uid");
+        java.lang.reflect.Field uidField = UserAttributeResource.class.getDeclaredField("uid");
         uidField.setAccessible(true);
         uidField.set(resource, 1);
     }
@@ -36,16 +36,16 @@ public class UsersAttributesResourceTest {
     //GET user attributes, 200 success
     @Test
     public void getUserAttributes_200_1() {
-        Users user = new Users();
-        UsersAttributes a1 = new UsersAttributes();
-        UsersAttributes a2 = new UsersAttributes();
+        User user = new User();
+        UserAttribute a1 = new UserAttribute();
+        UserAttribute a2 = new UserAttribute();
         a1.setId(1);
         a1.setAttribute_Name("Shirt Size");
         a1.setValue("XL");
         a2.setId(2);
         a2.setAttribute_Name("Favorite Color");
         a2.setValue("Blue");
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(a1);
         attributes.add(a2);
         user.setAttributes(attributes);
@@ -61,7 +61,7 @@ public class UsersAttributesResourceTest {
     //GET user attributes empty, 200 success
     @Test
     public void getUserAttributes_200_2() {
-        Users user = new Users();
+        User user = new User();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.getUserAttributes();
         assertEquals(200, response.getStatus());
@@ -80,11 +80,11 @@ public class UsersAttributesResourceTest {
     //CREATE user attributes, 201 success
     @Test
     public void createAttribute_201() {
-        Users user = new Users();
+        User user = new User();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(Users.class))).thenReturn(user);
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
-        UsersAttributes attribute = new UsersAttributes();
+        UserAttribute attribute = new UserAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt size");
         attribute.setValue("XL");
@@ -108,8 +108,8 @@ public class UsersAttributesResourceTest {
     //CREATE user attributes, 400, attribute name missing
     @Test
     public void createAttribute_400_2() {
-        Users user = new Users();
-        UsersAttributes attribute = new UsersAttributes();
+        User user = new User();
+        UserAttribute attribute = new UserAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name(null);
         attribute.setValue("XL");
@@ -123,8 +123,8 @@ public class UsersAttributesResourceTest {
     //CREATE user attributes, 400, value missing
     @Test
     public void createAttribute_400_3() {
-        Users user = new Users();
-        UsersAttributes attribute = new UsersAttributes();
+        User user = new User();
+        UserAttribute attribute = new UserAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt Size");
         attribute.setValue(null);
@@ -139,33 +139,33 @@ public class UsersAttributesResourceTest {
     @Test
     public void createAttribute_404() {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
-        UsersAttributes attribute = new UsersAttributes();
+        UserAttribute attribute = new UserAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt Size");
         attribute.setValue("XL");
 
         Response response = resource.createAttribute(attribute);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //UPDATE user attributes, 204 success
     @Test
     public void updateAttribute_204() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
         existing.setUser(user);
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         user.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(Users.class))).thenReturn(user);
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
-        UsersAttributes updated = new UsersAttributes();
+        UserAttribute updated = new UserAttribute();
         updated.setId(5);
         updated.setAttribute_Name("Shirt size");
         updated.setValue("L");
@@ -179,17 +179,17 @@ public class UsersAttributesResourceTest {
     //UPDATE user attributes, 400, invalid attribute name
     @Test
     public void updateAttribute_400_1() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
         existing.setUser(user);
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         user.setAttributes(attributes);
 
-        UsersAttributes updated = new UsersAttributes();
+        UserAttribute updated = new UserAttribute();
         updated.setId(5);
         updated.setAttribute_Name(null);
         updated.setValue("L");
@@ -202,17 +202,17 @@ public class UsersAttributesResourceTest {
     //UPDATE user attributes, 400, invalid value
     @Test
     public void updateAttribute_400_2() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
         existing.setUser(user);
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         user.setAttributes(attributes);
 
-        UsersAttributes updated = new UsersAttributes();
+        UserAttribute updated = new UserAttribute();
         updated.setId(5);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue(null);
@@ -225,61 +225,61 @@ public class UsersAttributesResourceTest {
     //UPDATE user attributes, 404, user entity does not exist
     @Test
     public void updateAttribute_404_1() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
         existing.setUser(user);
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
 
-        UsersAttributes updated = new UsersAttributes();
+        UserAttribute updated = new UserAttribute();
         updated.setId(5);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue("L");
 
         Response response = resource.updateAttribute(5, updated);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //UPDATE user attributes, 404, attribute does not exist
     @Test
     public void updateAttribute_404_2() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         user.setAttributes(attributes);
-        UsersAttributes updated = new UsersAttributes();
+        UserAttribute updated = new UserAttribute();
         updated.setId(5);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue("L");
 
         Response response = resource.updateAttribute(999, updated);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //DELETE attributes tests
     //DELETE attributes, 204 success
     @Test
     public void deleteAttribute_204() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         user.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(Users.class))).thenReturn(user);
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
         Response response = resource.deleteAttribute(5);
         assertEquals(204, response.getStatus());
@@ -290,36 +290,36 @@ public class UsersAttributesResourceTest {
     //DELETE attributes, 404, user entity does not exist
     @Test
     public void deleteAttribute_404_1() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
         existing.setUser(user);
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         when(userRepository.findById(1)).thenReturn(Optional.empty());
 
         Response response = resource.deleteAttribute(5);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //DELETE attributes, 404 attribute does not exist
     @Test
     public void deleteAttribute_404_2() {
-        Users user = new Users();
-        UsersAttributes existing = new UsersAttributes();
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("XL");
-        List<UsersAttributes> attributes = new ArrayList<>();
+        List<UserAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         user.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.deleteAttribute(999);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 }

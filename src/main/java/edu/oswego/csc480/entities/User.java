@@ -9,7 +9,7 @@ import jakarta.json.bind.annotation.JsonbTransient;
 
 @Entity
 @Table(name="users")
-public class Users implements Serializable {
+public class User implements Serializable {
 
     // here are the columns
 
@@ -28,13 +28,13 @@ public class Users implements Serializable {
     private String fullName;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<UsersAttributes> attributes = new ArrayList<>();
+    List<UserAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<People> people;
+    private List<Person> people;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UsersWishedItem> wishlist;
+    private List<UserWishedItem> wishlist;
 
     @Column(name = "email_address")
     private String email;
@@ -46,7 +46,7 @@ public class Users implements Serializable {
     @Column(name = "password")
     private String passwordHash;
 
-    public Users() {
+    public User() {
     } // we can use setters anyway.
 
     //get
@@ -66,7 +66,7 @@ public class Users implements Serializable {
         return surname;
     }
 
-    public List<UsersWishedItem> getWishlist() {
+    public List<UserWishedItem> getWishlist() {
         return wishlist;
     }
 
@@ -78,11 +78,11 @@ public class Users implements Serializable {
         return username;
     }
 
-    public List<UsersAttributes> getAttributes() {
+    public List<UserAttribute> getAttributes() {
         return attributes;
     }
 
-    public List<People> getPeople() {
+    public List<Person> getPeople() {
         return people;
     }
 
@@ -107,7 +107,7 @@ public class Users implements Serializable {
         this.surname = surname;
     }
 
-    public void setWishlist(List<UsersWishedItem> wishlist) {
+    public void setWishlist(List<UserWishedItem> wishlist) {
         this.wishlist = wishlist;
     }
 
@@ -119,11 +119,11 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-    public void setAttributes(List<UsersAttributes> attributes) {
+    public void setAttributes(List<UserAttribute> attributes) {
         this.attributes = attributes;
     }
 
-    public void setPeople(List<People> people) {
+    public void setPeople(List<Person> people) {
         this.people = people;
     }
 

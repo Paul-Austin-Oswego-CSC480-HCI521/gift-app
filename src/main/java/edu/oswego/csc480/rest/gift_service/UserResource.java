@@ -1,6 +1,6 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -14,15 +14,14 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class UsersResource {
+public class UserResource {
 
-    private Logger log = LoggerFactory.getLogger(UsersResource.class);
+    private Logger log = LoggerFactory.getLogger(UserResource.class);
 
     @Inject
     private UserRepository userRepository;
@@ -35,7 +34,7 @@ public class UsersResource {
     @GET
     public Response getUsers() {
         log.warn("Got request for querying EVERY USER from user {}.", token.getSubject());
-        List<Users> users = userRepository.findAll().toList();
+        List<User> users = userRepository.findAll().toList();
         return Response.ok(users).build();
     }
 
@@ -52,12 +51,12 @@ public class UsersResource {
     //Creates a new user
     @POST
     @Deprecated
-    public Response createUser(Users user) {
+    public Response createUser(User user) {
         if (user == null) {
             log.info("User creation request failed. No user information provided.");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        Users savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
         log.info("User with id {} created.", savedUser.getId());
         return Response
                 .status(Response.Status.CREATED)
@@ -67,16 +66,16 @@ public class UsersResource {
 
     @PUT
     @Path("/{id}")
-    public Response updateUser(@PathParam("id") Integer id, Users updatedUser) {
+    public Response updateUser(@PathParam("id") Integer id, User updatedUser) {
         log.info("Request to update user {} received.", id);
-        Users existingUser = userRepository.findById(id)
+        User existingUser = userRepository.findById(id)
                 .orElse(null);
         if(existingUser == null) {
             log.warn("User {} does not exist.", id);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         updatedUser.setId(id);
-        Users savedUser = userRepository.save(updatedUser);
+        User savedUser = userRepository.save(updatedUser);
         log.info("User {} updated successfully.", id);
         updatedUser.setPasswordHash(existingUser.getPasswordHash()); //Copy password hash from existing user on to update user to save it
         return Response.ok(savedUser).build();
@@ -86,7 +85,7 @@ public class UsersResource {
     @Path("/{id}")
     public Response deleteUser(@PathParam("id") Integer id) {
         log.info("Deletion request from user {} received.", id);
-        Users existingUser = userRepository.findById(id)
+        User existingUser = userRepository.findById(id)
                 .orElse(null);
         if(existingUser == null) {
             log.warn("User {} does not exist.", id);

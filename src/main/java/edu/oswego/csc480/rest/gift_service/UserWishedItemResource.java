@@ -1,7 +1,7 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Users;
-import edu.oswego.csc480.entities.UsersWishedItem;
+import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.UserWishedItem;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -18,19 +18,19 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class UsersWishedItemResource {
+public class UserWishedItemResource {
     @Inject
     private UserRepository userRepository;
 
     @PathParam("uid")
     private Integer uid;
 
-    private Logger log = LoggerFactory.getLogger(UsersWishedItemResource.class);
+    private Logger log = LoggerFactory.getLogger(UserWishedItemResource.class);
 
     @GET
     public Response getWishedItems() {
         log.info("User {} requested their wished items list.", uid);
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
@@ -41,7 +41,7 @@ public class UsersWishedItemResource {
     }
 
     @POST
-    public Response createWishedItem(UsersWishedItem item) {
+    public Response createWishedItem(UserWishedItem item) {
         if (item == null
                 || item.getGiftName() == null
                 || item.getGiftName().isBlank()
@@ -50,14 +50,14 @@ public class UsersWishedItemResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Users currentUser = user.get();
+        User currentUser = user.get();
 
         if(currentUser.getWishlist() == null) {
             log.debug("Created an empty wishlist for user {}.", uid);
@@ -77,7 +77,7 @@ public class UsersWishedItemResource {
 
     @PUT
     @Path("/{wid}")
-    public Response updateWishedItem(@PathParam("wid") Integer wid, UsersWishedItem item) {
+    public Response updateWishedItem(@PathParam("wid") Integer wid, UserWishedItem item) {
         if(item == null
                 || item.getGiftName() == null
                 || item.getGiftName().isBlank()
@@ -86,19 +86,19 @@ public class UsersWishedItemResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Users currentUser = user.get();
+        User currentUser = user.get();
         if(currentUser.getWishlist() == null) {
             log.debug("Cannot update wished item as wishlist does not exist for user {}.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UsersWishedItem existing = currentUser.getWishlist().stream()
+        UserWishedItem existing = currentUser.getWishlist().stream()
                 .filter(w -> w.getId() != null && w.getId().equals(wid))
                 .findFirst()
                 .orElse(null);
@@ -118,20 +118,20 @@ public class UsersWishedItemResource {
     @DELETE
     @Path("/{wid}")
     public Response deleteWishedItem(@PathParam("wid") Integer wid) {
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Users currentUser = user.get();
+        User currentUser = user.get();
 
         if(currentUser.getWishlist() == null) {
             log.debug("User {} does not have a wishlist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UsersWishedItem existing = currentUser.getWishlist().stream()
+        UserWishedItem existing = currentUser.getWishlist().stream()
                 .filter(w -> w.getId() != null && w.getId().equals(wid))
                 .findFirst()
                 .orElse(null);

@@ -1,7 +1,7 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Users;
-import edu.oswego.csc480.entities.UsersAttributes;
+import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.UserAttribute;
 import edu.oswego.csc480.repositories.UserRepository;
 
 import jakarta.inject.Inject;
@@ -19,19 +19,19 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class UsersAttributesResource {
+public class UserAttributeResource {
     @Inject
     private UserRepository userRepository;
 
     @PathParam("uid")
     private Integer uid;
 
-    private Logger log = LoggerFactory.getLogger(UsersAttributesResource.class);
+    private Logger log = LoggerFactory.getLogger(UserAttributeResource.class);
 
     @GET
     public Response getUserAttributes() {
         log.info("User {} requested their own attributes", uid);
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -40,7 +40,7 @@ public class UsersAttributesResource {
     }
 
     @POST
-    public Response createAttribute(UsersAttributes attribute) {
+    public Response createAttribute(UserAttribute attribute) {
         if(attribute == null
             || attribute.getAttribute_Name() == null
             || attribute.getAttribute_Name().isBlank()
@@ -49,13 +49,13 @@ public class UsersAttributesResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<Users>user = userRepository.findById(uid);
+        Optional<User>user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Users currentUser = user.get();
+        User currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
             currentUser.setAttributes(new ArrayList<>());
@@ -73,7 +73,7 @@ public class UsersAttributesResource {
 
     @PUT
     @Path("/{aid}")
-    public Response updateAttribute(@PathParam("aid") Integer aid, UsersAttributes attribute) {
+    public Response updateAttribute(@PathParam("aid") Integer aid, UserAttribute attribute) {
         if(attribute == null
                 || attribute.getAttribute_Name() == null
                 || attribute.getAttribute_Name().isBlank()
@@ -82,20 +82,20 @@ public class UsersAttributesResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Users currentUser = user.get();
+        User currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
             log.debug("User {} does not have attributes.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UsersAttributes existing = currentUser.getAttributes().stream()
+        UserAttribute existing = currentUser.getAttributes().stream()
                 .filter(a -> a.getId() != null && a.getId().equals(aid))
                 .findFirst()
                 .orElse(null);
@@ -114,21 +114,21 @@ public class UsersAttributesResource {
     @DELETE
     @Path("/{aid}")
     public Response deleteAttribute(@PathParam("aid") Integer aid) {
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         log.info("User {} is trying to delete attribute {}", uid, aid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Users currentUser = user.get();
+        User currentUser = user.get();
 
         if(currentUser.getAttributes() == null) {
             log.debug("User {} does not have attributes", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UsersAttributes existing = currentUser.getAttributes().stream()
+        UserAttribute existing = currentUser.getAttributes().stream()
                 .filter(a -> a.getId() != null && a.getId().equals(aid))
                 .findFirst()
                 .orElse(null);

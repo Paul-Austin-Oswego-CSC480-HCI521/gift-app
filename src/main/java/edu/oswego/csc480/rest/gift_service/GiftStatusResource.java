@@ -1,8 +1,8 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Gifts;
+import edu.oswego.csc480.entities.Gift;
 import edu.oswego.csc480.entities.GiftStatus;
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -33,12 +33,12 @@ public class GiftStatusResource {
     @GET
     public Response getStatus(){
         log.info("User {} requested status for gift {}",uid, gid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        Gifts gift = OccasionResource.getGift(user.get(), gid);
+        Gift gift = OccasionResource.getGift(user.get(), gid);
         if (gift == null){
             log.debug("Gift {} does not exist.", gid);
             return Response.status(Status.NOT_FOUND).build();
@@ -53,19 +53,19 @@ public class GiftStatusResource {
 
         log.warn("DO NOT USE createStatus AT GiftStatusResource");
 
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        Gifts gift = OccasionResource.getGift(user.get(), gid);
+        Gift gift = OccasionResource.getGift(user.get(), gid);
         if (gift == null){
             log.debug("Gift {} does not exist.", gid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
         gift.setStatus(status);
-        Users nuser = uRepo.save(user.get());
+        User nuser = uRepo.save(user.get());
         //gift = OccasionResource.getGift(nuser, gid);
 
         return Response.created(UriBuilder.fromPath("user/{uid}/gift/{gid}/status").build(uid,gid)).build();
@@ -74,12 +74,12 @@ public class GiftStatusResource {
     @PUT
     public Response updateStatus(GiftStatus status){
 
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        Gifts gift = OccasionResource.getGift(user.get(), gid);
+        Gift gift = OccasionResource.getGift(user.get(), gid);
         if (gift == null){
             log.debug("Gift {} does not exist.", gid);
             return Response.status(Status.NOT_FOUND).build();
