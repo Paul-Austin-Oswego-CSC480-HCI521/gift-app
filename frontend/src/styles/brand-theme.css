@@ -262,6 +262,7 @@ body,
 :root [data-carbon-theme="brand"] {
   /* Backgrounds & layers */
   --cds-background: #FCFBF4;
+  --page-background: #FFFFFF; /* Figma page content area; cards and tiles stay on --cds-background so they read as darker than the page */
   --side-nav-link-color: #1C544A; /* brand green, same as --cds-button-primary; 8.4:1 on --side-nav-background */
   --side-nav-background: #FAF8F1; /* deliberately not --cds-background: the Navigation frame's side nav is its own tint, see cds-side-nav rule above */
   --cds-background-inverse: #1C544A; /* brand green, not brandHex #BBE4DF — 8.69:1 against white text-inverse/icon-inverse, see note above */
