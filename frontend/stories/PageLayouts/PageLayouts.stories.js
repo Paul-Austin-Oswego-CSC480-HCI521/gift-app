@@ -7,10 +7,12 @@ import "../../src/components/shared/gift-brand/gift-brand.js";
 import "../../src/components/shared/gift-side-nav/gift-side-nav.js";
 import "../../src/components/gift-login-form/gift-login-form.js";
 import "../../src/components/gift-dashboard/gift-dashboard.js";
+import "../../src/components/gift-people/gift-people.js";
 import "../../src/components/gift-upcoming-dates/gift-upcoming-dates.js";
+import { people } from "../../src/mocks/people.js";
 import { upcomingDates } from "../../src/mocks/upcoming-dates.js";
-import "../../src/components/gift-preferences-header/gift-preferences-header.js";
-import "../../src/components/gift-wishlist-table/gift-wishlist-table.js";
+import { wishlistItems } from "../../src/mocks/wishlist.js";
+import "../../src/components/gift-my-wishlist/gift-my-wishlist.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/brand-theme-dark.css";
 import "../../src/styles/page-templates.css";
@@ -136,17 +138,7 @@ export const UpcomingDates = {
     `),
 };
 
-// my-wishlist.html: the Authenticated template with the page title, <gift-preferences-header> and
-// <gift-wishlist-table>. Items are passed in as properties, so no backend is needed.
-const wishlistItems = ["Cascadia", "Azul", "Project L"].map((giftName, index) => ({
-  id: index + 1,
-  giftName,
-  value: "25.00",
-  priority: index % 2 ? "Low" : "High",
-  status: index % 3 ? "Wanted" : "Received",
-  added: "2026-10-27",
-}));
-
+// my-wishlist.html: the Authenticated template with <gift-my-wishlist> as the page content.
 export const Wishlist = {
   render: () =>
     frame(html`
@@ -155,10 +147,24 @@ export const Wishlist = {
           <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
         </gift-nav-header>
         <gift-side-nav active="wishlist"></gift-side-nav>
-        <main class="page-main" aria-label="Page content">
-          <h1 class="page-title">My Wish List</h1>
-          <gift-preferences-header></gift-preferences-header>
-          <gift-wishlist-table .items=${wishlistItems}></gift-wishlist-table>
+        <main class="page-main" aria-label="My wish list">
+          <gift-my-wishlist .items=${wishlistItems}></gift-my-wishlist>
+        </main>
+      </div>
+    `),
+};
+
+// people.html: the Authenticated template with <gift-people> as the page content.
+export const People = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="people"></gift-side-nav>
+        <main class="page-main" aria-label="People page">
+          <gift-people .people=${people}></gift-people>
         </main>
       </div>
     `),

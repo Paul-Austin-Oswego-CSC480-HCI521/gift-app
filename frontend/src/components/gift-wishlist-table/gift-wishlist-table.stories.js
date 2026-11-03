@@ -1,13 +1,9 @@
 import { html } from "lit";
 import { expect, fn, userEvent, waitFor } from "storybook/test";
 import { renderedForm, typeInto } from "../../../stories/helpers/shadow.js";
+import { wishlistItems as sampleItems } from "../../mocks/wishlist.js";
 import "./gift-wishlist-table.js";
 
-const names = ["Marvel Dice Throne Battle Chest", "Project L", "We Didn't Playtest This at All", "Picky Eaters", "Dutz Blitz", "Betrayal at the House on the Hill", "Skull King", "Cascadia", "Azul"];
-const sampleItems = names.map((giftName, index) => ({
-  id: index + 1, giftName, value: "25.00", priority: index % 2 ? "Low" : "High",
-  status: index % 3 ? "Wanted" : "Received", added: "2026-10-27",
-}));
 export default {
   title: "Custom Components/Wishlist Table",
   render: ({ items, onSave }) => html`<gift-wishlist-table .items=${items} @wishlist-save=${onSave}></gift-wishlist-table>`,

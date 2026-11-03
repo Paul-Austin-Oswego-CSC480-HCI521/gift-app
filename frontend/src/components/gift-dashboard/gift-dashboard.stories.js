@@ -1,37 +1,12 @@
 import { html } from "lit";
 import { expect, fn, userEvent, waitFor } from "storybook/test";
+import { user } from "../../mocks/dashboard-user.js";
 import "./gift-dashboard.js";
 import "../../styles/page-templates.css";
 
 // The dashboard's page content: a tile per person with a structured list of their gifts.
 // Composed from cds-tile, cds-structured-list, cds-tag, cds-button and the Carbon notification/loading
 // components. Data is passed in as properties, so no backend is needed here.
-const user = {
-  fullName: "Test User 1",
-  people: [
-    {
-      fullName: "Alex Rivera",
-      gifts: [
-        {
-          name: "Pour-over coffee set",
-          type: "Physical",
-          status: { stage: "updated" },
-          occasion: { name: "Birthday", date: "2099-11-14" },
-          purchaseDate: null,
-        },
-        {
-          name: "Trail running shoes",
-          type: "Physical",
-          status: { stage: "purchased" },
-          occasion: { name: "Holiday", date: "2099-12-25" },
-          purchaseDate: "2026-10-02",
-        },
-      ],
-    },
-    { fullName: "Sam Patel", gifts: [] },
-  ],
-};
-
 export default {
   title: "Custom Components/Dashboard",
   component: "gift-dashboard",
