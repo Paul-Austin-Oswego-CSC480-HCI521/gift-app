@@ -100,8 +100,9 @@ public class AuthResource {
         }
 
         user = uRepo.save(user);
-        tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
-        return Response.created(UriBuilder.fromPath("user/" + user.getId()).build()).build();
+        String token = tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
+        LoginResponse tokenObject = new LoginResponse(token, user.getId());
+        return Response.created(UriBuilder.fromPath("user/" + user.getId()).build()).entity(tokenObject).build();
     }
 
     private Response reply(Response.Status status, Object body) {
