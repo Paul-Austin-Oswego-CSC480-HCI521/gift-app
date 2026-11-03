@@ -51,6 +51,7 @@ public class UsersResource {
 
     //Creates a new user
     @POST
+    @Deprecated
     public Response createUser(Users user) {
         if (user == null) {
             log.info("User creation request failed. No user information provided.");

@@ -97,6 +97,7 @@ public class GiftStatusResource {
     }
 
     @DELETE
+    @Deprecated
     public Response deleteStatus(){
         // DO NOT USE
         // THIS ITEM GETS DELETED WHEN GIFT GETS DELETED. NO GIFT SHOULD BE LACKING OF ITS OWN STATUS.
