@@ -15,15 +15,15 @@ const user = {
         {
           name: "Pour-over coffee set",
           type: "Physical",
-          status: { stage: "Need to buy" },
-          occasion: { name: "Birthday", date: "2026-11-14" },
+          status: { stage: "updated" },
+          occasion: { name: "Birthday", date: "2099-11-14" },
           purchaseDate: null,
         },
         {
           name: "Trail running shoes",
           type: "Physical",
-          status: { stage: "Purchased" },
-          occasion: { name: "Holiday", date: "2026-12-25" },
+          status: { stage: "purchased" },
+          occasion: { name: "Holiday", date: "2099-12-25" },
           purchaseDate: "2026-10-02",
         },
       ],
@@ -35,30 +35,41 @@ const user = {
 export default {
   title: "Custom Components/Dashboard",
   component: "gift-dashboard",
-  render: ({ user, loading, error, onAddGift, onReload }) => html`
+  render: ({ user, loading, error, onAddPerson, onAddGift, onAddDate }) => html`
     <gift-dashboard
       .user=${user}
       ?loading=${loading}
       error=${error}
+      @add-person=${onAddPerson}
       @add-gift=${onAddGift}
-      @dashboard-reload=${onReload}
+      @add-date=${onAddDate}
     ></gift-dashboard>
   `,
   argTypes: {
+    onAddPerson: { table: { disable: true } },
     onAddGift: { table: { disable: true } },
-    onReload: { table: { disable: true } },
+    onAddDate: { table: { disable: true } },
   },
-  args: { user, loading: false, error: "", onAddGift: fn(), onReload: fn() },
+  args: {
+    user,
+    loading: false,
+    error: "",
+    onAddPerson: fn(),
+    onAddGift: fn(),
+    onAddDate: fn(),
+  },
 };
 
 // Waits for gift-dashboard and its Carbon children, then returns the action buttons by label.
 const renderedDashboard = async (canvasElement) => {
   const host = canvasElement.querySelector("gift-dashboard");
   await host.updateComplete;
-  const buttons = [...host.shadowRoot.querySelectorAll(".actions cds-button")];
+  const cards = [...host.shadowRoot.querySelectorAll("dashboard-card")];
+  await Promise.all(cards.map((card) => card.updateComplete));
+  const buttons = cards.map((card) => card.shadowRoot.querySelector("cds-button"));
   await Promise.all(buttons.map((button) => button.updateComplete));
-  const byLabel = (label) => buttons.find((button) => button.textContent.trim() === label);
-  return { addGift: byLabel("Add Gift"), reload: byLabel("Reload data") };
+  const [addPerson, addGift, addDate] = buttons;
+  return { addPerson, addGift, addDate };
 };
 
 export const Default = {};
@@ -66,18 +77,22 @@ export const Loading = { args: { user: null, loading: true } };
 export const NoPeople = { args: { user: { fullName: "Test User 1", people: [] } } };
 export const LoadError = { args: { user: null, error: "API request to /user/1 failed: 500" } };
 
-export const ActionButtonsEmitEvents = {
+export const AddButtonsEmitEvents = {
   play: async ({ canvasElement, args, step }) => {
-    const { addGift, reload } = await renderedDashboard(canvasElement);
+    const { addPerson, addGift, addDate } = await renderedDashboard(canvasElement);
+    await step("Click Add Person", async () => {
+      await userEvent.click(addPerson);
+      await waitFor(() => expect(args.onAddPerson).toHaveBeenCalledTimes(1));
+      expect(args.onAddGift).not.toHaveBeenCalled();
+    });
     await step("Click Add Gift", async () => {
       await userEvent.click(addGift);
       await waitFor(() => expect(args.onAddGift).toHaveBeenCalledTimes(1));
-      expect(args.onReload).not.toHaveBeenCalled();
+      expect(args.onAddDate).not.toHaveBeenCalled();
     });
-    await step("Click Reload data", async () => {
-      await userEvent.click(reload);
-      await waitFor(() => expect(args.onReload).toHaveBeenCalledTimes(1));
-      expect(args.onAddGift).toHaveBeenCalledTimes(1);
+    await step("Click Add Date", async () => {
+      await userEvent.click(addDate);
+      await waitFor(() => expect(args.onAddDate).toHaveBeenCalledTimes(1));
     });
   },
 };
@@ -85,16 +100,15 @@ export const ActionButtonsEmitEvents = {
 export const LoadingBlocksActions = {
   args: { user: null, loading: true },
   play: async ({ canvasElement, args, step }) => {
-    const { addGift, reload } = await renderedDashboard(canvasElement);
-    await step("Both buttons are disabled while loading", async () => {
-      expect(addGift.disabled).toBe(true);
-      expect(reload.disabled).toBe(true);
+    const { addPerson, addGift, addDate } = await renderedDashboard(canvasElement);
+    await step("All three Add buttons are disabled while loading", async () => {
+      for (const button of [addPerson, addGift, addDate]) expect(button.disabled).toBe(true);
     });
     await step("Clicking them emits nothing", async () => {
-      await userEvent.click(addGift);
-      await userEvent.click(reload);
+      for (const button of [addPerson, addGift, addDate]) await userEvent.click(button);
+      expect(args.onAddPerson).not.toHaveBeenCalled();
       expect(args.onAddGift).not.toHaveBeenCalled();
-      expect(args.onReload).not.toHaveBeenCalled();
+      expect(args.onAddDate).not.toHaveBeenCalled();
     });
   },
 };
