@@ -75,7 +75,7 @@ public class AuthResource {
 
     @POST
     @Path("/signup")
-    public Response signup(){
+    public Response signup(SignupForm form){
         return null;
     }
 
@@ -84,7 +84,7 @@ public class AuthResource {
                 .header("Cache-Control", "no-store").entity(body).build();
     }
 
-    private record signupForm(String firstName, String surname,
+    public record SignupForm(String firstName, String surname,
                               String email, String username,
                               String password){};
 
