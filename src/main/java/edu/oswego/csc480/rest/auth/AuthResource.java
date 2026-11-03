@@ -13,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,10 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
     private static final String DUMMY_HASH = new PasswordService().hash("dummy-password");
+    private static final int MIN_PASSWORD_LENGTH= 6;
 
     @Inject
-    private UserRepository users;
+    private UserRepository uRepo;
 
     @Inject
     private PasswordService passwords;
@@ -47,7 +49,7 @@ public class AuthResource {
                     Map.of("message", "Email and password are required."));
         }
 
-        User user = users.findByEmail(request.email.strip()).orElse(null);
+        User user = uRepo.findByEmail(request.email.strip()).orElse(null);
         String storedHash = user == null ? null : user.getPasswordHash();
         String hashToVerify = storedHash == null ? DUMMY_HASH : storedHash;
         boolean verified;
@@ -83,9 +85,22 @@ public class AuthResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        user = new User();
+        user.setFirstName(form.firstName);
+        user.setSurname(form.surname);
+        user.setEmail(form.email);
+        user.setUsername(form.username);
 
+        try{
+            String passwordHash = passwords.hash(form.password);
+            user.setPasswordHash(passwordHash);
+        } catch(IllegalArgumentException e){
+            log.error("password does not meet password service requirements.", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
-        return null;
+        user = uRepo.save(user);
+        return Response.created(UriBuilder.fromPath("user/" + user.getId()).build()).build();
     }
 
     private Response reply(Response.Status status, Object body) {
