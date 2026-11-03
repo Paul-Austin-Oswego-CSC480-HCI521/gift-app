@@ -9,6 +9,8 @@ import "../../src/components/gift-login-form/gift-login-form.js";
 import "../../src/components/gift-dashboard/gift-dashboard.js";
 import "../../src/components/gift-upcoming-dates/gift-upcoming-dates.js";
 import { upcomingDates } from "../../src/mocks/upcoming-dates.js";
+import "../../src/components/gift-preferences-header/gift-preferences-header.js";
+import "../../src/components/gift-wishlist-table/gift-wishlist-table.js";
 import "../../src/styles/brand-theme.css";
 import "../../src/styles/brand-theme-dark.css";
 import "../../src/styles/page-templates.css";
@@ -129,6 +131,34 @@ export const UpcomingDates = {
         <gift-side-nav active="dates"></gift-side-nav>
         <main class="page-main" aria-label="Upcoming dates">
           <gift-upcoming-dates .dates=${upcomingDates}></gift-upcoming-dates>
+        </main>
+      </div>
+    `),
+};
+
+// my-wishlist.html: the Authenticated template with the page title, <gift-preferences-header> and
+// <gift-wishlist-table>. Items are passed in as properties, so no backend is needed.
+const wishlistItems = ["Cascadia", "Azul", "Project L"].map((giftName, index) => ({
+  id: index + 1,
+  giftName,
+  value: "25.00",
+  priority: index % 2 ? "Low" : "High",
+  status: index % 3 ? "Wanted" : "Received",
+  added: "2026-10-27",
+}));
+
+export const Wishlist = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="wishlist"></gift-side-nav>
+        <main class="page-main" aria-label="Page content">
+          <h1 class="page-title">My Wish List</h1>
+          <gift-preferences-header></gift-preferences-header>
+          <gift-wishlist-table .items=${wishlistItems}></gift-wishlist-table>
         </main>
       </div>
     `),
