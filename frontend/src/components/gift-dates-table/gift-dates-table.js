@@ -4,12 +4,12 @@ import "@carbon/web-components/es/components/icon-button/index.js";
 import "@carbon/web-components/es/components/tag/index.js";
 import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
 import Checkmark16 from "@carbon/icons/es/checkmark/16.js";
-import BatPictogram from "@carbon/pictograms/es/bat--01/index.js";
-import BirthdayCakePictogram from "@carbon/pictograms/es/birthday--cake/index.js";
-import CalendarPictogram from "@carbon/pictograms/es/calendar/index.js";
-import GiftPictogram from "@carbon/pictograms/es/gift/index.js";
-import PencilPictogram from "@carbon/pictograms/es/pencil/index.js";
-import WeddingCakePictogram from "@carbon/pictograms/es/wedding--cake/index.js";
+import BatPictogram from "@carbon/pictograms/es/bat--01";
+import BirthdayCakePictogram from "@carbon/pictograms/es/birthday--cake";
+import CalendarPictogram from "@carbon/pictograms/es/calendar";
+import GiftPictogram from "@carbon/pictograms/es/gift";
+import PencilPictogram from "@carbon/pictograms/es/pencil";
+import WeddingCakePictogram from "@carbon/pictograms/es/wedding--cake";
 
 // Occasion category -> pictogram, from the Figma date entries (Date Row 26:3371). Pictograms are
 // 64px by default; the design draws them at 32px.
