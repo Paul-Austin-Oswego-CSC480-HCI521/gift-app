@@ -72,4 +72,14 @@ describe("gift-tile", () => {
     const tile = await renderGiftTile({ type: "person" });
     expect(tile.shadowRoot.querySelector("cds-icon-button")).toBeNull();
   });
+
+  it("puts the person arrow inline after the name instead of in Carbon's icon slot", async () => {
+    const tile = await renderGiftTile({ type: "person", href: "#" });
+    expect(tile.shadowRoot.querySelector(".content .arrow")).not.toBeNull();
+    expect(tile.shadowRoot.querySelector('[slot="icon"]')).toBeNull();
+
+    const base = await renderGiftTile({ type: "base", href: "#" });
+    expect(base.shadowRoot.querySelector(".arrow")).toBeNull();
+    expect(base.shadowRoot.querySelector('[slot="icon"]')).not.toBeNull();
+  });
 });
