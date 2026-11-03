@@ -1,7 +1,8 @@
 // Enforces the "Carbon first" rule from docs/carbon-conventions.md.
 //
 // Every custom component in src/components/<tag>/<tag>.js must either
-//   1. import at least one @carbon/web-components component (it composes Carbon), or
+//   1. import at least one @carbon/web-components component (it composes Carbon), or import
+//      another gift-* component (it composes components that are themselves checked), or
 //   2. carry a `// carbon-exempt: <reason>` comment explaining why Carbon has nothing suitable.
 // Raw HTML controls that Carbon already provides (<button>, <input>, <select>, ...) are
 // rejected in templates unless the file is exempt.
@@ -72,9 +73,11 @@ for (const dir of componentDirs(root)) {
     continue;
   }
 
-  if (!/import\s+["']@carbon\/web-components\//.test(source)) {
+  const importsCarbon = /import\s+["']@carbon\/web-components\//.test(source);
+  const importsGiftComponent = /import\s+["'](?:\.\.?\/)+(?:[\w-]+\/)*gift-[\w-]+\.js["']/.test(source);
+  if (!importsCarbon && !importsGiftComponent) {
     problems.push(
-      `${label}: does not import any @carbon/web-components component. Compose Carbon components, ` +
+      `${label}: does not import any @carbon/web-components or gift-* component. Compose Carbon components, ` +
         "or add `// carbon-exempt: <why Carbon has nothing suitable>` if that is truly not possible."
     );
   }

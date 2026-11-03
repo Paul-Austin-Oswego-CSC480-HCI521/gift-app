@@ -255,7 +255,8 @@ Happo's `accessibility` target ignores the a11y config. Copy `carbonRadioAriaRea
 `gift-modal.stories.js`. Renaming or adding a story shows these as "new" violations in Happo until
 the exemption is on it.
 
-`npm run lint:carbon` fails if a component imports no Carbon component or renders a raw
+`npm run lint:carbon` fails if a component imports neither a Carbon component nor another `gift-*`
+component (a page that only composes existing `gift-*` components needs no exemption), or renders a raw
 `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. Fix the
 design rather than adding an exemption. Exemptions are reviewed, and a vague reason will be
 rejected.
