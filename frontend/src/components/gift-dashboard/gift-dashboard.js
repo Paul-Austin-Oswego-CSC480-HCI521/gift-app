@@ -3,6 +3,7 @@ import "@carbon/web-components/es/components/inline-loading/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 import "./dashboard-card.js"; // adjust paths to wherever you save these
 import "./dashboard-row.js";
+import { routes } from "../../config/routes.js";
 import { notificationTheme } from "../../styles/notification-theme.js";
 
 const MAX_ROWS = 7;
@@ -50,8 +51,10 @@ export class GiftDashboard extends LitElement {
     css`
       :host {
         display: flex;
+        inline-size: 100%;
         flex-direction: column;
-        gap: var(--cds-spacing-06, 1.5rem);
+        gap: var(--cds-spacing-07, 2rem); /* same as gift-people: header, then content */
+        color: var(--cds-text-primary);
       }
 
       /* brand-theme.css's heading rules can't reach into this shadow root. */
@@ -66,7 +69,7 @@ export class GiftDashboard extends LitElement {
       .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+        gap: 2.8125rem; /* Figma: 45 between cards */
         align-items: start;
       }
 
@@ -145,6 +148,8 @@ export class GiftDashboard extends LitElement {
       <div class="grid">
         <dashboard-card
           heading="People"
+          view-all-href=${routes.people.path}
+          view-all-label="People"
           description="View and manage your people"
           add-label="Add Person"
           .total=${people.length}
@@ -169,6 +174,8 @@ export class GiftDashboard extends LitElement {
 
         <dashboard-card
           heading="Gifts to Buy"
+          view-all-href=${routes.gifts.path}
+          view-all-label="Gifts to Buy"
           description="See what still needs to be purchased"
           add-label="Add Gift"
           .total=${toBuy.length}
@@ -196,6 +203,8 @@ export class GiftDashboard extends LitElement {
 
         <dashboard-card
           heading="Upcoming Dates"
+          view-all-href=${routes.dates.path}
+          view-all-label="Upcoming Dates"
           description="Keep track of important events"
           add-label="Add Date"
           .total=${dates.length}

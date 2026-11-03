@@ -1,10 +1,14 @@
 import { LitElement, html, css } from "lit";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/link/index.js";
-import "../../styles/brand-theme.css";
-import "../../styles/carbon-shape-overrides.js";
-import "../../styles/carbon-font-overrides.js";
+import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
+import Add16 from "@carbon/icons/es/add/16.js";
+import ArrowRight16 from "@carbon/icons/es/arrow--right/16.js";
+import "../gift-tile/gift-tile.js";
 
+// Figma "Gift Card / Section" (5:4470): a gift-tile of type "section" holding a header (icon, title,
+// description, add button), a summary (total + View all) and a list. The tile supplies the card
+// surface, radius and offset shadow; this component only lays out the section content.
 export class DashboardCard extends LitElement {
   static properties = {
     heading: { type: String },
@@ -12,32 +16,102 @@ export class DashboardCard extends LitElement {
     addLabel: { type: String, attribute: "add-label" },
     total: { type: Number },
     viewAllHref: { type: String, attribute: "view-all-href" },
+    // Visually hidden text after "View all" so the link name is unique, e.g. "People".
+    viewAllLabel: { type: String, attribute: "view-all-label" },
     disabled: { type: Boolean },
   };
 
   static styles = css`
-    .card {
-      background: var(--card-background, #fcfbf4);
-      border-radius: var(--radius-large, 0.75rem);
-      box-shadow: 4px 4px 0 var(--shadow-accent, #8b1a1a);
-      padding: 1.25rem;
+    :host {
+      display: block;
     }
-    header { display: flex; gap: 1rem; align-items: flex-start; }
+
+    /* Dashboard cards fill their grid column; the tile caps itself at the Figma 308px width. */
+    gift-tile {
+      max-inline-size: none;
+    }
+
+    header {
+      display: flex;
+      gap: var(--cds-spacing-06, 1.5rem);
+      align-items: center;
+    }
+
     .icon {
-      background: var(--brand-green, #1f4d3f);
-      color: #fff;
-      border-radius: var(--radius-large, 0.75rem);
-      padding: 0.75rem;
+      display: flex;
+      flex: none;
+      align-items: center;
+      justify-content: center;
+      inline-size: 3.625rem; /* Figma: 58 x 49 */
+      block-size: 3.0625rem;
+      border-radius: var(--tile-radius);
+      background: var(--cds-button-primary);
+      color: var(--cds-text-on-color);
     }
-    h2 { margin: 0; font-size: 1.25rem; font-weight: 500; }
-    p { margin: 0.25rem 0 0.5rem; font-size: 0.75rem; }
-    .totals {
+
+    .heading {
+      display: flex;
+      flex-direction: column;
+      gap: var(--cds-spacing-03, 0.5rem);
+      align-items: flex-start;
+      min-inline-size: 0;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: var(--font-family-heading);
+      font-size: 1.625rem;
+      font-weight: 400;
+      line-height: normal;
+      color: var(--cds-text-primary);
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--cds-text-primary);
+    }
+
+    .summary {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 1rem 0 0.5rem;
+      margin-block: var(--cds-spacing-05, 1rem);
     }
-    .count { font-size: 1.75rem; margin-right: 0.5rem; }
+
+    .total {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9375rem;
+      color: var(--cds-text-primary);
+    }
+
+    .count {
+      font-family: var(--font-family-heading);
+      font-size: 2rem;
+      line-height: 1.25;
+    }
+
+    /* Carbon's .cds--visually-hidden rule, repeated because the global stylesheet cannot reach into
+       this shadow root. It gives each "View all" link a unique accessible name. */
+    .cds--visually-hidden {
+      position: absolute;
+      overflow: hidden;
+      padding: 0;
+      border: 0;
+      margin: -1px;
+      block-size: 1px;
+      clip: rect(0, 0, 0, 0);
+      inline-size: 1px;
+      visibility: inherit;
+      white-space: nowrap;
+    }
+
+    [role="list"] {
+      display: block;
+      inline-size: 100%;
+    }
   `;
 
   _add() {
@@ -46,23 +120,27 @@ export class DashboardCard extends LitElement {
 
   render() {
     return html`
-      <section class="card">
+      <gift-tile type="section">
         <header>
           <div class="icon"><slot name="icon"></slot></div>
-          <div>
+          <div class="heading">
             <h2>${this.heading}</h2>
             <p>${this.description}</p>
-            <cds-button size="sm" ?disabled=${this.disabled} @click=${this._add}>${this.addLabel}</cds-button>
+            <cds-button size="sm" ?disabled=${this.disabled} @click=${this._add}>
+              ${this.addLabel}${iconLoader(Add16, { slot: "icon" })}
+            </cds-button>
           </div>
         </header>
 
-        <div class="totals">
-          <div><span class="count">${this.total}</span>Total</div>
-          <cds-link href=${this.viewAllHref ?? "#"}>View all</cds-link>
+        <div class="summary">
+          <div class="total"><span class="count">${this.total}</span>Total</div>
+          <cds-link href=${this.viewAllHref ?? "#"}>
+            View all <span class="cds--visually-hidden">${this.viewAllLabel}</span>${iconLoader(ArrowRight16, { slot: "icon" })}
+          </cds-link>
         </div>
 
         <div role="list"><slot></slot></div>
-      </section>
+      </gift-tile>
     `;
   }
 }

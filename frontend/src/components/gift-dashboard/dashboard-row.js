@@ -1,5 +1,8 @@
 import { LitElement, html, css } from "lit";
 import "@carbon/web-components/es/components/checkbox/index.js";
+import "@carbon/web-components/es/components/icon-button/index.js";
+import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
+import ArrowRight32 from "@carbon/icons/es/arrow--right/32.js";
 import "../../styles/brand-theme.css";
 import "../../styles/carbon-shape-overrides.js";
 import "../../styles/carbon-font-overrides.js";
@@ -12,17 +15,28 @@ export class DashboardRow extends LitElement {
     checked: { type: Boolean },
   };
 
+  // Figma list item: Outfit 24 title over a 13px subtitle, black rule above, arrow or checkbox at the end.
   static styles = css`
     .row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 0;
-      border-top: 1px solid currentColor;
+      gap: var(--cds-spacing-05, 1rem);
+      padding: var(--cds-spacing-05, 1rem);
+      border-block-start: 1px solid var(--cds-text-primary);
     }
-    .title { display: block; font-size: 1rem; }
-    .sub { display: block; font-size: 0.7rem; }
-    button { background: none; border: 0; cursor: pointer; }
+    .title {
+      display: block;
+      font-family: var(--font-family-heading);
+      font-size: 1.5rem;
+      line-height: normal;
+    }
+    .sub {
+      display: block;
+      padding-inline-start: var(--cds-spacing-05, 1rem);
+      font-family: var(--font-family-heading);
+      font-size: 0.8125rem;
+    }
   `;
 
   constructor() {
@@ -52,11 +66,10 @@ export class DashboardRow extends LitElement {
           ? html`<cds-checkbox hide-label label-text="Mark ${this.heading} purchased"
               ?checked=${this.checked}
               @cds-checkbox-changed=${this._toggle}></cds-checkbox>`
-          : html`<button aria-label="Open ${this.heading}" @click=${this._select}>
-              <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-                <path d="M18 6l-1.4 1.4L24.2 15H4v2h20.2l-7.6 7.6L18 26l10-10z"></path>
-              </svg>
-            </button>`}
+          : html`<cds-icon-button kind="ghost" size="lg" align="left" @click=${this._select}>
+              ${iconLoader(ArrowRight32, { slot: "icon" })}
+              <span slot="tooltip-content">Open ${this.heading}</span>
+            </cds-icon-button>`}
       </div>
     `;
   }
