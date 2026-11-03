@@ -76,6 +76,14 @@ public class AuthResource {
     @POST
     @Path("/signup")
     public Response signup(SignupForm form){
+        log.info("Request to create user");
+        User user;
+        if (form == null || form.email.isBlank() || form.firstName.isBlank() || form.password.isBlank()
+        || form.surname.isBlank() || form.username.isBlank()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+
 
         return null;
     }
