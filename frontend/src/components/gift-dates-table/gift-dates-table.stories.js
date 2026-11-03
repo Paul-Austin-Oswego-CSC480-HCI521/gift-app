@@ -12,9 +12,9 @@ export default {
 export const Default = {};
 
 export const Purchased = {
-  args: { dates: [upcomingDates[0]] },
+  args: { dates: [upcomingDates[1]] },
 };
 
 export const NotPurchased = {
-  args: { dates: [upcomingDates[1]] },
+  args: { dates: [upcomingDates[0]] },
 };

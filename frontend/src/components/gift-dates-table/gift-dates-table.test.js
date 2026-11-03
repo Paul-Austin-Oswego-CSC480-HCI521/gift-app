@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { upcomingDates } from "../../mocks/upcoming-dates.js";
 import "./gift-dates-table.js";
 
@@ -27,21 +27,21 @@ describe("gift-dates-table", () => {
     const table = await renderTable(upcomingDates);
     const rows = [...table.shadowRoot.querySelectorAll("cds-table-row")];
 
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(5);
     expect(text(rows[0])).toContain("5 DAYS Mom Birthday Mon, Oct 19, 2026");
-    expect(text(rows[1])).toContain("18 DAYS Jordan Anniversary Sun, Nov 1, 2026");
+    expect(text(rows[1])).toContain("10 DAYS Alex Rivera Anniversary Sat, Oct 24, 2026");
   });
 
   it("renders purchased and not-purchased summaries from row status", async () => {
     const table = await renderTable(upcomingDates);
     const rows = [...table.shadowRoot.querySelectorAll("cds-table-row")];
 
-    expect(text(rows[0])).toContain("All gifts purchased");
-    expect(text(rows[0])).toContain("Purchased on Fri, Oct 9, 2026");
-    expect(rows[0].querySelector("cds-tag")).toHaveAttribute("type", "green");
-    expect(text(rows[1])).toContain("2 gifts to buy");
-    expect(text(rows[1])).not.toContain("Purchased on");
-    expect(rows[1].querySelector("cds-tag")).toHaveAttribute("type", "red");
+    expect(text(rows[0])).toContain("2 gifts to buy");
+    expect(text(rows[0])).not.toContain("Purchased on");
+    expect(rows[0].querySelector("cds-tag")).toHaveAttribute("type", "red");
+    expect(text(rows[1])).toContain("All gifts purchased");
+    expect(text(rows[1])).toContain("Purchased on Sat, Oct 10, 2026");
+    expect(rows[1].querySelector("cds-tag")).toHaveAttribute("type", "green");
   });
 
   it("uses specific accessible labels for occasion and edit controls", async () => {
@@ -61,6 +61,32 @@ describe("gift-dates-table", () => {
 
     expect(head).toHaveClass("visually-hidden");
     expect(headers).toEqual(["Days", "Occasion", "Details", "Status", "Actions"]);
+  });
+
+  it("emits date-edit with the row id when the edit button is pressed", async () => {
+    const table = await renderTable(upcomingDates);
+    const onEdit = vi.fn();
+    table.addEventListener("date-edit", onEdit);
+
+    table.shadowRoot.querySelector("cds-icon-button").click();
+
+    expect(onEdit).toHaveBeenCalledOnce();
+    expect(onEdit.mock.calls[0][0].detail).toEqual({ id: "mom-birthday" });
+  });
+
+  it("draws occasion pictograms at 32px and falls back to the calendar", async () => {
+    const table = await renderTable([
+      upcomingDates[0],
+      { ...upcomingDates[0], id: "x", occasion: { name: "Graduation", dateLabel: "", category: "other" } },
+    ]);
+    const icons = [...table.shadowRoot.querySelectorAll(".occasion-cell svg.occasion-icon")];
+
+    expect(icons).toHaveLength(2);
+    for (const icon of icons) {
+      expect(icon).toHaveAttribute("width", "32");
+      expect(icon).toHaveAttribute("aria-hidden", "true");
+    }
+    expect(icons[0].innerHTML).not.toBe(icons[1].innerHTML);
   });
 
   it("does not use zebra striping for status", async () => {
