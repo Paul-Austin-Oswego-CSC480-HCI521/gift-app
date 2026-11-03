@@ -80,7 +80,7 @@ from Figma as an SVG, paste SVG paths, or link a Figma asset URL.
   `tooltip-content` slot or `aria-label`), not on the SVG.
 
 `npm run lint:carbon` runs `scripts/check-pictograms.mjs`. It fails on a pictogram import that is not
-`@carbon/pictograms/es/<name>/index.js` or names a pictogram that does not exist, on a pictogram
+`@carbon/pictograms/es/<name>` (or `.../<name>/index.js`) or names a pictogram that does not exist, on a pictogram
 rendered with neither `"aria-hidden": "true"` nor an `aria-label`, on any imported
 `.svg` file, and on `<img>` pointing at an `.svg`. It only lists inline `<svg>` markup as a warning.
 
