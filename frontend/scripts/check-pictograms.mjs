@@ -2,7 +2,7 @@
 //
 // Rules (errors):
 //   1. Anything imported from @carbon/pictograms must be a single pictogram module,
-//      `@carbon/pictograms/es/<name>/index.js`, and <name> must exist in the installed package.
+//      `@carbon/pictograms/es/<name>` (with or without `/index.js`), and <name> must exist in the installed package.
 //      Not the package root, `lib/`, `svg/`, or another pictogram package.
 //   2. No imported or referenced .svg files (`import x from "./thing.svg"`, `<img src="...svg">`).
 //      Use a Carbon pictogram (@carbon/pictograms) or icon (@carbon/icons) instead. If Figma has a
@@ -25,7 +25,7 @@ import { fileURLToPath } from "node:url";
 const frontend = fileURLToPath(new URL("..", import.meta.url));
 const pictogramDir = join(frontend, "node_modules/@carbon/pictograms/es");
 const SCAN = ["src", "stories", ".storybook"];
-const PICTOGRAM_IMPORT = /^@carbon\/pictograms\/es\/([a-z0-9-]+)\/index\.js$/;
+const PICTOGRAM_IMPORT = /^@carbon\/pictograms\/es\/([a-z0-9-]+)(?:\/index\.js)?$/;
 
 function* sourceFiles(dir) {
   if (!existsSync(dir)) return;
