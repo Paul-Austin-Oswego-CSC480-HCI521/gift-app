@@ -5,6 +5,7 @@ import "@carbon/web-components/es/components/icon-button/index.js";
 import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
 import Add16 from "@carbon/icons/es/add/16.js";
 import ArrowRight16 from "@carbon/icons/es/arrow--right/16.js";
+import ArrowRight32 from "@carbon/icons/es/arrow--right/32.js";
 
 // Figma component set "Gift Card" (node 5:4463), `Type` property. State (Enabled/Hover/Focus)
 // comes from Carbon's tile; typography is up to the slotted content.
@@ -57,13 +58,45 @@ export class GiftTile extends LitElement {
       border-color: var(--cds-button-primary-active);
     }
 
-    /* Person (Figma "Long name"): a long name is cut to two lines with an ellipsis, not wrapped on. */
+    /* Person and add (Figma 144px tall): content is centred, the person name sits inline with its arrow. */
+    :host([type="person"]) cds-tile,
+    :host([type="person"]) cds-clickable-tile,
+    :host([type="add"]) cds-tile {
+      block-size: 9rem;
+      box-sizing: border-box;
+    }
+
+    :host([type="person"]) .content,
+    :host([type="add"]) .content {
+      block-size: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    :host([type="person"]) .content {
+      flex-direction: row;
+      gap: var(--cds-spacing-03); /* Figma: 8 between name and arrow */
+    }
+
+    /* Person: the name is Outfit Regular 24px, max 170px wide. A long name is cut to two lines with an
+       ellipsis (Figma "Long name": text truncation ending, max 2 lines). */
     :host([type="person"]) ::slotted(:not([slot])) {
+      font-family: var(--font-family-heading);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: normal;
+      color: var(--cds-text-primary);
+      max-inline-size: 10.625rem;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
       overflow-wrap: anywhere;
+    }
+
+    .arrow {
+      display: flex;
+      flex: none;
     }
 
     .content {
@@ -85,12 +118,15 @@ export class GiftTile extends LitElement {
 
   #renderContent() {
     const isAdd = this.type === "add";
+    // Person: the arrow follows the name (Figma) instead of sitting in Carbon's corner icon slot.
+    const inlineArrow = this.type === "person" && this.href;
     return html`
       <div class="content">
         <slot name="title"></slot>
         <slot name="metric"></slot>
         <slot name="description"></slot>
         <slot></slot>
+        ${inlineArrow ? html`<span class="arrow">${iconLoader(ArrowRight32, { "aria-hidden": "true" })}</span>` : ""}
         ${isAdd
           ? html`<cds-icon-button kind="primary" size="lg" @click=${this.#onAdd}>
               ${iconLoader(Add16, { slot: "icon" })}
@@ -107,7 +143,7 @@ export class GiftTile extends LitElement {
     // draws its own arrow behind a feature flag, so the Figma arrow is slotted in explicitly.
     return this.href
       ? html`<cds-clickable-tile href=${this.href} link-role="link">
-          ${this.#renderContent()}${iconLoader(ArrowRight16, { slot: "icon" })}
+          ${this.#renderContent()}${this.type === "person" ? "" : iconLoader(ArrowRight16, { slot: "icon" })}
         </cds-clickable-tile>`
       : html`<cds-tile>${this.#renderContent()}</cds-tile>`;
   }
