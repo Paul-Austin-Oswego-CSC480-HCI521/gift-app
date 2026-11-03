@@ -5,6 +5,7 @@ import "./dashboard-card.js"; // adjust paths to wherever you save these
 import "./dashboard-row.js";
 import { routes } from "../../config/routes.js";
 import { notificationTheme } from "../../styles/notification-theme.js";
+import { pageContentStyles } from "../../styles/page-content.js";
 
 const MAX_ROWS = 7;
 
@@ -48,24 +49,8 @@ export class GiftDashboard extends LitElement {
 
   static styles = [
     notificationTheme,
+    pageContentStyles,
     css`
-      :host {
-        display: flex;
-        inline-size: 100%;
-        flex-direction: column;
-        gap: var(--cds-spacing-07, 2rem); /* same as gift-people: header, then content */
-        color: var(--cds-text-primary);
-      }
-
-      /* brand-theme.css's heading rules can't reach into this shadow root. */
-      h1 {
-        margin: 0;
-        font-family: var(--font-family-heading);
-        font-size: var(--page-title-font-size);
-        line-height: var(--page-title-line-height);
-        font-weight: var(--page-title-font-weight);
-      }
-
       .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

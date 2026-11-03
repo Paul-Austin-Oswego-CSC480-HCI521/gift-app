@@ -7,6 +7,7 @@ import "@carbon/web-components/es/components/text-input/index.js";
 import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
 import Add16 from "@carbon/icons/es/add/16.js";
 import "../gift-tile/gift-tile.js";
+import { pageContentStyles } from "../../styles/page-content.js";
 
 // Figma "People" frame (5:26022): title, a search + Add Person toolbar, then a wrapping grid of
 // gift-tile cards. Page padding comes from .page-main, so the host adds none.
@@ -19,23 +20,9 @@ export class GiftPeople extends LitElement {
     showForm: { type: Boolean },
   };
 
-  static styles = css`
-    :host {
-      display: flex;
-      inline-size: 100%;
-      flex-direction: column;
-      gap: var(--cds-spacing-07, 2rem); /* Figma: 32 between header, toolbar and grid */
-      color: var(--cds-text-primary);
-    }
-
-    h1 {
-      margin: 0;
-      font-family: var(--font-family-heading);
-      font-size: 3.375rem;
-      font-weight: 300;
-      line-height: 4rem;
-    }
-
+  static styles = [
+    pageContentStyles,
+    css`
     h2 {
       margin: 0;
       font-family: var(--font-family-heading);
@@ -96,7 +83,8 @@ export class GiftPeople extends LitElement {
         inline-size: 100%;
       }
     }
-  `;
+  `,
+  ];
 
   constructor() {
     super();
