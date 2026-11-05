@@ -80,8 +80,12 @@ public class AuthResource {
     public Response signup(SignupForm form){
         log.info("Request to create user");
         User user;
-        if (form == null || form.email.isBlank() || form.firstName.isBlank() || form.password.isBlank()
-        || form.surname.isBlank() || form.username.isBlank()){
+        if (form == null
+                || form.email == null || form.email.isBlank()
+                || form.firstName == null || form.firstName.isBlank()
+                || form.password == null || form.password.isBlank()
+                || form.surname == null || form.surname.isBlank()
+                || form.username == null || form.username.isBlank()){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
