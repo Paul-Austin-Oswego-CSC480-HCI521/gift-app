@@ -24,7 +24,7 @@ public class User implements Serializable {
     @Column(name = "last_name")
     private String surname;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", insertable = false, updatable = false)
     private String fullName;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
