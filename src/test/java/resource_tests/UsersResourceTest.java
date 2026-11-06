@@ -4,6 +4,7 @@ import edu.oswego.csc480.entities.Users;
 import edu.oswego.csc480.repositories.UserRepository;
 import edu.oswego.csc480.rest.gift_service.UsersResource;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -15,14 +16,22 @@ public class UsersResourceTest {
 
     private UserRepository userRepository;
     private UsersResource resource;
+    private JsonWebToken token;
 
     @BeforeEach
     public void setUp() throws Exception {
         userRepository = mock(UserRepository.class);
         resource = new UsersResource();
+        token = mock(JsonWebToken.class);
         java.lang.reflect.Field field = UsersResource.class.getDeclaredField("userRepository");
         field.setAccessible(true);
         field.set(resource, userRepository);
+
+        java.lang.reflect.Field tokenField = UsersResource.class.getDeclaredField("token");
+        tokenField.setAccessible(true);
+        tokenField.set(resource, token);
+
+        when(token.getSubject()).thenReturn("test-user");
     }
 
     //GET all users tests
