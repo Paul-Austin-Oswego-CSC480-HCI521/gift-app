@@ -94,13 +94,4 @@ public class GiftStatusResource {
         return Response.noContent().build();
 
     }
-
-    @DELETE
-    @Deprecated
-    public Response deleteStatus(){
-        // DO NOT USE
-        // THIS ITEM GETS DELETED WHEN GIFT GETS DELETED. NO GIFT SHOULD BE LACKING OF ITS OWN STATUS.
-        log.warn("User {} attempted to use deleteStatus which is not allowed.", uid);
-        return Response.status(Status.METHOD_NOT_ALLOWED).build();
-    }
 }

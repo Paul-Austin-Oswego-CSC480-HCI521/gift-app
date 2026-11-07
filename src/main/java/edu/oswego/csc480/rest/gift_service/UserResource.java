@@ -48,22 +48,6 @@ public class UserResource {
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
-    //Creates a new user
-    @POST
-    @Deprecated
-    public Response createUser(User user) {
-        if (user == null) {
-            log.info("User creation request failed. No user information provided.");
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        User savedUser = userRepository.save(user);
-        log.info("User with id {} created.", savedUser.getId());
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(savedUser)
-                .build();
-    }
-
     @PUT
     @Path("/{id}")
     public Response updateUser(@PathParam("id") Integer id, User updatedUser) {
