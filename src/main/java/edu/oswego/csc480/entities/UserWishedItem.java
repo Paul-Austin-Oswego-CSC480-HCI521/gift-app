@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="user_wishlist")
-public class UsersWishedItem {
+public class UserWishedItem {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_wishlist_id")
@@ -14,7 +14,7 @@ public class UsersWishedItem {
     @ManyToOne
     @JoinColumn(name="user_id")
     @JsonbTransient
-    private Users user;
+    private User user;
 
     @Column(name="gift_name")
     private String giftName;
@@ -22,13 +22,13 @@ public class UsersWishedItem {
     @Column(name="value")
     private String value;
 
-    public UsersWishedItem(){}
+    public UserWishedItem(){}
 
     //get
     public Integer getId() {
         return id;
     }
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
     public String getGiftName() {
@@ -42,7 +42,7 @@ public class UsersWishedItem {
     public void setId(Integer id) {
         this.id = id;
     }
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
     public void setGiftName(String giftName) {

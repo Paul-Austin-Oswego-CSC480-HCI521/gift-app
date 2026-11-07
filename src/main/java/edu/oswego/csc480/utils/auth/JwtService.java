@@ -2,7 +2,6 @@ package edu.oswego.csc480.utils.auth;
 
 
 import com.ibm.websphere.security.jwt.JwtBuilder;
-import edu.oswego.csc480.rest.gift_service.UsersAttributesResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

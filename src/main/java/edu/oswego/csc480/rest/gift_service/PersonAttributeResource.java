@@ -1,8 +1,8 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Users;
-import edu.oswego.csc480.entities.People;
-import edu.oswego.csc480.entities.PeopleAttributes;
+import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Person;
+import edu.oswego.csc480.entities.PersonAttribute;
 import edu.oswego.csc480.repositories.UserRepository;
 
 import jakarta.annotation.security.RolesAllowed;
@@ -19,17 +19,17 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class PeopleAttributesResource {
+public class PersonAttributeResource {
     @Inject
     private UserRepository userRepository;
 
     @PathParam("uid")
     private Integer uid;
 
-    private Logger log = LoggerFactory.getLogger(PeopleAttributesResource.class);
+    private Logger log = LoggerFactory.getLogger(PersonAttributeResource.class);
 
-    private People findPerson(Integer pid) {
-        Optional<Users> user = userRepository.findById(uid);
+    private Person findPerson(Integer pid) {
+        Optional<User> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
             return null;
@@ -44,13 +44,13 @@ public class PeopleAttributesResource {
     @GET
     public Response getAttributes(@PathParam("pid") Integer pid) {
         log.info("User {} requested attributes from person {}.", uid, pid);
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -69,7 +69,7 @@ public class PeopleAttributesResource {
     }
 
     @POST
-    public Response createAttributes(@PathParam("pid") Integer pid, PeopleAttributes attributes) {
+    public Response createAttributes(@PathParam("pid") Integer pid, PersonAttribute attributes) {
         if(attributes == null
             || attributes.getAttribute_name() == null
             || attributes.getAttribute_name().isBlank()
@@ -78,14 +78,14 @@ public class PeopleAttributesResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -109,7 +109,7 @@ public class PeopleAttributesResource {
 
     @Path("/{aid}")
     @PUT
-    public Response updateAttributes(@PathParam("pid") Integer pid, @PathParam("aid") Integer aid, PeopleAttributes attributes) {
+    public Response updateAttributes(@PathParam("pid") Integer pid, @PathParam("aid") Integer aid, PersonAttribute attributes) {
         if(attributes == null
                 || attributes.getAttribute_name() == null
                 || attributes.getAttribute_name().isBlank()
@@ -118,14 +118,14 @@ public class PeopleAttributesResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
 
         if(user.isEmpty()) {
             log.debug("User {} does not exist", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -135,7 +135,7 @@ public class PeopleAttributesResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        PeopleAttributes existing = person.getAttributes().stream()
+        PersonAttribute existing = person.getAttributes().stream()
                 .filter(a -> a.getId().equals(aid))
                 .findFirst()
                 .orElse(null);
@@ -156,13 +156,13 @@ public class PeopleAttributesResource {
     @DELETE
     public Response deleteAttribute(@PathParam("pid") Integer pid, @PathParam("aid") Integer aid) {
         log.info("User {} requested deletion of Person {}'s attributes.", uid, pid);
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -172,7 +172,7 @@ public class PeopleAttributesResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        PeopleAttributes attribute = person.getAttributes().stream()
+        PersonAttribute attribute = person.getAttributes().stream()
                 .filter(a -> a.getId().equals(aid))
                 .findFirst()
                 .orElse(null);

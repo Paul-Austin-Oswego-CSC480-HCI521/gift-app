@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="person_attributes")
-public class PeopleAttributes {
+public class PersonAttribute {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="person_attribute_id")
@@ -14,7 +14,7 @@ public class PeopleAttributes {
     @ManyToOne
     @JoinColumn(name="person_id", nullable = false)
     @JsonbTransient
-    private People person;
+    private Person person;
 
     @Column(name="attribute_name")
     private String attribute_name;
@@ -22,7 +22,7 @@ public class PeopleAttributes {
     @Column(name="value")
     private String value;
 
-    public PeopleAttributes(){}
+    public PersonAttribute(){}
 
     //get
     public Integer getId() {
@@ -34,7 +34,7 @@ public class PeopleAttributes {
     public String getValue() {
         return value;
     }
-    public People getPerson() {
+    public Person getPerson() {
         return person;
     }
 
@@ -48,7 +48,7 @@ public class PeopleAttributes {
     public void setValue(String value) {
         this.value = value;
     }
-    public void setPerson(People person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 }
