@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "gifts")
-public class Gifts {
+public class Gift {
 
     @Id  @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="gift_id")
@@ -15,7 +15,7 @@ public class Gifts {
 
     @OneToOne(cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="occasion_id")
-    private Occasions occasion;
+    private Occasion occasion;
 
     @Column(name="purchase_date")
     private LocalDate purchaseDate;
@@ -33,23 +33,23 @@ public class Gifts {
     @ManyToOne
     @JoinColumn(name="person_id")
     @JsonbTransient
-    private People person;
+    private Person person;
 
     @Column(name="gift_price")
     private double price;
-    public Gifts(){}
+    public Gift(){}
 
     //get
     public Integer getId() {
         return id;
     }
-    public People getPerson() {
+    public Person getPerson() {
         return person;
     }
     public String getName() {
         return name;
     }
-    public Occasions getOccasion() {
+    public Occasion getOccasion() {
         return occasion;
     }
     public String getType() {
@@ -69,10 +69,10 @@ public class Gifts {
     public void setId(Integer id) {
         this.id = id;
     }
-    public void setPerson(People person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
-    public void setOccasion(Occasions occasion) {
+    public void setOccasion(Occasion occasion) {
         this.occasion = occasion;
     }
     public void setPurchaseDate(LocalDate purchaseDate) {

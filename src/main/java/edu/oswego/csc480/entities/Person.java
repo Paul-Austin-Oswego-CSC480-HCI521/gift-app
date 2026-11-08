@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name="people")
-public class People {
+public class Person {
 
     @Column(name="person_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class People {
     @JoinColumn(name="user_id")
     @ManyToOne
     @JsonbTransient
-    private Users user;
+    private User user;
 
     @Column(name="first_name")
     private String firstName;
@@ -27,18 +27,18 @@ public class People {
     private String fullName;
 
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<PeopleAttributes> attributes = new ArrayList<>();
+    private List<PersonAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy="person", cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<Gifts> gifts;
+    private List<Gift> gifts;
 
-    public People(){}
+    public Person(){}
 
     //get
     public Integer getId() {
         return id;
     }
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
     public String getFullName() {
@@ -50,13 +50,13 @@ public class People {
     public String getLastName() {
         return lastName;
     }
-    public List<PeopleAttributes> getAttributes() {
+    public List<PersonAttribute> getAttributes() {
         return attributes;
     }
-    public void setAttributes(List<PeopleAttributes> attributes) {
+    public void setAttributes(List<PersonAttribute> attributes) {
         this.attributes = attributes;
     }
-    public List<Gifts> getGifts() {
+    public List<Gift> getGifts() {
         return gifts;
     }
 
@@ -64,7 +64,7 @@ public class People {
     public void setId(Integer id) {
         this.id = id;
     }
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
     public void setFirstName(String firstName) {
@@ -76,7 +76,7 @@ public class People {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public void setGifts(List<Gifts> gifts) {
+    public void setGifts(List<Gift> gifts) {
         this.gifts = gifts;
     }
 }

@@ -1,10 +1,10 @@
 package resource_tests;
 
-import edu.oswego.csc480.entities.Users;
-import edu.oswego.csc480.entities.People;
-import edu.oswego.csc480.entities.PeopleAttributes;
+import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.entities.Person;
+import edu.oswego.csc480.entities.PersonAttribute;
 import edu.oswego.csc480.repositories.UserRepository;
-import edu.oswego.csc480.rest.gift_service.PeopleAttributesResource;
+import edu.oswego.csc480.rest.gift_service.PersonAttributeResource;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,20 +14,20 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class PeopleAttributesResourceTest {
+public class PersonAttributeResourceTest {
     private UserRepository userRepository;
-    private PeopleAttributesResource resource;
+    private PersonAttributeResource resource;
 
     @BeforeEach
     public void setUp() throws Exception {
         userRepository = mock(UserRepository.class);
-        resource = new PeopleAttributesResource();
+        resource = new PersonAttributeResource();
 
-        java.lang.reflect.Field repoField = PeopleAttributesResource.class.getDeclaredField("userRepository");
+        java.lang.reflect.Field repoField = PersonAttributeResource.class.getDeclaredField("userRepository");
         repoField.setAccessible(true);
         repoField.set(resource, userRepository);
 
-        java.lang.reflect.Field uidField = PeopleAttributesResource.class.getDeclaredField("uid");
+        java.lang.reflect.Field uidField = PersonAttributeResource.class.getDeclaredField("uid");
         uidField.setAccessible(true);
         uidField.set(resource, 1);
     }
@@ -36,23 +36,23 @@ public class PeopleAttributesResourceTest {
     //GET all attributes, 200 success
     @Test
     public void getAttributes_200_1() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
 
-        PeopleAttributes a1 = new PeopleAttributes();
+        PersonAttribute a1 = new PersonAttribute();
         a1.setId(1);
         a1.setAttribute_Name("Shirt Size");
         a1.setValue("M");
         a1.setPerson(person);
 
-        PeopleAttributes a2 = new PeopleAttributes();
+        PersonAttribute a2 = new PersonAttribute();
         a2.setId(2);
         a2.setAttribute_Name("Favorite Color");
         a2.setValue("Blue");
         a2.setPerson(person);
 
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(a1);
         attributes.add(a2);
         person.setAttributes(attributes);
@@ -70,8 +70,8 @@ public class PeopleAttributesResourceTest {
     //GET empty attributes list, 200 success
     @Test
     public void getAttributes_200_2() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
         person.setAttributes(new ArrayList<>());
         user.setPeople(new ArrayList<>());
@@ -89,13 +89,13 @@ public class PeopleAttributesResourceTest {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
         Response response = resource.getAttributes(10);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //GET attributes, 404, person entity does not exist
     @Test
     public void getAttributes_404_2() {
-        Users user = new Users();
+        User user = new User();
         user.setPeople(new ArrayList<>());
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.getAttributes(10);
@@ -106,14 +106,14 @@ public class PeopleAttributesResourceTest {
     //CREATE new attributes list, 201 success
     @Test
     public void createAttributes_201() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes attribute = new PeopleAttributes();
+        PersonAttribute attribute = new PersonAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt Size");
         attribute.setValue("M");
@@ -133,10 +133,10 @@ public class PeopleAttributesResourceTest {
     //CREATE attributes, 400, null attributes
     @Test
     public void create_attributes_400_1() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
@@ -148,14 +148,14 @@ public class PeopleAttributesResourceTest {
     //CREATE attributes, 400, missing name
     @Test
     public void create_attributes_400_2() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes attribute = new PeopleAttributes();
+        PersonAttribute attribute = new PersonAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name(null);
         attribute.setValue("M");
@@ -168,14 +168,14 @@ public class PeopleAttributesResourceTest {
     //CREATE attributes, 400, missing value
     @Test
     public void create_attributes_400_3() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes attribute = new PeopleAttributes();
+        PersonAttribute attribute = new PersonAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt Size");
         attribute.setValue(null);
@@ -188,9 +188,9 @@ public class PeopleAttributesResourceTest {
     //CREATE attributes, 404, no user
     @Test
     public void create_attributes_404_1() {
-        People person = new People();
+        Person person = new Person();
         person.setId(10);
-        PeopleAttributes attribute = new PeopleAttributes();
+        PersonAttribute attribute = new PersonAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt Size");
         attribute.setValue("M");
@@ -198,20 +198,20 @@ public class PeopleAttributesResourceTest {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
         Response response = resource.createAttributes(10, attribute);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //CREATE attributes, 404, no person
     @Test
     public void createAttributes_2404_2() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(20);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes attribute = new PeopleAttributes();
+        PersonAttribute attribute = new PersonAttribute();
         attribute.setId(null);
         attribute.setAttribute_Name("Shirt Size");
         attribute.setValue("M");
@@ -220,34 +220,34 @@ public class PeopleAttributesResourceTest {
 
         Response response = resource.createAttributes(10, attribute);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //UPDATE attributes tests
     //UPDATE attributes, 204 success
     @Test
     public void updateAttributes_204() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
 
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
 
-        PeopleAttributes updated = new PeopleAttributes();
+        PersonAttribute updated = new PersonAttribute();
         updated.setId(null);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue("L");
@@ -262,7 +262,7 @@ public class PeopleAttributesResourceTest {
     //UPDATE attributes, 400, invalid attribute data
     @Test
     public void updateAttributes_400() {
-        PeopleAttributes updated = new PeopleAttributes();
+        PersonAttribute updated = new PersonAttribute();
         updated.setId(null);
         updated.setAttribute_Name(null);
         updated.setValue("L");
@@ -275,19 +275,19 @@ public class PeopleAttributesResourceTest {
     //UPDATE attributes, 404, user entity does not exist
     @Test
     public void updateAttributes_404_1() {
-        People person = new People();
+        Person person = new Person();
         person.setId(10);
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.empty());
-        PeopleAttributes updated = new PeopleAttributes();
+        PersonAttribute updated = new PersonAttribute();
         updated.setId(null);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue("L");
@@ -299,24 +299,24 @@ public class PeopleAttributesResourceTest {
     //UPDATE attributes, 404, person entity does not exist
     @Test
     public void updateAttributes_404_2() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        PeopleAttributes updated = new PeopleAttributes();
+        PersonAttribute updated = new PersonAttribute();
         updated.setId(null);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue("L");
@@ -328,24 +328,24 @@ public class PeopleAttributesResourceTest {
     //UPDATE attributes, 404, attribute entity does not exist
     @Test
     public void updateAttributes_404_3() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        PeopleAttributes updated = new PeopleAttributes();
+        PersonAttribute updated = new PersonAttribute();
         updated.setId(null);
         updated.setAttribute_Name("Shirt Size");
         updated.setValue("L");
@@ -358,19 +358,19 @@ public class PeopleAttributesResourceTest {
     //DELETE attributes, 204 success
     @Test
     public void deleteAttribute_204() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
@@ -387,14 +387,14 @@ public class PeopleAttributesResourceTest {
     //DELETE attribute, 404, user entity does not exist
     @Test
     public void deleteAttribute_404_1() {
-        People person = new People();
+        Person person = new Person();
         person.setId(10);
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
@@ -402,56 +402,56 @@ public class PeopleAttributesResourceTest {
         Response response = resource.deleteAttribute(10, 5);
 
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //DELETE attribute, 404, person entity does not exist
     @Test
     public void deleteAttribute_404_2() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         Response response = resource.deleteAttribute(999, 5);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //DELETE attribute, 404, attribute entity does not exist
     @Test
     public void deleteAttribute_404_3() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(10);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
 
-        PeopleAttributes existing = new PeopleAttributes();
+        PersonAttribute existing = new PersonAttribute();
         existing.setId(5);
         existing.setAttribute_Name("Shirt Size");
         existing.setValue("M");
         existing.setPerson(person);
-        List<PeopleAttributes> attributes = new ArrayList<>();
+        List<PersonAttribute> attributes = new ArrayList<>();
         attributes.add(existing);
         person.setAttributes(attributes);
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.deleteAttribute(10, 999);
         assertEquals(404, response.getStatus());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 }

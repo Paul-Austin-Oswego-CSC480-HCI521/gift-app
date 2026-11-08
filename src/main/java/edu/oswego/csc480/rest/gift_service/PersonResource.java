@@ -1,7 +1,7 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.People;
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.Person;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -18,23 +18,23 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class PeopleResource {
+public class PersonResource {
 
     @Inject
     private UserRepository userRepository;
 
-    private Logger log = LoggerFactory.getLogger(PeopleResource.class);
+    private Logger log = LoggerFactory.getLogger(PersonResource.class);
 
     //Returns all people belonging to the current user
     @GET
     public Response getPeople(@PathParam("user_id") Integer uid) {
         log.info("User {} requested a list of all their people", uid);
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if (user.isEmpty()) {
             log.debug("User {} does not exist", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        List<People> people = user.get().getPeople();
+        List<Person> people = user.get().getPeople();
         return Response.ok(people).build();
     }
 
@@ -44,12 +44,12 @@ public class PeopleResource {
     public Response getPerson(@PathParam("user_id") Integer uid,
                               @PathParam("pid") Integer pid) {
         log.info("User {} requested person {}.", uid, pid);
-        Optional<Users> user = userRepository.findById(uid);
+        Optional<User> user = userRepository.findById(uid);
         if (user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -62,21 +62,21 @@ public class PeopleResource {
 
     //Create a new person for the current user
     @POST
-    public Response createPerson(@PathParam("user_id") Integer uid, People person) {
+    public Response createPerson(@PathParam("user_id") Integer uid, Person person) {
         log.info("User {} requested creation of new person.", uid);
         if (person == null) {
             log.debug("Request does not provide a person.");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        Optional<Users> optUser = userRepository.findById(uid);
+        Optional<User> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        Users user = optUser.get();
+        User user = optUser.get();
         person.setUser(user);
         user.getPeople().add(person);
-        Users savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
         return Response
                 .status(Response.Status.CREATED)
                 .entity(person)
@@ -88,15 +88,15 @@ public class PeopleResource {
     @Path("/{pid}")
     public Response updatePerson(@PathParam("user_id") Integer uid,
                                  @PathParam("pid") Integer pid,
-                                 People updatedPerson) {
+                                 Person updatedPerson) {
         log.info("User {} is attempting to update person {}.", uid, pid);
-        Optional<Users> optUser = userRepository.findById(uid);
+        Optional<User> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        Users user = optUser.get();
-        People existingPerson = user.getPeople().stream()
+        User user = optUser.get();
+        Person existingPerson = user.getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -118,13 +118,13 @@ public class PeopleResource {
     public Response deletePerson(@PathParam("user_id") Integer uid,
                                  @PathParam("pid") Integer pid) {
         log.info("User {} is trying to delete person {}", uid, pid);
-        Optional<Users> optUser = userRepository.findById(uid);
+        Optional<User> optUser = userRepository.findById(uid);
         if (optUser.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        Users user = optUser.get();
-        People person = user.getPeople().stream()
+        User user = optUser.get();
+        Person person = user.getPeople().stream()
                 .filter(p -> p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
