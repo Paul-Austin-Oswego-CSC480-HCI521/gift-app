@@ -89,6 +89,12 @@ public class AuthResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        if (uRepo.findByEmail(form.email).isPresent()
+        || uRepo.findByUsername(form.username).isPresent()){
+            log.info("User attempted to create user with an email or username already in use");
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
         user = new User();
         user.setFirstName(form.firstName);
         user.setSurname(form.surname);

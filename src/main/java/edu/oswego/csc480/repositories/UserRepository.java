@@ -14,6 +14,9 @@ public interface UserRepository extends CrudRepository<User,Integer> {
     @Find
     Optional<User> findByEmail(@By("email") String email);
 
+    @Find
+    Optional<User> findByUsername(@By("username") String username);
+
     @Save
     User save(User user);
 }

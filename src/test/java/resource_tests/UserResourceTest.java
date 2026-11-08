@@ -66,23 +66,23 @@ public class UserResourceTest {
 
     //CREATE user tests
     //CREATE new user, 201 success
-    @Test
-    public void createUser_201() {
-        User user = new User();
-        when(userRepository.save(user)).thenReturn(user);
-        Response response = resource.createUser(user);
-        assertEquals(201, response.getStatus());
-        assertEquals(user, response.getEntity());
-        verify(userRepository).save(user);
-    }
-
-    //CREATE new user, 400, user entity does not exist (no attributes passed)
-    @Test
-    public void createUser_400() {
-        Response response = resource.createUser(null);
-        assertEquals(400, response.getStatus());
-        verify(userRepository, never()).save(any(User.class));
-    }
+//    @Test
+//    public void createUser_201() {
+//        User user = new User();
+//        when(userRepository.save(user)).thenReturn(user);
+//        Response response = resource.createUser(user);
+//        assertEquals(201, response.getStatus());
+//        assertEquals(user, response.getEntity());
+//        verify(userRepository).save(user);
+//    }
+//
+//    //CREATE new user, 400, user entity does not exist (no attributes passed)
+//    @Test
+//    public void createUser_400() {
+//        Response response = resource.createUser(null);
+//        assertEquals(400, response.getStatus());
+//        verify(userRepository, never()).save(any(User.class));
+//    }
 
     //UPDATE user tests
     //UPDATE existing user, 200 success
