@@ -28,13 +28,13 @@ public class Users implements Serializable {
     private String fullName;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<UsersAttributes> attributes = new ArrayList<>();
+    private List<UsersAttributes> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<People> people;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UsersWishedItem> wishlist;
+    private List<UsersWishedItem> wishlist = new ArrayList<>();
 
     @Column(name = "email_address")
     private String email;
