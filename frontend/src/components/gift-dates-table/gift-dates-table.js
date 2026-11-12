@@ -163,8 +163,10 @@ export class GiftDatesTable extends LitElement {
       <cds-table-row>
         <cds-table-cell class="days-cell">
           <span class="days">
-            <span class="days__number">${date.daysUntil}</span>
-            <span class="days__label">DAYS</span>
+              <span class="days__number">${date.daysUntil ?? "—"}</span>
+              ${date.daysUntil !== null && date.daysUntil !== undefined
+                ? html`<span class="days__label">${date.daysUntil === 1 ? "DAY" : "DAYS"}</span>`
+                : nothing}
           </span>
         </cds-table-cell>
         <cds-table-cell class="occasion-cell" aria-label=${occasion.name ?? "Occasion"}>
