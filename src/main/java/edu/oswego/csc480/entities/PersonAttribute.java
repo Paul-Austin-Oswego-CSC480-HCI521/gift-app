@@ -3,21 +3,18 @@ package edu.oswego.csc480.entities;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-
 @Entity
-@Table(name="user_attributes")
-public class UsersAttributes implements Serializable {
+@Table(name="person_attributes")
+public class PersonAttribute {
 
-    @Id
-    @Column(name="user_attribute_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="person_attribute_id")
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="person_id", nullable = false)
     @JsonbTransient
-    private Users user;
+    private Person person;
 
     @Column(name="attribute_name")
     private String attribute_name;
@@ -25,20 +22,20 @@ public class UsersAttributes implements Serializable {
     @Column(name="value")
     private String value;
 
-    public UsersAttributes(){}
+    public PersonAttribute(){}
 
     //get
     public Integer getId() {
         return id;
     }
-    public String getAttribute_Name() {
+    public String getAttribute_name() {
         return attribute_name;
     }
     public String getValue() {
         return value;
     }
-    public Users getUser() {
-        return user;
+    public Person getPerson() {
+        return person;
     }
 
     //set
@@ -51,7 +48,7 @@ public class UsersAttributes implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-    public void setUser(Users user) {
-        this.user = user;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

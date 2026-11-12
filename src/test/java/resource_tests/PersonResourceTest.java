@@ -1,9 +1,9 @@
 package resource_tests;
 
-import edu.oswego.csc480.entities.People;
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.Person;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
-import edu.oswego.csc480.rest.gift_service.PeopleResource;
+import edu.oswego.csc480.rest.gift_service.PersonResource;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,15 +13,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class PeopleResourceTest {
+public class PersonResourceTest {
     private UserRepository userRepository;
-    private PeopleResource resource;
+    private PersonResource resource;
 
     @BeforeEach
     public void setUp() throws Exception {
         userRepository = mock(UserRepository.class);
-        resource = new PeopleResource();
-        java.lang.reflect.Field field = PeopleResource.class.getDeclaredField("userRepository");
+        resource = new PersonResource();
+        java.lang.reflect.Field field = PersonResource.class.getDeclaredField("userRepository");
         field.setAccessible(true);
         field.set(resource, userRepository);
     }
@@ -30,12 +30,12 @@ public class PeopleResourceTest {
     //GET all people belonging to a user, 200 success
     @Test
     public void getPeople_200() {
-        Users user = new Users();
-        People person1 = new People();
+        User user = new User();
+        Person person1 = new Person();
         person1.setId(1);
-        People person2 = new People();
+        Person person2 = new Person();
         person2.setId(2);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person1);
         people.add(person2);
         user.setPeople(people);
@@ -59,10 +59,10 @@ public class PeopleResourceTest {
     //GET single person from a user, 200 success
     @Test
     public void getPerson_200() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(1);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
@@ -84,10 +84,10 @@ public class PeopleResourceTest {
     //GET single person from a user, 404, person entity does not exist
     @Test
     public void getPerson_404_2() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(1);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
@@ -100,10 +100,10 @@ public class PeopleResourceTest {
     //CREATE new person, 201 success
     @Test
     public void createPerson_201() {
-        Users user= new Users();
-        ArrayList<People> people = new ArrayList<>();
+        User user= new User();
+        ArrayList<Person> people = new ArrayList<>();
         user.setPeople(people);
-        People person = new People();
+        Person person = new Person();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
         Response response = resource.createPerson(1, person);
@@ -121,31 +121,31 @@ public class PeopleResourceTest {
         Response response = resource.createPerson(1, null);
         assertEquals(400, response.getStatus());
         verify(userRepository, never()).findById(any());
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //CREATE new person, 404, user entity does not exist
     @Test
     public void createPerson_404() {
-        People person = new People();
+        Person person = new Person();
         when(userRepository.findById(1)).thenReturn(Optional.empty());
         Response response = resource.createPerson(1, person);
         assertEquals(404, response.getStatus());
         verify(userRepository).findById(1);
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //UPDATE person tests
     //UPDATE existing person, 200, success
     @Test
     public void updatePerson_200() {
-        Users user = new Users();
-        People existingPerson = new People();
+        User user = new User();
+        Person existingPerson = new Person();
         existingPerson.setId(1);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(existingPerson);
         user.setPeople(people);
-        People updatedPerson = new People();
+        Person updatedPerson = new Person();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
         Response response = resource.updatePerson(1, 1, updatedPerson);
@@ -162,39 +162,39 @@ public class PeopleResourceTest {
     //UPDATE existing person, 404, user entity does not exist
     @Test
     public void updatePerson_404_1() {
-        People updatedPerson = new People();
+        Person updatedPerson = new Person();
         when(userRepository.findById(1)).thenReturn(Optional.empty());
         Response response = resource.updatePerson(1, 1, updatedPerson);
         assertEquals(404, response.getStatus());
         verify(userRepository).findById(1);
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //UPDATE existing person, 404, selected person entity does not exist
     @Test
     public void updatePerson_404_2() {
-        Users user = new Users();
-        People existingPerson = new People();
+        User user = new User();
+        Person existingPerson = new Person();
         existingPerson.setId(1);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(existingPerson);
         user.setPeople(people);
-        People updatedPerson = new People();
+        Person updatedPerson = new Person();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.updatePerson(1, 999, updatedPerson);
         assertEquals(404, response.getStatus());
         verify(userRepository).findById(1);
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //DELETE person tests
     //DELETE existing person, 204 success
     @Test
     public void deletePerson_204() {
-        Users user = new Users();
-        People person = new People();
+        User user = new User();
+        Person person = new Person();
         person.setId(1);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(person);
         user.setPeople(people);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
@@ -213,22 +213,22 @@ public class PeopleResourceTest {
         Response response = resource.deletePerson(1,1);
         assertEquals(404, response.getStatus());
         verify(userRepository).findById(1);
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     //DELETE existing person, 404, selected person entity does not exist
     @Test
     public void deletePerson_404_2() {
-        Users user = new Users();
-        People existingPerson = new People();
+        User user = new User();
+        Person existingPerson = new Person();
         existingPerson.setId(1);
-        ArrayList<People> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<>();
         people.add(existingPerson);
         user.setPeople(people);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         Response response = resource.deletePerson(1, 999);
         assertEquals(404, response.getStatus());
         verify(userRepository).findById(1);
-        verify(userRepository, never()).save(any(Users.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 }

@@ -9,7 +9,7 @@ import jakarta.json.bind.annotation.JsonbTransient;
 
 @Entity
 @Table(name="users")
-public class Users implements Serializable {
+public class User implements Serializable {
 
     // here are the columns
 
@@ -24,17 +24,17 @@ public class Users implements Serializable {
     @Column(name = "last_name")
     private String surname;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", insertable = false, updatable = false)
     private String fullName;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<UsersAttributes> attributes = new ArrayList<>();
+    List<UserAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<People> people;
+    private List<Person> people;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UsersWishedItem> wishlist;
+    private List<UserWishedItem> wishlist;
 
     @Column(name = "email_address")
     private String email;
@@ -42,14 +42,11 @@ public class Users implements Serializable {
     @Column(name = "username")
     private String username;
 
-    // Make sure there is a dummy constructor for persistence to work
-    // also getters and setters for everything.
-
     @JsonbTransient     //makes sure the pw hash isn't visible when api calls GET for user
     @Column(name = "password")
     private String passwordHash;
 
-    public Users() {
+    public User() {
     } // we can use setters anyway.
 
     //get
@@ -69,7 +66,7 @@ public class Users implements Serializable {
         return surname;
     }
 
-    public List<UsersWishedItem> getWishlist() {
+    public List<UserWishedItem> getWishlist() {
         return wishlist;
     }
 
@@ -81,11 +78,11 @@ public class Users implements Serializable {
         return username;
     }
 
-    public List<UsersAttributes> getAttributes() {
+    public List<UserAttribute> getAttributes() {
         return attributes;
     }
 
-    public List<People> getPeople() {
+    public List<Person> getPeople() {
         return people;
     }
 
@@ -110,7 +107,7 @@ public class Users implements Serializable {
         this.surname = surname;
     }
 
-    public void setWishlist(List<UsersWishedItem> wishlist) {
+    public void setWishlist(List<UserWishedItem> wishlist) {
         this.wishlist = wishlist;
     }
 
@@ -122,11 +119,11 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-    public void setAttributes(List<UsersAttributes> attributes) {
+    public void setAttributes(List<UserAttribute> attributes) {
         this.attributes = attributes;
     }
 
-    public void setPeople(List<People> people) {
+    public void setPeople(List<Person> people) {
         this.people = people;
     }
 

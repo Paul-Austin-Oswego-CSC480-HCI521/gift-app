@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="occasions")
-public class Occasions {
+public class Occasion {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "occasion_id")
@@ -18,7 +18,7 @@ public class Occasions {
     @Column(name = "occasion_date")
     private LocalDate date;
 
-    public Occasions(){}
+    public Occasion(){}
 
     public void setId(Integer id) {
         this.id = id;
