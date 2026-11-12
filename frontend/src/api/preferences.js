@@ -1,30 +1,29 @@
 import { apiFetch } from "./client.js";
 import { getAccessToken, getUserId } from "../auth/token-store.js";
-import { fields, serializePreference } from "../components/gift-full-preferences/full-preferences-model.js";
+import { serializePreferences } from "../components/gift-full-preferences/full-preferences-model.js";
 function session() {
   const id = getUserId(), token = getAccessToken();
   if (!id || !token) throw Object.assign(new Error("Please log in again."), { status: 401 });
-  return { path: `/user/${encodeURIComponent(id)}/attributes`, token };
+  return { path: `/user/${encodeURIComponent(id)}/preferences`, token };
 }
 export async function loadPreferences() {
   const { path, token } = session();
-  return (await apiFetch(path, { token })) ?? [];
+  try { return await apiFetch(path, { token }); }
+  catch (error) {
+    // The new API returns 404 when this user has no preferences yet.
+    if (error.status === 404) return null;
+    throw error;
+  }
 }
 export async function savePreferences(values) {
   const { path, token } = session();
-  // Refresh IDs so retrying a partial save cannot duplicate newly created fields.
   const existing = await loadPreferences();
-  for (const { name } of fields) {
-    const value = serializePreference(values[name]);
-    const row = existing.find(row => row.attribute_Name === name);
-    if (value === (row?.value ?? "")) continue;
-    if (!value) {
-      if (row) await apiFetch(`${path}/${row.id}`, { token, method: "DELETE" });
-    } else {
-      await apiFetch(row ? `${path}/${row.id}` : path, {
-        token, method: row ? "PUT" : "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ attribute_Name: name, value }),
-      });
-    }
+  const options = { token, method: existing ? "PUT" : "POST",
+    headers: { "Content-Type": "application/json" }, body: JSON.stringify(serializePreferences(values)) };
+  try { return await apiFetch(path, options); }
+  catch (error) {
+    // Another tab may have created the record since our GET.
+    if (!existing && error.status === 409) return apiFetch(path, { ...options, method: "PUT" });
+    throw error;
   }
 }

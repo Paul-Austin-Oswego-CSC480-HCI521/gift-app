@@ -1,14 +1,15 @@
 import { expect, it, afterEach, beforeAll, vi } from "vitest";
 import "./gift-full-preferences.js";
-import { readPreferences, serializePreference } from "./full-preferences-model.js";
+import { readPreferences, serializePreferences } from "./full-preferences-model.js";
 beforeAll(() => vi.stubGlobal("ResizeObserver", class { observe() {} unobserve() {} disconnect() {} }));
 afterEach(() => document.body.replaceChildren());
-it("loads saved values, preserves legacy choices, and serializes cleared selections", () => {
-  const result = readPreferences([{ attribute_Name: "Favorite Colors", value: '["Blue","Teal"]' }, { attribute_Name: "Interests", value: "Music, Art" }, { attribute_Name: "Likes", value: "Books" }]);
-  expect(result["Favorite Colors"]).toEqual(["Blue", "Teal"]);
-  expect(result.Interests).toEqual(["Music", "Art"]);
-  expect(result.Likes).toBe("Books");
-  expect(serializePreference([])).toBe("");
+it("maps the new backend fields to editable strings and back", () => {
+  const result = readPreferences({ favoriteColor: "Teal and copper", preferredFit: "Loose", styleDescription: "Vintage", interests: "Pottery", likes: null });
+  expect(result["Favorite Colors"]).toBe("Teal and copper");
+  expect(result["Preferred Fit"]).toBe("Loose");
+  expect(result.Likes).toBe("");
+  expect(serializePreferences(result)).toMatchObject({ favoriteColor: "Teal and copper", preferredFit: "Loose", styleDescription: "Vintage", interests: "Pottery" });
+  expect(readPreferences(null)["Favorite Colors"]).toBe("");
 });
 it("renders nine shared tiles and prevents saves before load or during save", async () => {
   const el = document.createElement("gift-full-preferences"); document.body.append(el); await el.updateComplete;
