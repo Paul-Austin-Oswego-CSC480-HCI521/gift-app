@@ -38,7 +38,7 @@ export class NavHeader extends LitElement {
 
     return html`
           <cds-header aria-label="${this.productName} header">
-            <cds-header-name href="/" prefix=""
+            <cds-header-name prefix=""
               >${this.productName}</cds-header-name>
             ${signedIn ? html`
                   <div class="actions">
