@@ -4,7 +4,7 @@ import { serializePreferences } from "../components/gift-full-preferences/full-p
 function session() {
   const id = getUserId(), token = getAccessToken();
   if (!id || !token) throw Object.assign(new Error("Please log in again."), { status: 401 });
-  return { path: `/user/${encodeURIComponent(id)}/preferences`, token };
+  return { path: `/user/${encodeURIComponent(id)}/attributes`, token };
 }
 export async function loadPreferences() {
   const { path, token } = session();
