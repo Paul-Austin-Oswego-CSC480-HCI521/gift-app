@@ -1,5 +1,6 @@
 
 import { LitElement, html, css } from "lit";
+import "@carbon/web-components/es/components/link/index.js";
 import "../gift-wishlist-table/gift-wishlist-table.js";
 import { pageContentStyles } from "../../styles/page-content.js";
 
@@ -305,7 +306,7 @@ preference(...keys) {
       return html`
         <p role="alert">
           ${this.error}
-          <a href="/people">Back to People</a>
+          <cds-link href="/people">Back to People</cds-link>
         </p>
       `;
     }
@@ -344,13 +345,14 @@ preference(...keys) {
 
 
     return html`
-      <nav
+      <div
         class="breadcrumb"
+        role="navigation"
         aria-label="Breadcrumb"
       >
-        <a href="/people">People</a>
+        <cds-link href="/people">People</cds-link>
         / ${this.personName}
-      </nav>
+      </div>
 
       <h1>${this.personName}</h1>
 
