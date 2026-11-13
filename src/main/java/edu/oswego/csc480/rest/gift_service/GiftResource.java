@@ -1,8 +1,8 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Gifts;
-import edu.oswego.csc480.entities.People;
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.Gift;
+import edu.oswego.csc480.entities.Person;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -21,7 +21,7 @@ import static jakarta.ws.rs.core.Response.Status;
 @Path("user/{uid}/gift")
 @Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class GiftsResource {
+public class GiftResource {
 
     @Inject
     private UserRepository uRepo;
@@ -29,21 +29,21 @@ public class GiftsResource {
     @PathParam("uid")
     private Integer uid;
 
-    private Logger log = LoggerFactory.getLogger(GiftsResource.class);
+    private Logger log = LoggerFactory.getLogger(GiftResource.class);
 
     @Path("/{gid}")
     @GET
     public Response getGiftDirect( @PathParam("gid") Integer gid){
         log.info("User {} requested gift with id of {}.", uid, gid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
 
         if (user.isEmpty()){
             log.info("User with id {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        ArrayList<Gifts> gifts = new ArrayList<>();
+        ArrayList<Gift> gifts = new ArrayList<>();
 
-        Gifts gift = user.get().getPeople().stream()
+        Gift gift = user.get().getPeople().stream()
                 .flatMap(p->p.getGifts().stream())
                 .filter(g -> g.getId().equals(gid))
                 .findFirst().orElse(null);
@@ -59,12 +59,12 @@ public class GiftsResource {
     @GET
     public Response getEveryGiftFromUser(){
         log.info("Request to get every gift from user {}", uid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.debug("User {} does not exist", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        ArrayList<Gifts> gifts = new ArrayList<>();
+        ArrayList<Gift> gifts = new ArrayList<>();
         user.get().getPeople().forEach(p->p.getGifts().forEach(g->gifts.add(g)));
         return Response.ok(gifts).build();
     }
@@ -73,12 +73,12 @@ public class GiftsResource {
     @GET
     public Response getEveryGiftFromSpecificPerson(@PathParam("pid") Integer pid){
         log.info("Request to get every gift for person {} from user {}.", pid, uid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.debug("User {} does not exist", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -92,21 +92,21 @@ public class GiftsResource {
 
     @Path("/person/{pid}")
     @POST
-    public Response postNewGiftToPerson(@PathParam("pid") Integer pid, Gifts gift){
+    public Response postNewGiftToPerson(@PathParam("pid") Integer pid, Gift gift){
         log.info("User {} attempts to create a gift for person {}.", uid, pid);
         if (gift==null || gift.getName().isBlank() || gift.getType().isBlank() || gift.getStatus() == null || gift.getStatus() == null){
             log.info("Received invalid gift creation request. uid: {}, pid: {}.", uid, pid);
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        Optional<Users> optUser = uRepo.findById(uid);
+        Optional<User> optUser = uRepo.findById(uid);
 
         if (optUser.isEmpty()){
             log.debug("User {} does not exist", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        People person = optUser.get().getPeople().stream()
+        Person person = optUser.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);
@@ -117,7 +117,7 @@ public class GiftsResource {
 
         person.getGifts().add(gift);
         gift.setPerson(person);
-        Users user = uRepo.save(optUser.get());
+        User user = uRepo.save(optUser.get());
         final String giftName = gift.getName();
 
         gift = user.getPeople().stream()
@@ -138,20 +138,20 @@ public class GiftsResource {
 
     @Path("/{gid}")
     @PUT
-    public Response updateGiftDirect(@PathParam("gid") Integer gid, Gifts gift){
+    public Response updateGiftDirect(@PathParam("gid") Integer gid, Gift gift){
         log.info("User {} requested update of gift {}.", uid, gid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        People person = null;
-        Gifts currentGift = null;
+        Person person = null;
+        Gift currentGift = null;
 
-        for (People p : user.get().getPeople()){
+        for (Person p : user.get().getPeople()){
             if (p.getGifts().isEmpty()) continue;
-            for (Gifts g : p.getGifts()){
+            for (Gift g : p.getGifts()){
                 if (!g.getId().equals(gid)) continue;
                 person = p;
                 currentGift = g;
@@ -172,7 +172,7 @@ public class GiftsResource {
     @DELETE
     public Response nukeItAll(){
         log.info("User {} has chosen to delete every gift.", uid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
@@ -187,18 +187,18 @@ public class GiftsResource {
     @DELETE
     public Response deleteGift(@PathParam("gid") Integer gid){
         log.info("User {} has chosen to delete gift {}.", uid, gid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.debug("User {} does not exist", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        People person = null;
-        Gifts target = null;
+        Person person = null;
+        Gift target = null;
 
-        for (People p : user.get().getPeople()){
+        for (Person p : user.get().getPeople()){
             if (p.getGifts().isEmpty()) continue;
-            for (Gifts g : p.getGifts()){
+            for (Gift g : p.getGifts()){
                 if (!g.getId().equals(gid)) continue;
                 person = p;
                 target = g;
@@ -218,13 +218,13 @@ public class GiftsResource {
     @DELETE
     public Response charcoal(@PathParam("pid") Integer pid){
         log.info("User {} has decided to delete every gift from Person {}", uid, pid);
-        Optional<Users> user = uRepo.findById(uid);
+        Optional<User> user = uRepo.findById(uid);
         if (user.isEmpty()){
             log.warn("User {} does not exist.", uid);
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        People person = user.get().getPeople().stream()
+        Person person = user.get().getPeople().stream()
                 .filter(p->p.getId().equals(pid))
                 .findFirst()
                 .orElse(null);

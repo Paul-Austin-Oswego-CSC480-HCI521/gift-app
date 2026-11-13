@@ -16,7 +16,7 @@ public class GiftStatus {
 
     @OneToOne(mappedBy = "status")
     @JsonbTransient
-    private Gifts gift;
+    private Gift gift;
 
     public GiftStatus(){}
 
@@ -24,7 +24,7 @@ public class GiftStatus {
         this.id = id;
     }
 
-    public void setGift(Gifts gift) {
+    public void setGift(Gift gift) {
         this.gift = gift;
     }
 
@@ -32,7 +32,7 @@ public class GiftStatus {
         this.stage = stage;
     }
 
-    public Gifts getGift() {
+    public Gift getGift() {
         return gift;
     }
 
