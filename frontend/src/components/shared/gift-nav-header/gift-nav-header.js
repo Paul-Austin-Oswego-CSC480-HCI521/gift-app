@@ -40,6 +40,8 @@ export class NavHeader extends LitElement {
           <cds-header aria-label="${this.productName} header">
             <cds-header-name prefix=""
               >${this.productName}</cds-header-name>
+            <!-- Slot for slotted navigation content; pages can supply custom nav or leave empty -->
+            <slot></slot>
             ${signedIn ? html`
                   <div class="actions">
                     <cds-button
