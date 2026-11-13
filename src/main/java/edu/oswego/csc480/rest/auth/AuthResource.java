@@ -84,8 +84,8 @@ public class AuthResource {
                 || form.email == null || form.email.isBlank()
                 || form.firstName == null || form.firstName.isBlank()
                 || form.password == null || form.password.isBlank()
-                || form.surname == null || form.surname.isBlank()){
-                //|| form.username == null || form.username.isBlank()){
+                || form.surname == null || form.surname.isBlank()
+                || form.username == null || form.username.isBlank()){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
