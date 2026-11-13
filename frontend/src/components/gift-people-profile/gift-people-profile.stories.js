@@ -3,7 +3,7 @@ import { html } from "lit";
 import "./gift-people-profile.js";
 
 export default {
-  title: "Components/Gift People Profile",
+  title: "Custom Components/Person Profile",
   component: "gift-people-profile",
 };
 
