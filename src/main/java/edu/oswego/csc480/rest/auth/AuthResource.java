@@ -84,8 +84,8 @@ public class AuthResource {
                 || form.email == null || form.email.isBlank()
                 || form.firstName == null || form.firstName.isBlank()
                 || form.password == null || form.password.isBlank()
-                || form.surname == null || form.surname.isBlank()
-                || form.username == null || form.username.isBlank()){
+                || form.surname == null || form.surname.isBlank()){
+                //|| form.username == null || form.username.isBlank()){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -99,7 +99,7 @@ public class AuthResource {
         user.setFirstName(form.firstName);
         user.setSurname(form.surname);
         user.setEmail(form.email);
-        user.setUsername(form.username);
+        //user.setUsername(form.username);
 
         try{
             String passwordHash = passwords.hash(form.password);

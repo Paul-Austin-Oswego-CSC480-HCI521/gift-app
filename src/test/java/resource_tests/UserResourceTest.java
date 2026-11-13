@@ -6,34 +6,23 @@ import edu.oswego.csc480.rest.gift_service.UserResource;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class UserResourceTest {
 
     private UserRepository userRepository;
-    private JsonWebToken token;
     private UserResource resource;
 
     @BeforeEach
     public void setUp() throws Exception {
         userRepository = mock(UserRepository.class);
-        token = mock(JsonWebToken.class);
         resource = new UserResource();
-        
-        Field userRepoField = UserResource.class.getDeclaredField("userRepository");
-        userRepoField.setAccessible(true);
-        userRepoField.set(resource, userRepository);
-        
-        Field tokenField = UserResource.class.getDeclaredField("token");
-        tokenField.setAccessible(true);
-        tokenField.set(resource, token);
-        
-        when(token.getSubject()).thenReturn("test-user");
+        java.lang.reflect.Field field = UserResource.class.getDeclaredField("userRepository");
+        field.setAccessible(true);
+        field.set(resource, userRepository);
     }
 
     //GET all users tests
