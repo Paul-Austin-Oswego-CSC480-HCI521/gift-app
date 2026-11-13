@@ -318,15 +318,20 @@ preference(...keys) {
     const items = gifts.map((gift) => {
       const rawStatus = gift.status;
 
-      const status =
+      const stage =
         typeof rawStatus === "string"
           ? rawStatus
-          : typeof rawStatus === "object" && rawStatus !== null
-            ? rawStatus.name ??
-              rawStatus.label ??
-              rawStatus.status ??
-              "Wanted"
-            : "Wanted";
+          : rawStatus?.stage ??
+            rawStatus?.name ??
+            rawStatus?.label ??
+            rawStatus?.status;
+
+      const status =
+        ["purchased", "gifted", "received"].includes(
+          String(stage ?? "").toLowerCase()
+        )
+          ? "Received"
+          : "Wanted";
 
       return {
         ...gift,
