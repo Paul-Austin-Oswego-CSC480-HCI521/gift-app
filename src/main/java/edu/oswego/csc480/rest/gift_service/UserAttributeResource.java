@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@Path("user/{uid}/preferences")
+@Path("user/{uid}/attributes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
@@ -30,139 +30,116 @@ public class UserAttributeResource {
 
     @GET
     public Response getUserAttributes() {
-
-        log.info("User {} requested their preferences.", uid);
-
+        log.info("User {} requested their own attributes", uid);
         Optional<User> user = userRepository.findById(uid);
-
-        if (user.isEmpty()) {
+        if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
-        User currentUser = user.get();
-
-        if (currentUser.getAttributes() == null
-                || currentUser.getAttributes().isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok(currentUser.getAttributes().get(0)).build();
+        return Response.ok(user.get().getAttributes()).build();
     }
 
     @POST
-    public Response createUserAttributes(UserAttribute attributes) {
-
-        if (attributes == null) {
+    public Response createAttribute(UserAttribute attribute) {
+        if(attribute == null
+            || attribute.getAttribute_Name() == null
+            || attribute.getAttribute_Name().isBlank()
+            || attribute.getValue() == null
+            || attribute.getValue().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Optional<User> user = userRepository.findById(uid);
-
-        if (user.isEmpty()) {
+        Optional<User>user = userRepository.findById(uid);
+        if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         User currentUser = user.get();
 
-        if (currentUser.getAttributes() == null) {
+        if(currentUser.getAttributes() == null) {
             currentUser.setAttributes(new ArrayList<>());
         }
 
-        // Only allow one preferences record per user
-        if (!currentUser.getAttributes().isEmpty()) {
-            log.warn("User {} already has preferences.", uid);
-            return Response.status(Response.Status.CONFLICT).build();
-        }
-
-        attributes.setId(null);
-        attributes.setUser(currentUser);
-
-        currentUser.getAttributes().add(attributes);
-
+        attribute.setId(null);
+        attribute.setUser(currentUser);
+        currentUser.getAttributes().add(attribute);
         userRepository.save(currentUser);
-
-        log.info("User {} created their preferences.", uid);
-
+        log.info("User {} created a new attribute.", uid);
         return Response.status(Response.Status.CREATED)
-                .entity(attributes)
+                .entity(attribute)
                 .build();
     }
 
     @PUT
-    public Response updateUserAttributes(UserAttribute attributes) {
-
-        if (attributes == null) {
+    @Path("/{aid}")
+    public Response updateAttribute(@PathParam("aid") Integer aid, UserAttribute attribute) {
+        if(attribute == null
+                || attribute.getAttribute_Name() == null
+                || attribute.getAttribute_Name().isBlank()
+                || attribute.getValue() == null
+                || attribute.getValue().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
         Optional<User> user = userRepository.findById(uid);
-
-        if (user.isEmpty()) {
+        if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         User currentUser = user.get();
 
-        if (currentUser.getAttributes() == null
-                || currentUser.getAttributes().isEmpty()) {
-            log.debug("User {} does not have preferences.", uid);
+        if(currentUser.getAttributes() == null) {
+            log.debug("User {} does not have attributes.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UserAttribute existing = currentUser.getAttributes().get(0);
+        UserAttribute existing = currentUser.getAttributes().stream()
+                .filter(a -> a.getId() != null && a.getId().equals(aid))
+                .findFirst()
+                .orElse(null);
+        if(existing == null) {
+            log.debug("User attribute {} does not exist.", aid);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
-        existing.setFavoriteColor(attributes.getFavoriteColor());
-        existing.setShirtSize(attributes.getShirtSize());
-        existing.setPantSize(attributes.getPantSize());
-        existing.setShoeSize(attributes.getShoeSize());
-        existing.setJacketSize(attributes.getJacketSize());
-        existing.setDressSize(attributes.getDressSize());
-        existing.setPreferredFit(attributes.getPreferredFit());
-        existing.setStyleDescription(attributes.getStyleDescription());
-        existing.setFavoriteBrands(attributes.getFavoriteBrands());
-        existing.setFavoriteFoods(attributes.getFavoriteFoods());
-        existing.setFavoriteDrinks(attributes.getFavoriteDrinks());
-        existing.setRingSize(attributes.getRingSize());
-        existing.setMetalPreference(attributes.getMetalPreference());
-        existing.setLikes(attributes.getLikes());
-        existing.setDislikes(attributes.getDislikes());
-        existing.setInterests(attributes.getInterests());
-
+        existing.setAttribute_Name(attribute.getAttribute_Name());
+        existing.setValue(attribute.getValue());
         userRepository.save(currentUser);
-
-        log.info("User {} updated their preferences.", uid);
-
+        log.info("User {} updated user attribute {}.", uid, aid);
         return Response.noContent().build();
     }
 
     @DELETE
-    public Response deleteUserAttributes() {
-
-        log.info("User {} is deleting their preferences.", uid);
-
+    @Path("/{aid}")
+    public Response deleteAttribute(@PathParam("aid") Integer aid) {
         Optional<User> user = userRepository.findById(uid);
-
-        if (user.isEmpty()) {
+        log.info("User {} is trying to delete attribute {}", uid, aid);
+        if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         User currentUser = user.get();
 
-        if (currentUser.getAttributes() == null
-                || currentUser.getAttributes().isEmpty()) {
+        if(currentUser.getAttributes() == null) {
+            log.debug("User {} does not have attributes", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        currentUser.getAttributes().clear();
+        UserAttribute existing = currentUser.getAttributes().stream()
+                .filter(a -> a.getId() != null && a.getId().equals(aid))
+                .findFirst()
+                .orElse(null);
 
+        if(existing == null) {
+            log.debug("User attribute {} does not exist.", aid);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        currentUser.getAttributes().remove(existing);
         userRepository.save(currentUser);
-
-        log.info("User {} deleted their preferences.", uid);
-
         return Response.noContent().build();
     }
 }
