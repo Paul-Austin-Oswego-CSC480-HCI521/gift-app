@@ -16,12 +16,12 @@ export const Saving = { args: { saving: true } };
 export const EditAndSave = {
   play: async ({ canvasElement, args, step }) => {
     const { host, root } = await renderedForm(canvasElement, "gift-full-preferences");
-    await step("Change multiple colors", async () => {
-      const colors = root.querySelector("cds-multi-select");
-      await userEvent.click(colors.shadowRoot.querySelector('[role="combobox"]'));
-      await userEvent.click(colors.querySelector('[value="Red"]'));
-      await waitFor(() => expect(host.values["Favorite Colors"]).toContain("Red"));
-      await userEvent.keyboard("{Escape}");
+    await step("Enter colors freely", async () => {
+      const colors = root.querySelector('cds-text-input[label="Favorite Colors"]').shadowRoot.querySelector("input");
+      await userEvent.click(colors);
+      await userEvent.keyboard("{Control>}a{/Control}{Backspace}");
+      await userEvent.type(colors, "Teal and copper");
+      expect(host.values["Favorite Colors"]).toBe("Teal and copper");
     });
     await step("Edit a prefilled preference and save", async () => {
       const likes = root.querySelector('cds-textarea[label="Likes"]');
@@ -32,7 +32,7 @@ export const EditAndSave = {
       await userEvent.click(root.querySelector("cds-button").shadowRoot.querySelector("button"));
       await waitFor(() => expect(args.onSave).toHaveBeenCalled());
       expect(host.values.Likes).toBe("Books and puzzles");
-      expect(args.onSave.mock.calls.at(-1)[0].detail["Favorite Colors"]).toEqual(expect.arrayContaining(["Green", "Blue", "Red"]));
+      expect(args.onSave.mock.calls.at(-1)[0].detail["Favorite Colors"]).toBe("Teal and copper");
     });
   },
 };
