@@ -419,7 +419,4 @@ preference(...keys) {
   }
 }
 
-customElements.define(
-  "gifting-people-profile",
-  GiftingPeopleProfile
-);
+customElements.define("gift-people-profile", GiftingPeopleProfile);

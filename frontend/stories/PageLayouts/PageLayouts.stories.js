@@ -1,3 +1,4 @@
+import "../../src/components/gift-people-profile/gift-people-profile.js";
 import "../../src/components/gift-full-preferences/gift-full-preferences.js";
 import { preferences } from "../../src/mocks/preferences.js";
 import { html } from "lit";
@@ -187,6 +188,40 @@ export const QuickPreferences = {
         </main>
       </div>
     `),
+};
 export const FullPreferences = {
   render: () => frame(html`<div style="${pageColumn}"><gift-nav-header product-name="Gift App"></gift-nav-header><gift-side-nav active="wishlist"></gift-side-nav><main class="page-main" aria-label="Gift preferences"><gift-full-preferences .values=${preferences}></gift-full-preferences></main></div>`),
+};
+
+// Person Profile page
+export const PersonProfile = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+
+        <gift-side-nav active="people"></gift-side-nav>
+
+        <main class="page-main" aria-label="Person Profile">
+          <gift-people-profile
+            .person=${{
+              id: 1,
+              fullName: "Vanessa Maike",
+              attributes: [],
+              gifts: [
+                {
+                  id: 1,
+                  name: "Headphones",
+                  status: { stage: "updated" },
+                },
+              ],
+            }}
+            .loading=${false}
+            .error=${""}
+          ></gift-people-profile>
+        </main>
+      </div>
+    `),
 };

@@ -173,7 +173,7 @@ export class GiftPeople extends LitElement {
       ${!this.loading && !this.error ? html`
         <div class="grid">
           ${this.filteredPeople.map((person) => html`
-            <gift-tile type="person" href=${`/gifting-people-profile?personId=${person.id}`}>
+            <gift-tile type="person" href=${`/gift-people-profile?personId=${person.id}`}>
               <span>${person.fullName || [person.firstName, person.lastName].filter(Boolean).join(" ")}</span>
             </gift-tile>
           `)}

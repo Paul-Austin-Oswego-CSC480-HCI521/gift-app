@@ -6,6 +6,7 @@ export const routes = {
   dashboard: { label: "Dashboard", path: "/dashboard" },
   wishlist: { label: "My Wish List", path: "/my-wishlist" },
   people: { label: "People", path: "/people" },
+  "people-profile": { label: "Person Profile",path: "/gift-people-profile",},
   dates: { label: "Upcoming Dates", path: "/upcoming-dates" },
   gifts: { label: "All Gifts", path: "/all-gifts" },
   settings: { label: "Settings", path: "/settings" },
