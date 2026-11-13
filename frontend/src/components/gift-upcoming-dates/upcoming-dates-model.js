@@ -42,26 +42,22 @@ export function buildDateRows(people = [], today = new Date()) {
   for (const person of people) {
     for (const gift of person.gifts ?? []) {
       const date = toDate(gift.occasion?.date);
-      if (date && date < start) continue;
+      if (!date || date < start) continue;
 
-  const key = `${person.id ?? person.fullName}|${gift.occasion?.name ?? ""}|${gift.occasion?.date ?? "none"}`;
-  const name = gift.occasion?.name || (date ? "Occasion" : "No occasion");
+      const key = `${person.id ?? person.fullName}|${gift.occasion.name}|${gift.occasion.date}`;
       if (!rows.has(key)) {
-              rows.set(key, {
-                id: key,
-                daysUntil: date ? Math.round((date - start) / DAY_MS) : null,
-                person: person.fullName,
-                occasion: {
-                  name,
-                  dateLabel: date ? formatDateLabel(date) : "No date",
-                  category: date ? categoryFor(name) : "other",
-                },
-                giftCount: 0,
-                giftsToBuy: 0,
-                purchasedOn: null,
-                editLabel: `Edit ${person.fullName}'s ${name.toLowerCase()}`,
-              });
-            }
+        const name = gift.occasion.name || "Occasion";
+        rows.set(key, {
+          id: key,
+          daysUntil: Math.round((date - start) / DAY_MS),
+          person: person.fullName,
+          occasion: { name, dateLabel: formatDateLabel(date), category: categoryFor(name) },
+          giftCount: 0,
+          giftsToBuy: 0,
+          purchasedOn: null,
+          editLabel: `Edit ${person.fullName}'s ${name.toLowerCase()}`,
+        });
+      }
 
       const row = rows.get(key);
       row.giftCount += 1;
@@ -75,7 +71,7 @@ export function buildDateRows(people = [], today = new Date()) {
   }
 
   return [...rows.values()]
-    .sort((a, b) => (a.daysUntil ?? Number.MAX_SAFE_INTEGER) - (b.daysUntil ?? Number.MAX_SAFE_INTEGER))
+    .sort((a, b) => a.daysUntil - b.daysUntil)
     .map(({ purchasedOn, ...row }) => {
       const purchased = row.giftCount > 0 && row.giftsToBuy === 0;
       return {
@@ -97,7 +93,7 @@ const plural = (count, one, many = `${one}s`) => (count === 1 ? one : many);
 
 // The three Figma metric tiles. Halloween is counted as a holiday.
 export function summarize(rows = []) {
-  const soon = rows.filter((row) => row.daysUntil !== null && row.daysUntil <= SOON_DAYS);
+  const soon = rows.filter((row) => row.daysUntil <= SOON_DAYS);
   const counts = {};
   for (const row of soon) {
     const category = row.occasion.category === "halloween" ? "holiday" : row.occasion.category;
