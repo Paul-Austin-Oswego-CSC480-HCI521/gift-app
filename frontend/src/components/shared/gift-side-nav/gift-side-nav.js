@@ -7,8 +7,9 @@ const links = [
   ["dashboard", "M3 10 12 2l9 8M5 9v12h14V9M10 21v-7h4v7"],
   ["wishlist", "M3 4h3v3H3zM3 11h3v3H3zM3 18h3v3H3zM10 5h11M10 12h11M10 19h11"],
   ["people", "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 22v-4a7 7 0 0 1 14 0v4M17 3a4 4 0 0 1 0 8M19 13a6 6 0 0 1 3 5v4"],
-  ["dates", "M3 5h18v17H3zM7 2v6M17 2v6M3 10h18M7 14h2M15 14h2M7 18h2M15 18h2"],
-  ["gifts", "M3 8h18v5H3zM5 13v9h14v-9M12 8v14M12 8H8a3 3 0 1 1 3-3l1 3ZM12 8h4a3 3 0 1 0-3-3l-1 3Z"],
+  ["dates", "M3 5h18v17H3zM7 2v6M17 2v6M3 10h18M7 14h2M15 14h2M7 18h2M15 18h2"]
+  //All gifts have been removed, will keep this here incase things change
+  //["gifts", "M3 8h18v5H3zM5 13v9h14v-9M12 8v14M12 8H8a3 3 0 1 1 3-3l1 3ZM12 8h4a3 3 0 1 0-3-3l-1 3Z"],
 ];
 const settingsPath = "M10 2h4l1 4 4-1 2 4-3 3 3 3-2 4-4-1-1 4h-4l-1-4-4 1-2-4 3-3-3-3 2-4 4 1 1-4ZM16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z";
 
@@ -62,9 +63,6 @@ export class SideNav extends LitElement {
         <cds-side-nav-items>
           ${links.map(([item, icon]) => this._link(item, icon))}
         </cds-side-nav-items>
-        <div class="page-sidenav-footer">
-          <cds-side-nav-items>${this._link("settings", settingsPath)}</cds-side-nav-items>
-        </div>
       </cds-side-nav>
     `;
   }

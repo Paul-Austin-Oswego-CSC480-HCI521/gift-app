@@ -40,7 +40,7 @@ public class AuthResourceTest {
         passwords = spy(service);
         tokens = mock(JwtService.class);
         resource = new AuthResource();
-        inject("users", users);
+        inject("uRepo", users);
         inject("passwords", passwords);
         inject("tokens", tokens);
 
