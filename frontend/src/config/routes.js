@@ -2,6 +2,7 @@
 // goes in pages/ and its script in src/pages/. Paths have no .html (Netlify and the dev server
 // serve extensionless URLs). `key` is the value a page passes as `active` to the side nav.
 export const routes = {
+  preferences: { label: "Your Gift Preferences", path: "/full-preferences" },
   dashboard: { label: "Dashboard", path: "/dashboard" },
   wishlist: { label: "My Wish List", path: "/my-wishlist" },
   people: { label: "People", path: "/people" },

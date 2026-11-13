@@ -1,3 +1,5 @@
+import "../../src/components/gift-full-preferences/gift-full-preferences.js";
+import { preferences } from "../../src/mocks/preferences.js";
 import { html } from "lit";
 import "@carbon/web-components/es/components/link/index.js";
 import "@carbon/web-components/es/components/ui-shell/index.js";
@@ -185,4 +187,6 @@ export const QuickPreferences = {
         </main>
       </div>
     `),
+export const FullPreferences = {
+  render: () => frame(html`<div style="${pageColumn}"><gift-nav-header product-name="Gift App"></gift-nav-header><gift-side-nav active="wishlist"></gift-side-nav><main class="page-main" aria-label="Gift preferences"><gift-full-preferences .values=${preferences}></gift-full-preferences></main></div>`),
 };
