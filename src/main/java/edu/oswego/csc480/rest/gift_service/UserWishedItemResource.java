@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@Path("user/{uid}/preferences")
+@Path("user/{uid}/wished_items")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
@@ -28,7 +28,7 @@ public class UserWishedItemResource {
     private Logger log = LoggerFactory.getLogger(UserWishedItemResource.class);
 
     @GET
-    public Response getPreferences() {
+    public Response getWishedItems() {
         log.info("User {} requested their wished items list.", uid);
         Optional<User> user = userRepository.findById(uid);
 
@@ -41,8 +41,12 @@ public class UserWishedItemResource {
     }
 
     @POST
-    public Response createPreferences(UsersWishedItem item) {
-        if (item == null) {
+    public Response createWishedItem(UserWishedItem item) {
+        if (item == null
+                || item.getGiftName() == null
+                || item.getGiftName().isBlank()
+                || item.getValue() == null
+                || item.getValue().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -72,8 +76,13 @@ public class UserWishedItemResource {
     }
 
     @PUT
-    public Response updatePreferences(UsersWishedItem item) {
-        if(item == null) {
+    @Path("/{wid}")
+    public Response updateWishedItem(@PathParam("wid") Integer wid, UserWishedItem item) {
+        if(item == null
+                || item.getGiftName() == null
+                || item.getGiftName().isBlank()
+                || item.getValue() == null
+                || item.getValue().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -89,32 +98,27 @@ public class UserWishedItemResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        UsersWishedItem existing = currentUser.getWishlist().get(0);
+        UserWishedItem existing = currentUser.getWishlist().stream()
+                .filter(w -> w.getId() != null && w.getId().equals(wid))
+                .findFirst()
+                .orElse(null);
 
-        existing.setFavoriteColor(item.getFavoriteColor());
-        existing.setShirtSize(item.getShirtSize());
-        existing.setPantSize(item.getPantSize());
-        existing.setShoeSize(item.getShoeSize());
-        existing.setJacketSize(item.getJacketSize());
-        existing.setDressSize(item.getDressSize());
-        existing.setPreferredFit(item.getPreferredFit());
-        existing.setStyleDescription(item.getStyleDescription());
-        existing.setFavoriteBrands(item.getFavoriteBrands());
-        existing.setFavoriteFoods(item.getFavoriteFoods());
-        existing.setFavoriteDrinks(item.getFavoriteDrinks());
-        existing.setRingSize(item.getRingSize());
-        existing.setMetalPreference(item.getMetalPreference());
-        existing.setLikes(item.getLikes());
-        existing.setDislikes(item.getDislikes());
-        existing.setInterests(item.getInterests());
+        if(existing == null) {
+            log.debug("Wished item {} does not exist.", wid);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        existing.setGiftName(item.getGiftName());
+        existing.setValue(item.getValue());
+        log.info("User {} updated wished item {} in their wishlist.", uid, wid);
         userRepository.save(currentUser);
-        log.info("User {} updated their preferences.", uid);
         return Response.noContent().build();
     }
 
     @DELETE
-    public Response deleteWishedItem() {
-        Optional<Users> user = userRepository.findById(uid);
+    @Path("/{wid}")
+    public Response deleteWishedItem(@PathParam("wid") Integer wid) {
+        Optional<User> user = userRepository.findById(uid);
         if(user.isEmpty()) {
             log.warn("User {} does not exist.", uid);
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -127,11 +131,19 @@ public class UserWishedItemResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        currentUser.getWishlist().clear();
+        UserWishedItem existing = currentUser.getWishlist().stream()
+                .filter(w -> w.getId() != null && w.getId().equals(wid))
+                .findFirst()
+                .orElse(null);
 
+        if(existing == null) {
+            log.debug("Wished item {} does not exist.", wid);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        currentUser.getWishlist().remove(existing);
         userRepository.save(currentUser);
-
-        log.info("User {} deleted their preferences.", uid);
+        log.info("User {} deleted wished item {} from their wishlist.", uid, wid);
         return Response.noContent().build();
     }
 }
