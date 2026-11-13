@@ -1,5 +1,6 @@
 import { html } from "lit";
 import { expect, fn, userEvent, waitFor } from "storybook/test";
+import { user } from "../../mocks/dashboard-user.js";
 import "./gift-dashboard.js";
 import "../../styles/page-templates.css";
 

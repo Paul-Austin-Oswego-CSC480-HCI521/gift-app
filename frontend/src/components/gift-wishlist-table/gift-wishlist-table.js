@@ -18,7 +18,7 @@ const statuses = ["Wanted", "Received"];
 
 export class WishlistTable extends LitElement {
   static properties = {
-    items: { attribute: false }, loading: { type: Boolean }, saving: { type: Boolean },
+    items: { attribute: false }, loading: { type: Boolean }, saving: { type: Boolean }, listTitle: { type: String }, addButtonLabel: { type: String },
     error: { type: String }, saveError: { type: String },
     _query: { state: true }, _page: { state: true }, _pageSize: { state: true },
     _filters: { state: true }, _draftFilters: { state: true }, _filterOpen: { state: true },
@@ -26,6 +26,8 @@ export class WishlistTable extends LitElement {
   };
   static styles = css`
     :host { display: block; min-width: 0; }
+    /* Figma List background pads 24/48/16/48; cds-tile already supplies 16 on every side. */
+    .card { padding: var(--cds-spacing-03, 0.5rem) var(--cds-spacing-07, 2rem) 0; }
     gift-tile { max-inline-size: none; } /* the table needs the full width, not the tile's card width */
     gift-tile, cds-modal { --cds-layer: var(--card-background); --cds-layer-01: var(--card-background); }
     h2 { margin: 0 0 var(--cds-spacing-05, 1rem); font-family: var(--font-family-heading); font-size: var(--cds-heading-03-font-size, 1.25rem); }
@@ -45,6 +47,8 @@ export class WishlistTable extends LitElement {
   `;
   constructor() {
     super();
+    this.listTitle = "My Wish List";
+    this.addButtonLabel = "Add to My Wish List";
     this.items = []; this.loading = false; this.saving = false;
     this.error = ""; this.saveError = ""; this._query = "";
     this._page = 1; this._pageSize = 7; this._filters = []; this._draftFilters = [];
@@ -129,7 +133,7 @@ export class WishlistTable extends LitElement {
   render() {
     const rows = this.filteredItems;
     const page = Math.min(this._page, Math.max(1, Math.ceil(rows.length / this._pageSize)));
-    return html`<gift-tile><h2>My Wish List</h2>
+    return html`<gift-tile><div class="card"><h2>${this.listTitle}</h2>
       <div class="toolbar">
         <cds-search label-text="Search wish list" close-button-label-text="Clear search" placeholder="Search items" .value=${this._query}
           @cds-search-input=${event => { this._query = event.detail.value; this._page = 1; }}></cds-search>
@@ -146,26 +150,24 @@ export class WishlistTable extends LitElement {
               <cds-button size="sm" @click=${() => { this._filters = [...this._draftFilters]; this._page = 1; this._filterOpen = false; this.renderRoot.querySelector("#filter-toggle").focus(); }}>Apply</cds-button></div>
           </div></cds-popover-content>
         </cds-popover>
-        <cds-button ?disabled=${this.loading} @click=${() => this._edit()}>Add to My Wish List
+        <cds-button ?disabled=${this.loading} @click=${() => this._edit()}>${this.addButtonLabel}
           <span slot="icon" aria-hidden="true">+</span></cds-button>
       </div>
-      <p class="note">Priority, status, and added date are preview values until backend support is available.</p>
       ${this.error ? html`<cds-inline-notification open kind="error" title="Could not load wish list" subtitle=${this.error} hide-close-button></cds-inline-notification>` : nothing}
       ${this.loading ? html`<p role="status">Loading wish list…</p>` : nothing}
       ${!this.loading && !this.error && !rows.length ? html`<p role="status">${this.items.length ? "No matching items. Try another search or reset the filters." : "Your wish list is empty. Add an item you would like to receive."}</p>` : nothing}
       <div class="scroll"><cds-table aria-label="My wish list">
-        <cds-table-head><cds-table-header-row>${["Item", "Priority", "Status", "Added", "Actions"].map(label => html`<cds-table-header-cell>${label}</cds-table-header-cell>`)}</cds-table-header-row></cds-table-head>
+        <cds-table-head><cds-table-header-row>${["Item", "Priority", "Status", "Added"].map(label => html`<cds-table-header-cell>${label}</cds-table-header-cell>`)}</cds-table-header-row></cds-table-head>
         <cds-table-body>${rows.slice((page - 1) * this._pageSize, page * this._pageSize).map(item => {
           return html`<cds-table-row><cds-table-cell>${item.giftName}</cds-table-cell><cds-table-cell>${item.priority}</cds-table-cell>
-            <cds-table-cell>${item.status}</cds-table-cell><cds-table-cell>${this._date(item.added)}</cds-table-cell>
-            <cds-table-cell><cds-button kind="ghost" size="sm" tooltip-text=${`Edit ${item.giftName}`} @click=${() => this._edit(item)}>Edit</cds-button></cds-table-cell></cds-table-row>`;
+            <cds-table-cell>${item.status}</cds-table-cell><cds-table-cell>${this._date(item.added)}</cds-table-cell></cds-table-row>`;
         })}</cds-table-body></cds-table>
       <cds-pagination items-per-page-text="Items per page:" .page=${page} .pageSize=${this._pageSize} .totalItems=${rows.length}
         @cds-pagination-changed-current=${event => { this._page = event.detail.page; }}
         @cds-page-sizes-select-changed=${event => { this._pageSize = event.detail.pageSize; this._page = 1; }}>
         ${[7, 14, 28].map(size => html`<cds-select-item value=${size}>${size}</cds-select-item>`)}
       </cds-pagination></div>
-    </gift-tile>${this._editor()}`;
+    </div></gift-tile>${this._editor()}`;
   }
 }
 customElements.define("gift-wishlist-table", WishlistTable);

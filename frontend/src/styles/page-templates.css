@@ -92,7 +92,7 @@
   /* cds-header is position:fixed and 3rem tall, so without this the content starts underneath it. */
   margin-block-start: 3rem;
   padding: 2rem;
-  background: var(--cds-background);
+  background: var(--page-background, var(--cds-background));
   box-sizing: border-box;
   min-height: calc(100vh - 3rem);
 }

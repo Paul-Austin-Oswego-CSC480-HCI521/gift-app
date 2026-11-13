@@ -32,6 +32,12 @@ async function loadData() {
 dashboard.addEventListener("add-gift", () => {
   addGiftModal.open = true;
 });
+dashboard.addEventListener("add-person", () => {
+  window.location.assign(routes.people.path);
+});
+dashboard.addEventListener("add-date", () => {
+  window.location.assign(routes.dates.path);
+});
 dashboard.addEventListener("dashboard-reload", loadData);
 addGiftModal.addEventListener("gift-added", loadData);
 

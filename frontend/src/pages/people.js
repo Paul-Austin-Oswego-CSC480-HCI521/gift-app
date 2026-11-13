@@ -1,4 +1,4 @@
-// Placeholder page: shared shell only until the page has content.
+// People page: loads the signed-in user's people into <gift-people> and saves new ones.
 import "../app/boot-authed.js";
 import { apiFetch } from "../api/client.js";
 import "../components/gift-people/gift-people.js";

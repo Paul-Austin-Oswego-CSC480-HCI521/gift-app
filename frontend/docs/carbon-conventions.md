@@ -48,7 +48,7 @@ tokens), then compose several into a `gift-*` component, and only then write a c
 something Carbon lacks. Custom elements must start with `// carbon-exempt: <reason>`.
 
 `npm run lint:carbon` (also a CI check, `.github/workflows/frontend-checks.yml`) fails when a
-component imports no Carbon component or uses a raw `<button>`, `<input>`, `<select>`,
+component imports neither a Carbon component nor another `gift-*` component, or uses a raw `<button>`, `<input>`, `<select>`,
 `<textarea>`, `<dialog>`, `<table>`, `<nav>` or `<a>`. The full guide, including the Carbon
 component lookup table used by AI tools, is [`../AGENTS.md`](../AGENTS.md).
 

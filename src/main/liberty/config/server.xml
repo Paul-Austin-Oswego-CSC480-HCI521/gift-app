@@ -12,9 +12,8 @@
         <feature>jwt-1.0</feature> <!-- Added by TJ for jwt config -->
     </featureManager>
 
-    <!--
-    <keyStore password=""/>
-    -->
+    <keyStore id="defaultKeyStore" password="${keystore.password}"/>
+    <ltpa keysPassword="${keystore.password}"/>
 
     <!-- Empty on purpose. jakartaee-11.0 requires a registry. Real users live in the database and log in with JWT. -->
     <basicRegistry id="basic" realm="BasicRealm">
@@ -54,8 +53,6 @@
     <library id="PostgreSQL">
         <fileset dir="${shared.resource.dir}" includes="postgresql-*.jar"/>
     </library>
-
-
 
     <dataSource jndiName="jdbc/giftapp">
         <jdbcDriver libraryRef="PostgreSQL"/>

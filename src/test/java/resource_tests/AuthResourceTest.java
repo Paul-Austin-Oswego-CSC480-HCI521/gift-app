@@ -1,6 +1,6 @@
 package resource_tests;
 
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import edu.oswego.csc480.rest.auth.AuthResource;
 import edu.oswego.csc480.rest.auth.LoginRequest;
@@ -30,7 +30,7 @@ public class AuthResourceTest {
     private PasswordService passwords;
     private JwtService tokens;
     private AuthResource resource;
-    private Users user;
+    private User user;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -40,11 +40,11 @@ public class AuthResourceTest {
         passwords = spy(service);
         tokens = mock(JwtService.class);
         resource = new AuthResource();
-        inject("users", users);
+        inject("uRepo", users);
         inject("passwords", passwords);
         inject("tokens", tokens);
 
-        user = new Users();
+        user = new User();
         user.setId(42);
         user.setEmail(EMAIL);
         user.setPasswordHash(passwordHash);

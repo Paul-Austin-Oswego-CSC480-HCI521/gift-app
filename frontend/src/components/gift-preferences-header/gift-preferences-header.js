@@ -1,3 +1,4 @@
+import { routes } from "../../config/routes.js";
 import { LitElement, html, css } from "lit";
 import "@carbon/web-components/es/components/tile/index.js";
 import "@carbon/web-components/es/components/link/index.js";
@@ -24,7 +25,7 @@ export class GiftPreferencesHeader extends LitElement {
     .note { margin-bottom: 0; color: var(--cds-text-secondary); font-size: var(--cds-helper-text-01-font-size, .75rem); }
   `;
   _preferenceLink(label) {
-    return html`<cds-link href="#"><span class="sr-only">${label} preferences (coming soon)</span><span aria-hidden="true">→</span></cds-link>`;
+    return html`<cds-link href=${routes.preferences.path}><span class="sr-only">${label} preferences</span><span aria-hidden="true">→</span></cds-link>`;
   }
   render() {
     return html`<section aria-labelledby="preferences-title"><cds-tile class="panel">

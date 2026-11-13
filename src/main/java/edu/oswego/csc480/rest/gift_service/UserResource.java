@@ -1,0 +1,82 @@
+package edu.oswego.csc480.rest.gift_service;
+
+import edu.oswego.csc480.entities.User;
+import edu.oswego.csc480.repositories.UserRepository;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+@Path("user")
+@Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("user")
+public class UserResource {
+
+    private Logger log = LoggerFactory.getLogger(UserResource.class);
+
+    @Inject
+    private UserRepository userRepository;
+
+    @Inject
+    private JsonWebToken token;
+
+    //Returns all users
+    //maybe should not allow "user" to access it?
+    @GET
+    public Response getUsers() {
+        log.warn("Got request for querying EVERY USER from user {}.", token.getSubject());
+        List<User> users = userRepository.findAll().toList();
+        return Response.ok(users).build();
+    }
+
+    //Return a single user
+    @GET
+    @Path("/{id}")
+    public Response getUser(@PathParam("id") Integer id) {
+        log.info("Query for user {}.", id);
+        return userRepository.findById(id)
+                .map(user -> Response.ok(user).build())
+                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response updateUser(@PathParam("id") Integer id, User updatedUser) {
+        log.info("Request to update user {} received.", id);
+        User existingUser = userRepository.findById(id)
+                .orElse(null);
+        if(existingUser == null) {
+            log.warn("User {} does not exist.", id);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        updatedUser.setId(id);
+        User savedUser = userRepository.save(updatedUser);
+        log.info("User {} updated successfully.", id);
+        updatedUser.setPasswordHash(existingUser.getPasswordHash()); //Copy password hash from existing user on to update user to save it
+        return Response.ok(savedUser).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteUser(@PathParam("id") Integer id) {
+        log.info("Deletion request from user {} received.", id);
+        User existingUser = userRepository.findById(id)
+                .orElse(null);
+        if(existingUser == null) {
+            log.warn("User {} does not exist.", id);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        userRepository.deleteById(id);
+        log.info("User {} has been deleted.", id);
+        return Response.noContent().build();
+    }
+}

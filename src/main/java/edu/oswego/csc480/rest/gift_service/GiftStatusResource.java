@@ -1,8 +1,8 @@
 package edu.oswego.csc480.rest.gift_service;
 
-import edu.oswego.csc480.entities.Gifts;
+import edu.oswego.csc480.entities.Gift;
 import edu.oswego.csc480.entities.GiftStatus;
-import edu.oswego.csc480.entities.Users;
+import edu.oswego.csc480.entities.User;
 import edu.oswego.csc480.repositories.UserRepository;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -10,6 +10,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -26,15 +28,21 @@ public class GiftStatusResource {
     private @PathParam("uid") Integer uid;
     private @PathParam("gid") Integer gid;
 
-
-    //TODO:           GET POST PUT DELETE
+    private Logger log = LoggerFactory.getLogger(GiftStatusResource.class);
 
     @GET
     public Response getStatus(){
-        Optional<Users> user = uRepo.findById(uid);
-        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
-        Gifts gift = OccasionResource.getGift(user.get(), gid);
-        if (gift == null) return Response.status(Status.NOT_FOUND).build();
+        log.info("User {} requested status for gift {}",uid, gid);
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()){
+            log.warn("User {} does not exist.", uid);
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        Gift gift = OccasionResource.getGift(user.get(), gid);
+        if (gift == null){
+            log.debug("Gift {} does not exist.", gid);
+            return Response.status(Status.NOT_FOUND).build();
+        }
         return Response.ok(gift.getStatus()).build();
     }
 
@@ -43,14 +51,22 @@ public class GiftStatusResource {
 
         // THIS SHOULD NOT BE NECESSARY, ADD THE STATUS OBJECT DIRECTLY IN THE POST REQUEST TO GIFT!!!!
 
-        Optional<Users> user = uRepo.findById(uid);
-        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
-        Gifts gift = OccasionResource.getGift(user.get(), gid);
-        if (gift == null) return Response.status(Status.NOT_FOUND).build();
+        log.warn("DO NOT USE createStatus AT GiftStatusResource");
+
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()){
+            log.warn("User {} does not exist.", uid);
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        Gift gift = OccasionResource.getGift(user.get(), gid);
+        if (gift == null){
+            log.debug("Gift {} does not exist.", gid);
+            return Response.status(Status.NOT_FOUND).build();
+        }
 
         gift.setStatus(status);
-        Users nuser = uRepo.save(user.get());
-        gift = OccasionResource.getGift(nuser, gid);
+        User nuser = uRepo.save(user.get());
+        //gift = OccasionResource.getGift(nuser, gid);
 
         return Response.created(UriBuilder.fromPath("user/{uid}/gift/{gid}/status").build(uid,gid)).build();
     }
@@ -58,36 +74,24 @@ public class GiftStatusResource {
     @PUT
     public Response updateStatus(GiftStatus status){
 
-        Optional<Users> user = uRepo.findById(uid);
-        if (user.isEmpty()) return Response.status(Status.NOT_FOUND).build();
-        Gifts gift = OccasionResource.getGift(user.get(), gid);
-        if (gift == null) return Response.status(Status.NOT_FOUND).build();
+        Optional<User> user = uRepo.findById(uid);
+        if (user.isEmpty()){
+            log.warn("User {} does not exist.", uid);
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        Gift gift = OccasionResource.getGift(user.get(), gid);
+        if (gift == null){
+            log.debug("Gift {} does not exist.", gid);
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        String oldStatus = gift.getStatus()== null? "[NULL]" : gift.getStatus().getStage();
+        log.info("User {} has updated the status ({}) for gift {} from {} to {}",
+                uid, status.getId(), gift.getId(), oldStatus, status.getStage());
 
         gift.setStatus(status);
-
         uRepo.save(user.get());
 
         return Response.noContent().build();
 
     }
-
-    @DELETE
-    public Response deleteStatus(){
-        // DO NOT USE
-        // THIS ITEM GETS DELETED WHEN GIFT GETS DELETED. NO GIFT SHOULD BE LACKING OF ITS OWN STATUS.
-        return Response.status(Status.METHOD_NOT_ALLOWED).build();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -5,6 +5,7 @@ import "./dashboard-card.js"; // adjust paths to wherever you save these
 import "./dashboard-row.js";
 import { routes } from "../../config/routes.js";
 import { notificationTheme } from "../../styles/notification-theme.js";
+import { pageContentStyles } from "../../styles/page-content.js";
 
 const MAX_ROWS = 7;
 
@@ -48,6 +49,7 @@ export class GiftDashboard extends LitElement {
 
   static styles = [
     notificationTheme,
+    pageContentStyles,
     css`
       :host {
         display: flex;
