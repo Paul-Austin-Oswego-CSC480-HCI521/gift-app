@@ -3,6 +3,85 @@ import { LitElement, html, css } from "lit";
 import "../gift-wishlist-table/gift-wishlist-table.js";
 import { pageContentStyles } from "../../styles/page-content.js";
 
+const normalize = (value) =>
+  String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
+const COLOR_NAMES = {
+  red: "#e53935",
+  orange: "#fb8c00",
+  yellow: "#fdd835",
+  green: "#43a047",
+  blue: "#1e88e5",
+  purple: "#8e24aa",
+  pink: "#ec407a",
+  black: "#212121",
+  white: "#ffffff",
+  gray: "#9e9e9e",
+  grey: "#9e9e9e",
+  brown: "#795548",
+  teal: "#00897b",
+  navy: "#1a237e",
+  gold: "#d4af37",
+  silver: "#b0bec5",
+  beige: "#d6c6a5",
+  maroon: "#800000",
+};
+
+function displayValue(value) {
+  if (value == null || value === "") {
+    return "Not provided";
+  }
+
+  if (Array.isArray(value)) {
+    const parts = value
+      .map(displayValue)
+      .filter((part) => part !== "Not provided");
+
+    return parts.length ? parts.join(", ") : "Not provided";
+  }
+
+  if (typeof value === "object") {
+    return displayValue(
+      value.value ?? value.label ?? value.name ?? value.text
+    );
+  }
+
+  return String(value).trim() || "Not provided";
+}
+
+function colorTokens(value) {
+  if (value == null) return [];
+
+  if (Array.isArray(value)) {
+    return value.flatMap(colorTokens);
+  }
+
+  if (typeof value === "object") {
+    return colorTokens(
+      value.value ?? value.label ?? value.name
+    );
+  }
+
+  return String(value)
+    .split(/[,;|]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function validColor(token) {
+  const lower = token.toLowerCase().trim();
+
+  if (Object.prototype.hasOwnProperty.call(COLOR_NAMES, lower)) {
+    return COLOR_NAMES[lower];
+  }
+
+  return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(lower)
+    ? lower
+    : null;
+}
+
 export class GiftingPeopleProfile extends LitElement {
   static properties = {
     person: { attribute: false },
@@ -55,7 +134,7 @@ export class GiftingPeopleProfile extends LitElement {
       }
 
       .card {
-        background: #fff;
+        background: var(--card-background, #fcfbf4);
         border-radius: 8px;
         padding: 1rem;
         overflow-wrap: anywhere;
@@ -68,6 +147,32 @@ export class GiftingPeopleProfile extends LitElement {
 
       .card p {
         margin: 0;
+      }
+
+      .colors {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .color-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .swatch {
+        display: inline-block;
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        border: 1px solid #777;
+        flex: none;
+      }
+
+      .color-name {
+        font-size: 0.8rem;
       }
 
       .wishlist h2 {
@@ -101,44 +206,94 @@ export class GiftingPeopleProfile extends LitElement {
     );
   }
 
-  preference(...keys) {
-    const p = this.person ?? {};
+  preferenceValue(...keys) {
+  const p = this.person ?? {};
 
-    const attributes = Array.isArray(p.attributes)
-      ? p.attributes
-      : [];
+  const sources = [p, p.preferences].filter(
+    (source) => source && typeof source === "object"
+  );
 
-    const normalize = (value) =>
-      String(value ?? "")
-        .toLowerCase()
-        .replace(/[^a-z]/g, "");
-
-    for (const key of keys) {
-      const direct = p[key];
-
-      if (direct != null && direct !== "") {
-        return Array.isArray(direct)
-          ? direct.join(", ")
-          : String(direct);
-      }
-
-      const match = attributes.find(
-        (a) =>
-          normalize(
-            a.attribute_name ??
-              a.attributeName ??
-              a.name
-          ) === normalize(key)
-      );
-
-      if (match?.value != null && match.value !== "") {
-        return String(match.value);
+  for (const source of sources) {
+    for (const [name, value] of Object.entries(source)) {
+      if (
+        keys.some((key) => normalize(key) === normalize(name)) &&
+        value != null &&
+        value !== ""
+      ) {
+        return value;
       }
     }
-
-    return "Not provided";
   }
 
+  const attributes = Array.isArray(p.attributes)
+    ? p.attributes
+    : [];
+
+  for (const attribute of attributes) {
+    const name =
+      attribute.attribute_name ??
+      attribute.attributeName ??
+      attribute.name ??
+      attribute.key;
+
+    if (keys.some((key) => normalize(key) === normalize(name))) {
+      const value =
+        attribute.value ??
+        attribute.attributeValue ??
+        attribute.values;
+
+      if (value != null && value !== "") {
+        return value;
+      }
+    }
+  }
+
+  return null;
+}
+
+preference(...keys) {
+  return displayValue(this.preferenceValue(...keys));
+}
+
+  renderColors() {
+  const raw = this.preferenceValue(
+    "favoriteColors",
+    "favorite colors",
+    "favoriteColor",
+    "colors",
+    "color"
+  );
+
+  const colors = colorTokens(raw);
+
+  if (!colors.length) {
+    return html`<p>Not provided</p>`;
+  }
+
+  return html`
+    <div class="colors">
+      ${colors.map((color) => {
+        const swatch = validColor(color);
+
+        return html`
+          <span class="color-item">
+            ${swatch
+              ? html`
+                  <span
+                    class="swatch"
+                    style=${`background-color: ${swatch}`}
+                    role="img"
+                    aria-label=${color}
+                  ></span>
+                `
+              : ""}
+            <span class="color-name">${color}</span>
+          </span>
+        `;
+      })}
+    </div>
+  `;
+}
   render() {
     if (this.loading) {
       return html`
@@ -159,11 +314,29 @@ export class GiftingPeopleProfile extends LitElement {
       ? this.person.gifts
       : [];
 
-    const items = gifts.map((gift) => ({
-      ...gift,
-      giftName: gift.giftName ?? gift.name ?? "",
-      value: gift.value ?? gift.price ?? 0,
-    }));
+    
+    const items = gifts.map((gift) => {
+      const rawStatus = gift.status;
+
+      const status =
+        typeof rawStatus === "string"
+          ? rawStatus
+          : typeof rawStatus === "object" && rawStatus !== null
+            ? rawStatus.name ??
+              rawStatus.label ??
+              rawStatus.status ??
+              "Wanted"
+            : "Wanted";
+
+      return {
+        ...gift,
+        giftName: gift.giftName ?? gift.name ?? "",
+        value: gift.value ?? gift.price ?? 0,
+        status:
+          typeof status === "string" ? status : "Wanted",
+      };
+    });
+
 
     return html`
       <nav
@@ -190,54 +363,52 @@ export class GiftingPeopleProfile extends LitElement {
         </h2>
 
         <div class="cards">
-          ${[
-            [
-              "Favorite Colors",
-              this.preference(
-                "favoriteColors",
-                "favorite colors",
-                "colors"
-              ),
-            ],
-            [
-              "Sizes",
-              this.preference("sizes", "size"),
-            ],
-            [
-              "Interests",
-              this.preference(
+          <div class="card">
+            <h3>Favorite Colors</h3>
+            ${this.renderColors()}
+          </div>
+
+          <div class="card">
+            <h3>Sizes</h3>
+            <p>
+              ${this.preference(
+                "sizes",
+                "size",
+                "clothingSize"
+              )}
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Interests</h3>
+            <p>
+              ${this.preference(
                 "interests",
-                "interest"
-              ),
-            ],
-            [
-              "Dislikes",
-              this.preference(
+                "interest",
+                "hobbies"
+              )}
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Dislikes</h3>
+            <p>
+              ${this.preference(
                 "dislikes",
                 "dislike"
-              ),
-            ],
-          ].map(
-            ([label, value]) => html`
-              <div class="card">
-                <h3>${label}</h3>
-                <p>${value}</p>
-              </div>
-            `
-          )}
+              )}
+            </p>
+          </div>
         </div>
       </section>
 
-      <section
-        class="wishlist"
-        aria-label="Person gift list"
-      >
-        <h2>${this.personName}'s list</h2>
-
+      
+      <section class="wishlist" aria-label="Person gift list">
         <gift-wishlist-table
           .items=${items}
+          .listTitle=${`${this.personName}'s list`}
+          .addButtonLabel=${"Add to Gift"}
         ></gift-wishlist-table>
-
       </section>
     `;
   }

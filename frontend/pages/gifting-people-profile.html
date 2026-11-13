@@ -1,23 +1,21 @@
+
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <!-- @include head -->
     <title>Person Profile | Gift App</title>
   </head>
 
-  <body>
-    <div id="app">
-      <gifting-people-profile>
-      </gifting-people-profile>
-    </div>
+  <body data-carbon-theme="brand">
+    <!-- @include app-shell active=people -->
+
+    <main class="page-main" aria-label="Person profile">
+      <gifting-people-profile></gifting-people-profile>
+    </main>
 
     <script
       type="module"
-      src="../src/pages/gifting-people-profile.js"
+      src="/src/pages/gifting-people-profile.js"
     ></script>
   </body>
 </html>
