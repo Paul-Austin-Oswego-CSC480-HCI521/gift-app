@@ -1,6 +1,6 @@
 
 import "../app/boot-authed.js";
-import "../components/gifting-people-profile/gifting-people-profile.js";
+import "../components/gift-people-profile/gift-people-profile.js";
 import { apiFetch } from "../api/client.js";
 import {
   getAccessToken,
@@ -8,7 +8,7 @@ import {
   clearAccessToken,
 } from "../auth/token-store.js";
 
-const profile = document.querySelector("gifting-people-profile");
+const profile = document.querySelector("gift-people-profile");
 
 const personId = new URLSearchParams(
   window.location.search

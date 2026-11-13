@@ -3,6 +3,7 @@ import { apiFetch } from "../api/client.js";
 import "../components/gift-dashboard/gift-dashboard.js";
 import "../components/shared/gift-modal/gift-modal.js";
 import { getAccessToken, getUserId, clearAccessToken } from "../auth/token-store.js";
+import { routes } from "../config/routes.js";
 
 const dashboard = document.querySelector("gift-dashboard");
 const addGiftModal = document.getElementById("add-gift-modal");
