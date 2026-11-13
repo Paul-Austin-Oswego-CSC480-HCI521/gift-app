@@ -3,6 +3,7 @@ import { apiFetch } from "../api/client.js";
 import "../components/gift-dashboard/gift-dashboard.js";
 import "../components/shared/gift-modal/gift-modal.js";
 import { getAccessToken, getUserId, clearAccessToken } from "../auth/token-store.js";
+import { routes } from "../config/routes.js";
 
 const dashboard = document.querySelector("gift-dashboard");
 const addGiftModal = document.getElementById("add-gift-modal");
@@ -31,6 +32,12 @@ async function loadData() {
 
 dashboard.addEventListener("add-gift", () => {
   addGiftModal.open = true;
+});
+dashboard.addEventListener("add-person", () => {
+  window.location.assign(routes.people.path);
+});
+dashboard.addEventListener("add-date", () => {
+  window.location.assign(routes.dates.path);
 });
 dashboard.addEventListener("dashboard-reload", loadData);
 addGiftModal.addEventListener("gift-added", loadData);
