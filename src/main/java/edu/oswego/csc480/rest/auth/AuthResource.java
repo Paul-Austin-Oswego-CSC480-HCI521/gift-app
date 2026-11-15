@@ -85,13 +85,11 @@ public class AuthResource {
                 || form.firstName == null || form.firstName.isBlank()
                 || form.password == null || form.password.isBlank()
                 || form.surname == null || form.surname.isBlank()){
-                //|| form.username == null || form.username.isBlank()){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        if (uRepo.findByEmail(form.email).isPresent()
-        || uRepo.findByUsername(form.username).isPresent()){
-            log.info("User attempted to create user with an email or username already in use");
+        if (uRepo.findByEmail(form.email).isPresent()){
+            log.info("User attempted to create user with an email already in use");
             return Response.status(Response.Status.CONFLICT).build();
         }
 
@@ -99,7 +97,6 @@ public class AuthResource {
         user.setFirstName(form.firstName);
         user.setSurname(form.surname);
         user.setEmail(form.email);
-        //user.setUsername(form.username);
 
         try{
             String passwordHash = passwords.hash(form.password);
