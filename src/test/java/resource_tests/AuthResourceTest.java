@@ -8,6 +8,7 @@ import edu.oswego.csc480.rest.auth.LoginResponse;
 import edu.oswego.csc480.security.PasswordService;
 import edu.oswego.csc480.utils.auth.JwtService;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -160,15 +161,42 @@ public class AuthResourceTest {
         try (Response response = resource.login(request(EMAIL, PASSWORD))) {
             assertEquals(200, response.getStatus());
             LoginResponse result = assertInstanceOf(LoginResponse.class, response.getEntity());
-            assertEquals("test-token", result.getToken());
+            NewCookie cookie = response.getCookies().get("gift_access_token");
+            assertNotNull(cookie);
+            assertEquals("test-token", cookie.getValue());
+            assertEquals("/", cookie.getPath());
+            assertNull(cookie.getDomain());
+            assertTrue(cookie.isHttpOnly());
+            assertTrue(cookie.isSecure());
+            assertEquals(NewCookie.SameSite.STRICT, cookie.getSameSite());
+            assertEquals(NewCookie.DEFAULT_MAX_AGE, cookie.getMaxAge());
             assertEquals(Integer.valueOf(42), result.getUserId());
             assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
-            assertEquals("no-store", response.getHeaderString("Cache-Control"));
+            assertEquals("private, no-store", response.getHeaderString("Cache-Control"));
         }
 
         verify(users).findByEmail(EMAIL);
         verify(passwords).verify(PASSWORD, passwordHash);
         verify(tokens).mintAccessToken(42, List.of("user"), EMAIL);
+    }
+
+    @Test
+    public void logout_clearsSecureCookie_204() {
+        try (Response response = resource.logout()) {
+            assertEquals(204, response.getStatus());
+            assertFalse(response.hasEntity());
+            NewCookie cookie = response.getCookies().get("gift_access_token");
+            assertNotNull(cookie);
+            assertEquals("", cookie.getValue());
+            assertEquals(0, cookie.getMaxAge());
+            assertEquals("/", cookie.getPath());
+            assertNull(cookie.getDomain());
+            assertTrue(cookie.isHttpOnly());
+            assertTrue(cookie.isSecure());
+            assertEquals(NewCookie.SameSite.STRICT, cookie.getSameSite());
+            assertEquals("private, no-store", response.getHeaderString("Cache-Control"));
+        }
+        verifyNoInteractions(users, passwords, tokens);
     }
 
     private void inject(String name, Object value) throws Exception {
@@ -188,8 +216,9 @@ public class AuthResourceTest {
         try (response) {
             assertEquals(status, response.getStatus());
             assertEquals(Map.of("message", message), response.getEntity());
+            assertFalse(response.getCookies().containsKey("gift_access_token"));
             assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
-            assertEquals("no-store", response.getHeaderString("Cache-Control"));
+            assertEquals("private, no-store", response.getHeaderString("Cache-Control"));
         }
     }
 }
