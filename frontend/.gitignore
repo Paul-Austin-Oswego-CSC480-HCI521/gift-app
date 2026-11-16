@@ -1,3 +1,5 @@
 coverage/
 playwright-report/
 test-results/
+playwright-report-live/
+test-results-live/
