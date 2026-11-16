@@ -274,5 +274,7 @@ attribute. The check is `scripts/check-carbon-attributes.mjs`.
 - `docs/carbon-conventions.md`: how we use Carbon, theming, stories, styling
 - `docs/frontend-structure.md`: folder layout and how to add a page
 - `docs/frontend-testing.md`: testing approach
+- `docs/carbon-conventions.md#test-hooks-data-testid`: add `data-testid` hooks to new UI (naming rules)
+- `e2e/README.md`: Playwright end-to-end tests
 - Wiki (rationale): ADR-Frontend-Framework, Carbon-Design-System-in-Figma, Storybook-Guide
 - Per course policy, say in the PR that an AI tool was used and for what. You own the result.
