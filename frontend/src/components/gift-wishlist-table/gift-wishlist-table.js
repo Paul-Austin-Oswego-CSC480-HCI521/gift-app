@@ -18,7 +18,7 @@ const statuses = ["Wanted", "Received"];
 
 export class WishlistTable extends LitElement {
   static properties = {
-    items: { attribute: false }, loading: { type: Boolean }, saving: { type: Boolean },
+    items: { attribute: false }, loading: { type: Boolean }, saving: { type: Boolean }, listTitle: { type: String }, addButtonLabel: { type: String },
     error: { type: String }, saveError: { type: String },
     _query: { state: true }, _page: { state: true }, _pageSize: { state: true },
     _filters: { state: true }, _draftFilters: { state: true }, _filterOpen: { state: true },
@@ -47,6 +47,8 @@ export class WishlistTable extends LitElement {
   `;
   constructor() {
     super();
+    this.listTitle = "My Wish List";
+    this.addButtonLabel = "Add to My Wish List";
     this.items = []; this.loading = false; this.saving = false;
     this.error = ""; this.saveError = ""; this._query = "";
     this._page = 1; this._pageSize = 7; this._filters = []; this._draftFilters = [];
@@ -131,7 +133,7 @@ export class WishlistTable extends LitElement {
   render() {
     const rows = this.filteredItems;
     const page = Math.min(this._page, Math.max(1, Math.ceil(rows.length / this._pageSize)));
-    return html`<gift-tile><div class="card"><h2>My Wish List</h2>
+    return html`<gift-tile><div class="card"><h2>${this.listTitle}</h2>
       <div class="toolbar">
         <cds-search label-text="Search wish list" close-button-label-text="Clear search" placeholder="Search items" .value=${this._query}
           @cds-search-input=${event => { this._query = event.detail.value; this._page = 1; }}></cds-search>
@@ -148,7 +150,7 @@ export class WishlistTable extends LitElement {
               <cds-button size="sm" @click=${() => { this._filters = [...this._draftFilters]; this._page = 1; this._filterOpen = false; this.renderRoot.querySelector("#filter-toggle").focus(); }}>Apply</cds-button></div>
           </div></cds-popover-content>
         </cds-popover>
-        <cds-button ?disabled=${this.loading} @click=${() => this._edit()}>Add to My Wish List
+        <cds-button ?disabled=${this.loading} @click=${() => this._edit()}>${this.addButtonLabel}
           <span slot="icon" aria-hidden="true">+</span></cds-button>
       </div>
       ${this.error ? html`<cds-inline-notification open kind="error" title="Could not load wish list" subtitle=${this.error} hide-close-button></cds-inline-notification>` : nothing}

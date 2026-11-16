@@ -69,6 +69,18 @@ async function addPerson(event) {
 peoplePage.addEventListener("add-person", addPerson);
 peoplePage.addEventListener("people-reload", loadPeople);
 
+function openFormIfRequested() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("add") !== "1") return;
+
+  peoplePage.openForm();
+
+  // Remove the param so a refresh doesn't reopen the form.
+  params.delete("add");
+  const query = params.toString();
+  history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : ""));
+}
+
 if (getAccessToken() && getUserId()) {
-  loadPeople();
+  loadPeople().then(openFormIfRequested);
 }

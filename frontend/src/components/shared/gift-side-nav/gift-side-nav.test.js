@@ -14,11 +14,11 @@ async function renderNav(attrs = "") {
 const labels = (nav) =>
   [...nav.querySelectorAll("cds-side-nav-link")].map((link) => link.textContent.trim());
 
-it("is built on Carbon's side nav with an accessible name and all six links", async () => {
+it("is built on Carbon's side nav with an accessible name and all four links", async () => {
   const nav = await renderNav();
   expect(nav.querySelector("cds-side-nav")).toHaveAttribute("aria-label", "Gift App sidebar");
   expect(labels(nav)).toEqual([
-    "Dashboard", "My Wish List", "People", "Upcoming Dates", "All Gifts", "Settings",
+    "Dashboard", "My Wish List", "People", "Upcoming Dates",
   ]);
 });
 
@@ -46,13 +46,12 @@ it("navigates to the correct page when clicked", async () => {
   const controls = [...nav.querySelectorAll("cds-side-nav-link, cds-button")];
 
   // Expected HTML file routes matching your component's navigation mapping
+  // Note: "All Gifts" and "Settings" have been removed from the navigation
   const expectedRoutes = [
     "/dashboard",
     "/my-wishlist",
     "/people",
     "/upcoming-dates",
-    "/all-gifts",
-    "/settings",
     "/add-gift",
     "/add-recipient"
   ];

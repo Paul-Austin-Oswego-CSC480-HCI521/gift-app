@@ -33,9 +33,12 @@ describe("gift-people", () => {
     expect(el.shadowRoot.querySelector("gift-tile[type='add']")).not.toBeNull();
   });
 
-  it("links person tiles so they show the arrow", async () => {
+  it("links person tiles to their profile pages", async () => {
     const el = await renderPeople();
-    for (const tile of personTiles(el)) expect(tile).toHaveAttribute("href", "#");
+    for (const tile of personTiles(el)) {
+      const href = tile.getAttribute("href");
+      expect(href).toMatch(/^\/gift-people-profile\?personId=/);
+    }
   });
 
   it("filters by search text", async () => {
