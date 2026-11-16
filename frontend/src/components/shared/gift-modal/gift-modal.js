@@ -156,18 +156,20 @@ export class GiftAddGiftModal extends LitElement {
   render() {
     return html`
       <cds-modal
+        data-testid="gift-modal-dialog"
         ?open=${this.open}
         aria-label="Add Gift"
         @cds-modal-closed=${this._closeModal}
       >
         <cds-modal-header>
-          <cds-modal-close-button></cds-modal-close-button>
+          <cds-modal-close-button data-testid="gift-modal-close-button"></cds-modal-close-button>
           <cds-modal-heading>Add Gift</cds-modal-heading>
         </cds-modal-header>
 
         <cds-modal-body>
-          <form class="gift-form">
+          <form class="gift-form" data-testid="gift-modal-form">
             <cds-text-input
+              data-testid="gift-modal-name-input"
               name="gift-name"
               label="Gift Name"
               placeholder="Enter gift name"
@@ -180,6 +182,7 @@ export class GiftAddGiftModal extends LitElement {
             ></cds-text-input>
 
             <cds-text-input
+              data-testid="gift-modal-link-input"
               name="gift-link"
               label="Gift Link"
               placeholder="Enter a link to the gift"
@@ -188,6 +191,7 @@ export class GiftAddGiftModal extends LitElement {
             ></cds-text-input>
 
             <cds-text-input
+              data-testid="gift-modal-quantity-input"
               name="quantity"
               label="Quantity"
               placeholder="Insert Quantity"
@@ -196,6 +200,7 @@ export class GiftAddGiftModal extends LitElement {
             ></cds-text-input>
 
             <cds-text-input
+              data-testid="gift-modal-occasion-input"
               name="occasion"
               label="Occasion"
               placeholder="Enter the occasion"
@@ -204,6 +209,7 @@ export class GiftAddGiftModal extends LitElement {
             ></cds-text-input>
 
             <cds-dropdown
+              data-testid="gift-modal-person-dropdown"
               name="person-id"
               title-text="Who is this gift for?"
               label="Choose a person"
@@ -217,7 +223,7 @@ export class GiftAddGiftModal extends LitElement {
             >
               ${(this.people ?? []).map(
                 (person) => html`
-                  <cds-dropdown-item value="${person.id}">
+                  <cds-dropdown-item data-testid="gift-modal-person-option-${person.id}" value="${person.id}">
                     ${person.fullName ?? "Unnamed person"}
                   </cds-dropdown-item>
                 `
@@ -225,6 +231,7 @@ export class GiftAddGiftModal extends LitElement {
             </cds-dropdown>
 
             <cds-radio-button-group
+              data-testid="gift-modal-status-group"
               legend-text="Set Status"
               label-position="right"
               orientation="horizontal"
@@ -232,11 +239,13 @@ export class GiftAddGiftModal extends LitElement {
               value="need-to-buy"
             >
               <cds-radio-button
+                data-testid="gift-modal-status-need-to-buy-radio"
                 value="need-to-buy"
                 label-text="Need to buy"
               ></cds-radio-button>
 
               <cds-radio-button
+                data-testid="gift-modal-status-purchased-radio"
                 value="purchased"
                 label-text="Purchased"
               ></cds-radio-button>
@@ -245,6 +254,7 @@ export class GiftAddGiftModal extends LitElement {
             ${this._errors.general
               ? html`
                   <cds-inline-notification
+                    data-testid="gift-modal-error-banner"
                     kind="error"
                     title="Error"
                     subtitle=${this._errors.general}
@@ -255,6 +265,7 @@ export class GiftAddGiftModal extends LitElement {
               : ""}
 
             <cds-button
+              data-testid="gift-modal-submit-button"
               type="button"
               kind="primary"
               ?disabled=${this._saving}

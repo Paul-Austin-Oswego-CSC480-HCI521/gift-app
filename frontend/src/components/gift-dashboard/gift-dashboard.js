@@ -108,9 +108,9 @@ export class GiftDashboard extends LitElement {
     const { people, toBuy, dates } = this._derive();
 
     return html`
-      <h1>Welcome!</h1>
+      <h1 data-testid="dashboard-heading">Welcome!</h1>
 
-      <div role="status" aria-live="polite">
+      <div role="status" aria-live="polite" data-testid="dashboard-loading">
         ${this.loading
           ? html`<cds-inline-loading
               status="active"
@@ -123,6 +123,7 @@ export class GiftDashboard extends LitElement {
 
       ${this.error
         ? html`<cds-inline-notification
+            data-testid="dashboard-error-banner"
             kind="error"
             title="Could not load data"
             subtitle=${this.error}
@@ -132,6 +133,7 @@ export class GiftDashboard extends LitElement {
 
       ${this.user && !this.loading && !this.error && people.length === 0
         ? html`<cds-inline-notification
+            data-testid="dashboard-empty-banner"
             kind="info"
             title="No people found"
             subtitle="Add a person to start tracking gifts."
@@ -139,8 +141,10 @@ export class GiftDashboard extends LitElement {
           ></cds-inline-notification>`
         : nothing}
 
-      <div class="grid">
+      <div class="grid" data-testid="dashboard-grid">
         <dashboard-card
+          data-testid="dashboard-people-card"
+          test-id="dashboard-people"
           heading="People"
           view-all-href=${routes.people.path}
           view-all-label="People"
@@ -157,8 +161,10 @@ export class GiftDashboard extends LitElement {
             </svg>
           </svg>
           ${people.slice(0, MAX_ROWS).map(
-            (p) => html`
+            (p, i) => html`
               <dashboard-row
+                data-testid="dashboard-people-row-${i}"
+                test-id="dashboard-people-row-${i}"
                 heading=${p.fullName ?? "Unnamed person"}
                 subtitle=${p.relationship ?? ""}
               ></dashboard-row>
@@ -167,6 +173,8 @@ export class GiftDashboard extends LitElement {
         </dashboard-card>
 
         <dashboard-card
+          data-testid="dashboard-gifts-card"
+          test-id="dashboard-gifts"
           heading="Gifts to Buy"
           view-all-href=${routes.gifts.path}
           view-all-label="Gifts to Buy"
@@ -183,8 +191,10 @@ export class GiftDashboard extends LitElement {
             </svg>
           </svg>
           ${toBuy.slice(0, MAX_ROWS).map(
-            (g) => html`
+            (g, i) => html`
               <dashboard-row
+                data-testid="dashboard-gifts-row-${i}"
+                test-id="dashboard-gifts-row-${i}"
                 variant="checkbox"
                 heading=${g.name}
                 subtitle=${formatDate(g.occasion?.date)}
@@ -196,6 +206,8 @@ export class GiftDashboard extends LitElement {
         </dashboard-card>
 
         <dashboard-card
+          data-testid="dashboard-dates-card"
+          test-id="dashboard-dates"
           heading="Upcoming Dates"
           view-all-href=${routes.dates.path}
           view-all-label="Upcoming Dates"
@@ -211,8 +223,10 @@ export class GiftDashboard extends LitElement {
             </svg>
           </svg>
           ${dates.slice(0, MAX_ROWS).map(
-            (d) => html`
+            (d, i) => html`
               <dashboard-row
+                data-testid="dashboard-dates-row-${i}"
+                test-id="dashboard-dates-row-${i}"
                 heading=${d.name}
                 subtitle=${formatDate(d.date)}
               ></dashboard-row>

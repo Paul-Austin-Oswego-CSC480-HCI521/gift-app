@@ -99,70 +99,70 @@ export class WishlistTable extends LitElement {
     return `${month}/${day}/${year}`;
   }
   _select(label, key, values) {
-    return html`<cds-select label-text=${label} name=${key} .value=${this._draft[key]}
+    return html`<cds-select data-testid="wishlist-editor-${key}-select" label-text=${label} name=${key} .value=${this._draft[key]}
       ?disabled=${this.saving} @cds-select-selected=${event => this._setField(key, event.detail.value)}>${values.map(value => html`<cds-select-item value=${value}>${value}</cds-select-item>`)}</cds-select>`;
   }
   _editor() {
     if (!this._draft) return nothing;
     const title = this._draft.id != null ? "Edit item" : "Add item";
-    return html`<cds-modal open aria-label=${title}
+    return html`<cds-modal open data-testid="wishlist-editor-modal" aria-label=${title}
       ?prevent-close=${this.saving} @cds-modal-closed=${() => this.closeEditor()}>
-      <cds-modal-header><cds-modal-close-button ?disabled=${this.saving}></cds-modal-close-button>
+      <cds-modal-header><cds-modal-close-button data-testid="wishlist-editor-close-button" ?disabled=${this.saving}></cds-modal-close-button>
         <cds-modal-heading>${title}</cds-modal-heading></cds-modal-header>
       <cds-modal-body><div class="fields">
-        <cds-text-input name="giftName" label="Item" required data-modal-primary-focus
+        <cds-text-input data-testid="wishlist-editor-item-input" name="giftName" label="Item" required data-modal-primary-focus
           .value=${this._draft.giftName} ?disabled=${this.saving}
           ?invalid=${Boolean(this._errors.giftName)} invalid-text=${this._errors.giftName || ""}
           @input=${event => this._setField("giftName", event.target.value)}></cds-text-input>
-        <cds-text-input name="value" label="Price" required .value=${this._draft.value}
+        <cds-text-input data-testid="wishlist-editor-price-input" name="value" label="Price" required .value=${this._draft.value}
           helper-text="Enter a price such as 25.00." ?disabled=${this.saving}
           ?invalid=${Boolean(this._errors.value)} invalid-text=${this._errors.value || ""}
           @input=${event => this._setField("value", event.target.value)}></cds-text-input>
         ${this._select("Priority (preview)", "priority", priorities)}
         ${this._select("Status (preview)", "status", statuses)}
-        <cds-text-input name="added" label="Added (preview)" type="date" .value=${this._draft.added}
+        <cds-text-input data-testid="wishlist-editor-added-input" name="added" label="Added (preview)" type="date" .value=${this._draft.added}
           ?disabled=${this.saving} @input=${event => this._setField("added", event.target.value)}></cds-text-input>
         <p class="note">Priority, status, and added date are preview data for this session only. Only the item and price are saved.</p>
-        ${this.saveError ? html`<cds-inline-notification open kind="error" title="Could not save item"
+        ${this.saveError ? html`<cds-inline-notification open data-testid="wishlist-editor-error-banner" kind="error" title="Could not save item"
           subtitle=${this.saveError} hide-close-button></cds-inline-notification>` : nothing}
       </div></cds-modal-body>
-      <cds-modal-footer><cds-button kind="secondary" ?disabled=${this.saving} @click=${() => this.closeEditor()}>Cancel</cds-button>
-        <cds-button ?disabled=${this.saving} @click=${this._submit}>${this.saving ? "Saving…" : "Save item"}</cds-button></cds-modal-footer>
+      <cds-modal-footer><cds-button data-testid="wishlist-editor-cancel-button" kind="secondary" ?disabled=${this.saving} @click=${() => this.closeEditor()}>Cancel</cds-button>
+        <cds-button data-testid="wishlist-editor-save-button" ?disabled=${this.saving} @click=${this._submit}>${this.saving ? "Saving…" : "Save item"}</cds-button></cds-modal-footer>
     </cds-modal>`;
   }
   render() {
     const rows = this.filteredItems;
     const page = Math.min(this._page, Math.max(1, Math.ceil(rows.length / this._pageSize)));
-    return html`<gift-tile><div class="card"><h2>${this.listTitle}</h2>
+    return html`<gift-tile data-testid="wishlist-card"><div class="card"><h2 data-testid="wishlist-title">${this.listTitle}</h2>
       <div class="toolbar">
-        <cds-search label-text="Search wish list" close-button-label-text="Clear search" placeholder="Search items" .value=${this._query}
+        <cds-search data-testid="wishlist-search-input" label-text="Search wish list" close-button-label-text="Clear search" placeholder="Search items" .value=${this._query}
           @cds-search-input=${event => { this._query = event.detail.value; this._page = 1; }}></cds-search>
         <cds-popover ?open=${this._filterOpen} align="bottom" @keydown=${this._filterKeydown}>
-          <cds-button id="filter-toggle" kind="ghost" tooltip-text="Filter wish list" aria-expanded=${this._filterOpen}
+          <cds-button id="filter-toggle" data-testid="wishlist-filter-toggle-button" kind="ghost" tooltip-text="Filter wish list" aria-expanded=${this._filterOpen}
             @click=${() => { this._draftFilters = [...this._filters]; this._filterOpen = !this._filterOpen; }}>
             <svg slot="icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1 2h14v1l-6 6v5H7V9L1 3zm2 1 5 5 5-5z"></path></svg>
           </cds-button>
           <cds-popover-content><div class="filter"><strong>Filter wish list</strong>
             ${[["Status", statuses], ["Priority", priorities]].map(([label, values]) => html`<p>${label}</p>
-              ${values.map(value => html`<cds-checkbox label-text=${value} ?checked=${this._draftFilters.includes(value)}
+              ${values.map(value => html`<cds-checkbox data-testid="wishlist-filter-${label.toLowerCase()}-${String(value).toLowerCase()}-checkbox" label-text=${value} ?checked=${this._draftFilters.includes(value)}
                 @cds-checkbox-changed=${event => { this._draftFilters = event.target.checked ? [...this._draftFilters, value] : this._draftFilters.filter(v => v !== value); }}></cds-checkbox>`)}`)}
-            <div class="actions"><cds-button kind="secondary" size="sm" @click=${() => { this._draftFilters = []; }}>Reset</cds-button>
-              <cds-button size="sm" @click=${() => { this._filters = [...this._draftFilters]; this._page = 1; this._filterOpen = false; this.renderRoot.querySelector("#filter-toggle").focus(); }}>Apply</cds-button></div>
+            <div class="actions"><cds-button data-testid="wishlist-filter-reset-button" kind="secondary" size="sm" @click=${() => { this._draftFilters = []; }}>Reset</cds-button>
+              <cds-button data-testid="wishlist-filter-apply-button" size="sm" @click=${() => { this._filters = [...this._draftFilters]; this._page = 1; this._filterOpen = false; this.renderRoot.querySelector("#filter-toggle").focus(); }}>Apply</cds-button></div>
           </div></cds-popover-content>
         </cds-popover>
-        <cds-button ?disabled=${this.loading} @click=${() => this._edit()}>${this.addButtonLabel}
+        <cds-button data-testid="wishlist-add-button" ?disabled=${this.loading} @click=${() => this._edit()}>${this.addButtonLabel}
           <span slot="icon" aria-hidden="true">+</span></cds-button>
       </div>
-      ${this.error ? html`<cds-inline-notification open kind="error" title="Could not load wish list" subtitle=${this.error} hide-close-button></cds-inline-notification>` : nothing}
-      ${this.loading ? html`<p role="status">Loading wish list…</p>` : nothing}
-      ${!this.loading && !this.error && !rows.length ? html`<p role="status">${this.items.length ? "No matching items. Try another search or reset the filters." : "Your wish list is empty. Add an item you would like to receive."}</p>` : nothing}
-      <div class="scroll"><cds-table aria-label="My wish list">
+      ${this.error ? html`<cds-inline-notification open data-testid="wishlist-error-banner" kind="error" title="Could not load wish list" subtitle=${this.error} hide-close-button></cds-inline-notification>` : nothing}
+      ${this.loading ? html`<p role="status" data-testid="wishlist-loading">Loading wish list…</p>` : nothing}
+      ${!this.loading && !this.error && !rows.length ? html`<p role="status" data-testid="wishlist-empty-message">${this.items.length ? "No matching items. Try another search or reset the filters." : "Your wish list is empty. Add an item you would like to receive."}</p>` : nothing}
+      <div class="scroll"><cds-table data-testid="wishlist-table" aria-label="My wish list">
         <cds-table-head><cds-table-header-row>${["Item", "Priority", "Status", "Added"].map(label => html`<cds-table-header-cell>${label}</cds-table-header-cell>`)}</cds-table-header-row></cds-table-head>
-        <cds-table-body>${rows.slice((page - 1) * this._pageSize, page * this._pageSize).map(item => {
-          return html`<cds-table-row><cds-table-cell>${item.giftName}</cds-table-cell><cds-table-cell>${item.priority}</cds-table-cell>
+        <cds-table-body>${rows.slice((page - 1) * this._pageSize, page * this._pageSize).map((item, index) => {
+          return html`<cds-table-row data-testid="wishlist-row-${item.id ?? index}"><cds-table-cell>${item.giftName}</cds-table-cell><cds-table-cell>${item.priority}</cds-table-cell>
             <cds-table-cell>${item.status}</cds-table-cell><cds-table-cell>${this._date(item.added)}</cds-table-cell></cds-table-row>`;
         })}</cds-table-body></cds-table>
-      <cds-pagination items-per-page-text="Items per page:" .page=${page} .pageSize=${this._pageSize} .totalItems=${rows.length}
+      <cds-pagination data-testid="wishlist-pagination" items-per-page-text="Items per page:" .page=${page} .pageSize=${this._pageSize} .totalItems=${rows.length}
         @cds-pagination-changed-current=${event => { this._page = event.detail.page; }}
         @cds-page-sizes-select-changed=${event => { this._pageSize = event.detail.pageSize; this._page = 1; }}>
         ${[7, 14, 28].map(size => html`<cds-select-item value=${size}>${size}</cds-select-item>`)}

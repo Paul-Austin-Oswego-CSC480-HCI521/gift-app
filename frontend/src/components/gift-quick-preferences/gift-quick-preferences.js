@@ -97,7 +97,7 @@ export class GiftQuickPreferences extends LitElement {
 
   renderSelect(label, name, options) {
     return html`
-      <cds-select label-text=${label} name=${name} placeholder="Choose an option">
+      <cds-select data-testid="quick-preferences-${name}-select" label-text=${label} name=${name} placeholder="Choose an option">
         ${options.map(
           (option) => html`<cds-select-item value=${option}>${option}</cds-select-item>`
         )}
@@ -108,16 +108,16 @@ export class GiftQuickPreferences extends LitElement {
   render() {
     return html`
       <header class="intro">
-        <h1>Gift Preferences: Quick Set Up</h1>
+        <h1 data-testid="quick-preferences-heading">Gift Preferences: Quick Set Up</h1>
         <p>
           Here is a quick way to fill out your basic preferences. You can add
           more details now or later, if you’d like.
         </p>
       </header>
 
-      <form>
+      <form data-testid="quick-preferences-form">
         <div class="preferences-grid">
-          <gift-tile type="section" class="basic-information">
+          <gift-tile type="section" data-testid="quick-preferences-basic-information-section" class="basic-information">
             <h2 slot="title">Basic Information</h2>
 
             <div class="basic-information-fields">
@@ -129,10 +129,11 @@ export class GiftQuickPreferences extends LitElement {
             </div>
           </gift-tile>
 
-          <gift-tile type="section" class="likes">
+          <gift-tile type="section" data-testid="quick-preferences-likes-section" class="likes">
             <h2 slot="title">Likes</h2>
 
             <cds-textarea
+              data-testid="quick-preferences-likes-textarea"
               label="Things you'd like to receive"
               name="likes"
               placeholder="Enter your likes here"
@@ -142,10 +143,11 @@ export class GiftQuickPreferences extends LitElement {
             ></cds-textarea>
           </gift-tile>
 
-          <gift-tile type="section" class="dislikes">
+          <gift-tile type="section" data-testid="quick-preferences-dislikes-section" class="dislikes">
             <h2 slot="title">Dislikes</h2>
 
             <cds-textarea
+              data-testid="quick-preferences-dislikes-textarea"
               label="Things you would prefer not to receive"
               name="dislikes"
               placeholder="Enter your dislikes here"
@@ -155,10 +157,11 @@ export class GiftQuickPreferences extends LitElement {
             ></cds-textarea>
           </gift-tile>
 
-          <gift-tile type="section" class="interests">
+          <gift-tile type="section" data-testid="quick-preferences-interests-section" class="interests">
             <h2 slot="title">Interests</h2>
 
             <cds-textarea
+              data-testid="quick-preferences-interests-textarea"
               label="Placeholder text"
               name="interests"
               placeholder="Enter your interests here"

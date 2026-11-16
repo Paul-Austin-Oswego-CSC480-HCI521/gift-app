@@ -13,6 +13,8 @@ export class DashboardRow extends LitElement {
     subtitle: { type: String },
     variant: { type: String },   // "link" | "checkbox"
     checked: { type: Boolean },
+    // Prefix for the data-testid hooks inside the row (the parent sets it per row).
+    testId: { type: String, attribute: "test-id" },
   };
 
   // Figma list item: Outfit 24 title over a 13px subtitle, black rule above, arrow or checkbox at the end.
@@ -63,10 +65,10 @@ export class DashboardRow extends LitElement {
           <span class="sub">${this.subtitle}</span>
         </div>
         ${this.variant === "checkbox"
-          ? html`<cds-checkbox hide-label label-text="Mark ${this.heading} purchased"
+          ? html`<cds-checkbox data-testid="${this.testId}-checkbox" hide-label label-text="Mark ${this.heading} purchased"
               ?checked=${this.checked}
               @cds-checkbox-changed=${this._toggle}></cds-checkbox>`
-          : html`<cds-icon-button kind="ghost" size="lg" align="left" @click=${this._select}>
+          : html`<cds-icon-button data-testid="${this.testId}-open-button" kind="ghost" size="lg" align="left" @click=${this._select}>
               ${iconLoader(ArrowRight32, { slot: "icon" })}
               <span slot="tooltip-content">Open ${this.heading}</span>
             </cds-icon-button>`}

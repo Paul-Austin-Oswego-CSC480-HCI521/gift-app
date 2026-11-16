@@ -37,7 +37,7 @@ export class NavHeader extends LitElement {
     const signedIn = Boolean(getAccessToken());
 
     return html`
-          <cds-header aria-label="${this.productName} header">
+          <cds-header data-testid="nav-header" aria-label="${this.productName} header">
             <cds-header-name prefix=""
               >${this.productName}</cds-header-name>
             <!-- Slot for slotted navigation content; pages can supply custom nav or leave empty -->
@@ -45,6 +45,7 @@ export class NavHeader extends LitElement {
             ${signedIn ? html`
                   <div class="actions">
                     <cds-button
+                      data-testid="nav-header-logout-button"
                       type="button"
                       kind="primary"
                       size="sm"

@@ -49,7 +49,7 @@ export class SideNav extends LitElement {
 
   _link(item, icon) {
     return html`
-      <cds-side-nav-link href=${routes[item].path} ?active=${this.active === item}
+      <cds-side-nav-link data-testid="side-nav-${item}-link" href=${routes[item].path} ?active=${this.active === item}
         aria-current=${this.active === item ? "page" : nothing}
         @click=${event => this._select(event, item)}>
         ${this._icon(icon)}${routes[item].label}
@@ -59,7 +59,7 @@ export class SideNav extends LitElement {
 
   render() {
     return html`
-      <cds-side-nav expanded collapse-mode="fixed" aria-label="Gift App sidebar">
+      <cds-side-nav data-testid="side-nav" expanded collapse-mode="fixed" aria-label="Gift App sidebar">
         <cds-side-nav-items>
           ${links.map(([item, icon]) => this._link(item, icon))}
         </cds-side-nav-items>
