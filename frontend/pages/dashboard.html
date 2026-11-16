@@ -6,10 +6,10 @@
   </head>
   <body data-carbon-theme="brand">
     <!-- @include app-shell active=dashboard -->
-    <main class="page-main" aria-label="Page content">
+    <main class="page-main" aria-label="Page content" data-testid="dashboard-page">
       <gift-dashboard></gift-dashboard>
     </main>
-    <gift-modal id="add-gift-modal"></gift-modal>
+    <gift-modal id="add-gift-modal" data-testid="add-gift-modal"></gift-modal>
 
     <script type="module" src="/src/pages/dashboard.js"></script>
   </body>

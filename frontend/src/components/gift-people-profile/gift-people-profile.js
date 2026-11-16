@@ -298,15 +298,15 @@ preference(...keys) {
   render() {
     if (this.loading) {
       return html`
-        <p role="status">Loading person profile…</p>
+        <p role="status" data-testid="people-profile-loading">Loading person profile…</p>
       `;
     }
 
     if (this.error) {
       return html`
-        <p role="alert">
+        <p role="alert" data-testid="people-profile-error-message">
           ${this.error}
-          <cds-link href="/people">Back to People</cds-link>
+          <cds-link data-testid="people-profile-back-link" href="/people">Back to People</cds-link>
         </p>
       `;
     }
@@ -347,22 +347,24 @@ preference(...keys) {
     return html`
       <div
         class="breadcrumb"
+        data-testid="people-profile-breadcrumb"
         role="navigation"
         aria-label="Breadcrumb"
       >
-        <cds-link href="/people">People</cds-link>
+        <cds-link data-testid="people-profile-people-link" href="/people">People</cds-link>
         / ${this.personName}
       </div>
 
-      <h1>${this.personName}</h1>
+      <h1 data-testid="people-profile-heading">${this.personName}</h1>
 
-      <p class="relationship">
+      <p class="relationship" data-testid="people-profile-relationship">
         Relationship:
         ${this.preference("relationship")}
       </p>
 
       <section
         class="preferences"
+        data-testid="people-profile-preferences"
         aria-label="Person preferences"
       >
         <h2>
@@ -370,12 +372,12 @@ preference(...keys) {
         </h2>
 
         <div class="cards">
-          <div class="card">
+          <div class="card" data-testid="people-profile-favorite-colors-card">
             <h3>Favorite Colors</h3>
             ${this.renderColors()}
           </div>
 
-          <div class="card">
+          <div class="card" data-testid="people-profile-sizes-card">
             <h3>Sizes</h3>
             <p>
               ${this.preference(
@@ -386,7 +388,7 @@ preference(...keys) {
             </p>
           </div>
 
-          <div class="card">
+          <div class="card" data-testid="people-profile-interests-card">
             <h3>Interests</h3>
             <p>
               ${this.preference(
@@ -397,7 +399,7 @@ preference(...keys) {
             </p>
           </div>
 
-          <div class="card">
+          <div class="card" data-testid="people-profile-dislikes-card">
             <h3>Dislikes</h3>
             <p>
               ${this.preference(
@@ -410,7 +412,7 @@ preference(...keys) {
       </section>
 
       
-      <section class="wishlist" aria-label="Person gift list">
+      <section class="wishlist" data-testid="people-profile-wishlist" aria-label="Person gift list">
         <gift-wishlist-table
           .items=${items}
           .listTitle=${`${this.personName}'s list`}

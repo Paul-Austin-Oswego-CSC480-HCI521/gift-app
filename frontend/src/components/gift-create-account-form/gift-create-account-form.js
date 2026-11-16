@@ -116,17 +116,19 @@ export class CreateAccountForm extends LitElement {
       <form
         aria-label="Create account"
         aria-busy=${this.loading}
+        data-testid="create-account-form"
         novalidate
         @submit=${this._submit}
         @keydown=${this._handleKeydown}
       >
         ${[
-          ["firstName", "First name", "given-name", "text"],
-          ["surname", "Last name", "family-name", "text"],
-          ["email", "Email", "email", "email"],
+          ["firstName", "First name", "given-name", "text", "first-name"],
+          ["surname", "Last name", "family-name", "text", "last-name"],
+          ["email", "Email", "email", "email", "email"],
         ].map(
-          ([name, label, autocomplete, type]) => html`
+          ([name, label, autocomplete, type, testId]) => html`
             <cds-text-input
+              data-testid="create-account-${testId}-input"
               name=${name}
               label=${label}
               autocomplete=${autocomplete}
@@ -139,11 +141,12 @@ export class CreateAccountForm extends LitElement {
           `,
         )}
         ${[
-          ["password", "Password"],
-          ["confirmPassword", "Confirm password"],
+          ["password", "Password", "password"],
+          ["confirmPassword", "Confirm password", "confirm-password"],
         ].map(
-          ([name, label]) => html`
+          ([name, label, testId]) => html`
             <cds-password-input
+              data-testid="create-account-${testId}-input"
               name=${name}
               id=${name}
               label=${label}
@@ -158,6 +161,7 @@ export class CreateAccountForm extends LitElement {
         ${this.errorMessage
           ? html`
               <cds-inline-notification
+                data-testid="create-account-error-banner"
                 kind="error"
                 title="Unable to create account"
                 subtitle=${this.errorMessage}
@@ -166,6 +170,7 @@ export class CreateAccountForm extends LitElement {
             `
           : nothing}
         <cds-button
+          data-testid="create-account-submit-button"
           type="button"
           kind="primary"
           ?disabled=${this.loading}

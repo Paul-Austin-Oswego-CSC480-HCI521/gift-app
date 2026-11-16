@@ -47,28 +47,29 @@ export class GiftFullPreferences extends LitElement {
     if (this.blocked) return;
     this.dispatchEvent(new CustomEvent("preferences-save", { detail: { ...this.values }, bubbles: true, composed: true }));
   }
-  _saveButton() { return html`<cds-button class="save" ?disabled=${this.blocked} @click=${this._save}>${this.saving ? "Saving…" : "Save Preferences"}</cds-button>`; }
+  _slug(name) { return String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  _saveButton(position) { return html`<cds-button class="save" data-testid="full-preferences-save-${position}-button" ?disabled=${this.blocked} @click=${this._save}>${this.saving ? "Saving…" : "Save Preferences"}</cds-button>`; }
   _field({ name, options, multiline }) {
     const value = this.values[name] ?? "";
-    if (multiline) return html`<cds-textarea label=${name} .value=${value} .maxCount=${100} enable-counter ?disabled=${this.blocked} @input=${event => this._change(name, event.target.value)}></cds-textarea>`;
-    if (!options) return html`<cds-text-input label=${name} .value=${value} ?disabled=${this.blocked} @input=${event => this._change(name, event.target.value)}></cds-text-input>`;
+    if (multiline) return html`<cds-textarea data-testid="full-preferences-${this._slug(name)}-textarea" label=${name} .value=${value} .maxCount=${100} enable-counter ?disabled=${this.blocked} @input=${event => this._change(name, event.target.value)}></cds-textarea>`;
+    if (!options) return html`<cds-text-input data-testid="full-preferences-${this._slug(name)}-input" label=${name} .value=${value} ?disabled=${this.blocked} @input=${event => this._change(name, event.target.value)}></cds-text-input>`;
     const choices = [...new Set([...options, ...value ? [value] : []])];
-    return html`<cds-select placeholder="Choose an option" label-text=${name} .value=${value} ?disabled=${this.blocked} @cds-select-selected=${event => this._change(name, event.detail.value)}>
+    return html`<cds-select data-testid="full-preferences-${this._slug(name)}-select" placeholder="Choose an option" label-text=${name} .value=${value} ?disabled=${this.blocked} @cds-select-selected=${event => this._change(name, event.detail.value)}>
       <cds-select-item value="">Not specified</cds-select-item>
       ${choices.map(option => html`<cds-select-item value=${option}>${option}</cds-select-item>`)}
     </cds-select>`;
   }
   render() {
-    return html`<cds-link href=${routes.wishlist.path}>My Wish List</cds-link>
-      <header class="sticky-header"><h1>Your Gift Preferences</h1>${this._saveButton()}</header>
-      ${this.loading ? html`<div role="status"><cds-inline-loading description="Loading preferences"></cds-inline-loading></div>` : nothing}
-      ${this.error ? html`<cds-inline-notification open kind="error" title="Preferences could not be saved or loaded" subtitle=${this.error} hide-close-button></cds-inline-notification>` : nothing}
-      ${this.message ? html`<cds-inline-notification open kind="success" title=${this.message} hide-close-button></cds-inline-notification>` : nothing}
-      ${this.loadFailed ? html`<cds-button @click=${() => this.dispatchEvent(new CustomEvent("preferences-reload", { bubbles: true, composed: true }))}>Retry loading</cds-button>` : nothing}
-      <div class="grid">${sections.map(section => html`<gift-tile class=${section.wide ? "wide" : ""}>
+    return html`<cds-link data-testid="full-preferences-wishlist-link" href=${routes.wishlist.path}>My Wish List</cds-link>
+      <header class="sticky-header"><h1 data-testid="full-preferences-heading">Your Gift Preferences</h1>${this._saveButton("top")}</header>
+      ${this.loading ? html`<div role="status" data-testid="full-preferences-loading"><cds-inline-loading description="Loading preferences"></cds-inline-loading></div>` : nothing}
+      ${this.error ? html`<cds-inline-notification open data-testid="full-preferences-error-banner" kind="error" title="Preferences could not be saved or loaded" subtitle=${this.error} hide-close-button></cds-inline-notification>` : nothing}
+      ${this.message ? html`<cds-inline-notification open data-testid="full-preferences-success-banner" kind="success" title=${this.message} hide-close-button></cds-inline-notification>` : nothing}
+      ${this.loadFailed ? html`<cds-button data-testid="full-preferences-retry-button" @click=${() => this.dispatchEvent(new CustomEvent("preferences-reload", { bubbles: true, composed: true }))}>Retry loading</cds-button>` : nothing}
+      <div class="grid">${sections.map(section => html`<gift-tile data-testid="full-preferences-${this._slug(section.title)}-section" class=${section.wide ? "wide" : ""}>
         <h2 slot="title">${section.title}</h2><div class="fields">${section.fields.map(field => this._field(field))}</div>
       </gift-tile>`)}</div>
-      ${this._saveButton()}`;
+      ${this._saveButton("bottom")}`;
   }
 }
 customElements.define("gift-full-preferences", GiftFullPreferences);

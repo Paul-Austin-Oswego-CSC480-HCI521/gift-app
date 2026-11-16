@@ -99,11 +99,13 @@ export class LoginForm extends LitElement {
       <form
         aria-label="Log in"
         aria-busy=${this.loading}
+        data-testid="login-form"
         novalidate
         @submit=${this._submit}
         @keydown=${this._handleKeydown}
       >
         <cds-text-input
+          data-testid="login-email-input"
           name="email"
           type="email"
           autocomplete="username"
@@ -117,6 +119,7 @@ export class LoginForm extends LitElement {
         <cds-password-input
           name="password"
           id="password"
+          data-testid="login-password-input"
           autocomplete="current-password"
           required
           label="Password"
@@ -125,11 +128,12 @@ export class LoginForm extends LitElement {
           invalid-text=${this._passwordError}
         >
         </cds-password-input>
-        <cds-checkbox name="remember-me" label-text="Remember me" ?disabled=${this.loading}>
+        <cds-checkbox data-testid="login-remember-checkbox" name="remember-me" label-text="Remember me" ?disabled=${this.loading}>
         </cds-checkbox>
         ${this.errorMessage
           ? html`
               <cds-inline-notification
+                data-testid="login-error-banner"
                 kind="error"
                 title="Unable to log in"
                 subtitle=${this.errorMessage}
@@ -139,6 +143,7 @@ export class LoginForm extends LitElement {
             `
           : nothing}
         <cds-button
+          data-testid="login-submit-button"
           type="button"
           kind="primary"
           ?disabled=${this.loading}
