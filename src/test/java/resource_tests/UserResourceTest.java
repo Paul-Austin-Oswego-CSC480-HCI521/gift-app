@@ -24,15 +24,15 @@ public class UserResourceTest {
         userRepository = mock(UserRepository.class);
         token = mock(JsonWebToken.class);
         resource = new UserResource();
-        
+
         Field userRepoField = UserResource.class.getDeclaredField("userRepository");
         userRepoField.setAccessible(true);
         userRepoField.set(resource, userRepository);
-        
+
         Field tokenField = UserResource.class.getDeclaredField("token");
         tokenField.setAccessible(true);
         tokenField.set(resource, token);
-        
+
         when(token.getSubject()).thenReturn("test-user");
     }
 
