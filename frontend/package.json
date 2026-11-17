@@ -12,6 +12,8 @@
     "test": "vitest run",
     "test:unit": "vitest run --project=unit",
     "test:storybook": "vitest run --project=storybook",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@carbon/pictograms": "^12.87.0",
+    "@playwright/test": "1.63.0",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-vitest": "^10.6.0",
     "@storybook/test-runner": "^0.24.5",
