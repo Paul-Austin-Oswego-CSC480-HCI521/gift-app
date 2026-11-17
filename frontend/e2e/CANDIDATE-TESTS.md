@@ -34,58 +34,111 @@ windows, with no virtual desktop.
 
 ### Record
 
-1. Pick a test from the lists below. Each one names a **scenario** to record with.
-2. In the terminal, in the `frontend` folder, type the scenario name after `npm run record --`:
+This walks through one complete example: open a person from the People page and check their name
+shows. Do it once as practice, then use the same steps for the tests in the lists below. You will use
+**two browser tabs**: the Codespace (VS Code, where you type commands and save files) and the
+**Desktop tab** from step 3 above (where the recording happens).
+
+1. **Start the recorder.** In the VS Code terminal, in the `frontend` folder, type a **scenario** name
+   after `npm run record --`:
    ```bash
-   npm run record -- people-empty
+   npm run record -- people
    ```
-   To see every scenario, run `npm run record -- --list`. To start on a different page of the same
-   scenario, add `--url=/upcoming-dates` to the end.
-3. A browser window and a second window called **Playwright Inspector** open (in a Codespace, they
-   appear in the virtual desktop tab on port 6080). The browser shows the app as a signed-in user, with
-   a fake server, so nothing you do changes real data.
-4. In the Inspector, click the red **Record** button. Now click, type and navigate in the browser.
-   Each action shows up as a line of code in the Inspector.
-5. To check something, use the tools in the Inspector's toolbar (next to Record) and then click the
-   thing on the page:
-   - **Assert visibility** (eye icon): this element must be on the page.
+   Each test in the lists below names its scenario. To see them all, run `npm run record -- --list`.
+   To start on a different page of the same scenario, add `--url=/upcoming-dates` to the end.
+   Wait about 10 seconds. The terminal prints `Scenario: people` and a block of code (you need it
+   later). **Leave this terminal alone until you finish**: it stays busy while recording. Open a second
+   terminal with the **+** in the terminal panel if you need to type anything.
+2. **Switch to the Desktop tab.** Two windows are open (see the screenshot below):
+   - the **browser**, large, showing the app already signed in as a test user, with a fake server
+     behind it, so nothing you do changes real data;
+   - the **Playwright Inspector**, small, at the left, on top of the browser. Its code panel shows
+     some unrelated code. Ignore it: it is replaced when you record.
+
+   ![The Desktop tab before recording: the Inspector at the left on top of the browser](images/record-ready.png)
+3. **Click Record** in the Inspector toolbar. The circle turns red. From now on every click you make
+   in the browser is written down.
+4. **Use the app.** In the browser, click **Jaritza Lopez**. The page changes to her profile.
+5. **Add a check.** Click the **eye icon** in the Inspector toolbar (hover over icons to see their
+   names). It turns blue. Then click the heading **Jaritza Lopez** in the browser. A line starting
+   with `await expect(` appears in the Inspector. The other check tools sit next to the eye:
+   - **Assert visibility** (eye): this element must be on the page.
    - **Assert text** (ABC icon): this element must show this text.
    - **Assert value** (cursor-in-box icon): this field must contain this value.
 
    **Every test needs at least one check.** A test that only clicks never fails, so it proves nothing.
-6. Click Record again to stop. Copy the lines from the Inspector's code panel, then close the browser.
+6. **Bring the Inspector back.** Clicking in the browser puts it in front of the Inspector, so the
+   Inspector may look cut off (see the screenshot below). Click the Inspector's **title bar** (the
+   blue strip at the top, still visible at the left) to bring it to the front.
+7. **Stop recording.** Click **Record** again. The circle turns grey.
 
-The terminal prints the lines your test file should start with. For `people-empty` it looks like this:
-
-```js
-import { test, expect, signIn, mockApi } from "./fixtures/index.js";
-
-test("describe what this test checks", async ({ page }) => {
-  // calls lists every API request the page makes, in case a test needs to check one
-  const { calls } = await mockApi(page, {"people":{"body":[]}});
-  await signIn(page);
-  await page.goto("/people");
-  // paste the recorded steps here
-});
-```
+   ![The Inspector after recording a click and a check](images/record-recorded.png)
+8. **Copy only your steps.** The code panel holds a whole test:
+   ```js
+   import { test, expect } from '@playwright/test';      // do not copy
+   test('test', async ({ page }) => {                      // do not copy
+     await page.getByRole('link', { name: 'Jaritza Lopez' }).click();                   // copy
+     await expect(page.getByTestId('people-profile-heading')).toBeVisible();            // copy
+   });                                                     // do not copy
+   ```
+   Copy only the lines that start with `await`. Drag over them with the mouse and press Ctrl+C
+   (Cmd+C on a Mac). Do not use the copy icon in the toolbar: it copies the whole block, including the
+   lines you do not want.
+9. **Get the lines into VS Code.** The Desktop tab is a separate screen, so Ctrl+V in VS Code may not
+   see what you copied. Open the noVNC side panel (the small arrow tab at the left edge of the Desktop
+   tab), click the **clipboard** icon, and the copied lines appear in a box. Select them there, copy,
+   and switch to the Codespace tab to paste. If the box stays empty, type the lines by hand: they are
+   short.
+10. **Close the browser window** in the Desktop tab (the **X** at its top right). The terminal gets its
+    prompt back.
 
 ### Save it as a test
 
-1. In VS Code, create a new file in `frontend/e2e/` named after the feature, ending in `.spec.js`
-   (for example `people-empty.spec.js`).
-2. Paste the block the terminal printed. Change the text in `test("...")` to say what the test
-   checks, in plain words: `shows a message when there are no people`.
-3. Replace the `// paste the recorded steps here` line with the lines you copied from the Inspector.
-4. Save the file, then run only your test:
-   ```bash
-   npx playwright test people-empty --headed
+1. In VS Code's file list, right-click the `frontend/e2e` folder, choose **New File**, and name it
+   after the feature, ending in `.spec.js`: `people-profile.spec.js`.
+2. Paste the block the terminal printed in step 1 (select the lines in the terminal, copy, paste in
+   the file). For this example it is:
+   ```js
+   import { test, expect, signIn, mockApi } from "./fixtures/index.js";
+
+   test("describe what this test checks", async ({ page }) => {
+     // calls lists every API request the page makes, in case a test needs to check one
+     const { calls } = await mockApi(page);
+     await signIn(page);
+     await page.goto("/people");
+     // paste the recorded steps here
+   });
    ```
-   Green and `1 passed` means it works. Red means a step failed; the terminal says which line.
+3. Change the text in `test("...")` to say what the test checks, in plain words, and replace the
+   `// paste the recorded steps here` line with the lines you copied. The finished file:
+   ```js
+   import { test, expect, signIn, mockApi } from "./fixtures/index.js";
+
+   test("shows the person's name when you open their profile", async ({ page }) => {
+     // calls lists every API request the page makes, in case a test needs to check one
+     const { calls } = await mockApi(page);
+     await signIn(page);
+     await page.goto("/people");
+     await page.getByRole('link', { name: 'Jaritza Lopez' }).click();
+     await expect(page.getByTestId('people-profile-heading')).toBeVisible();
+   });
+   ```
+4. Save the file (Ctrl+S), then run only your test in the second terminal:
+   ```bash
+   npx playwright test people-profile --headed
+   ```
+   `--headed` shows the browser in the Desktop tab for a moment. Leave it off to run without a
+   window. Green and `1 passed` means it works. Red means a step failed, and the terminal says which
+   line.
 5. Run the whole suite once (`npm run test:e2e`) to make sure you did not break the others.
 6. Open a pull request and ask Front-End to review it.
 
 ### If something goes wrong
 
+- **The Inspector is cut off or hidden behind the browser**: click its title bar (the blue strip at
+  the left of the Desktop tab) to bring it to the front.
+- **I clicked in the browser and nothing was recorded**: the Record circle must be red. Click Record
+  once to turn it on. Clicks made before that are not written down.
 - **A step fails with "not an input" or "element is not editable"** (usually a `.fill(...)` line):
   Carbon inputs wrap the real field. Add `.locator("input")` before `.fill`, like this:
   `await page.getByTestId("login-email-input").locator("input").fill("a@b.co");`
