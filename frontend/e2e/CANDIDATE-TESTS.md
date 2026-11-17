@@ -162,7 +162,7 @@ shows. Do it once as practice, then use the same steps for the tests in the list
 ## Tests to write
 
 Every test in the tables on this page is a mocked `e2e/` test that runs in CI. Tests that need the
-real server go in a separate folder that is run by hand at 8pm EST and never in CI; see
+real server go in a separate folder that is run by hand when the server is awake and never in CI; see
 [Which folder does my test go in?](README.md#which-folder-does-my-test-go-in) and the
 [live section](#priority-1-real-backend-smoke-run-svt) below.
 
@@ -253,14 +253,14 @@ and does **not** go in `e2e/`.
 1. **Real-backend smoke run**: login, add a gift, see it on the dashboard, against the live
    Liberty backend and Neon database instead of the mocked API. This is the SVT-style end-to-end
    check (frontend through JAX-RS to the database and back).
-   - **Not run in CI.** QA runs it by hand at **8pm EST**, when the server is automatically
-     active. The Render instance sleeps otherwise, and the first request can take about a minute.
+   - **Not run in CI.** QA runs it by hand **when the server is awake**. The Render instance sleeps
+     otherwise, and the first request can take about a minute.
    - **Keep it out of the CI suite.** `npm run test:e2e` runs every `e2e/**/*.spec.js` with the
      mocked API, so this spec goes in `e2e-live/` with its own Playwright config and its own
      `npm` script (`npm run test:e2e:live`) that no workflow calls. The folder is set up (see
      [`../e2e-live/README.md`](../e2e-live/README.md)); `npm run lint:live-isolation` runs in the CI
      `e2e` job and fails if CI could reach it.
-   - **To record it:** at 8pm, first open
+   - **To record it:** when the server is awake, first open
      `https://gift-app-rppl.onrender.com/gift-app/api/ping` and wait for `{"status":"OK"}`. Then run
      `npx playwright codegen https://gift-app-project.netlify.app/` and use the shared test account
      (never type the password into a file; a developer swaps it for an environment variable).
@@ -292,7 +292,7 @@ and does **not** go in `e2e/`.
 ## Rule: tests that need the real server live in their own folder
 
 Any test that needs real data from the server (the Render backend and Neon database) goes in a
-separate folder, not in `e2e/`. The backend is only reliably awake at 8pm EST, and Render sleeps
+separate folder, not in `e2e/`. The backend is only awake some of the time, and Render sleeps
 when idle, so a live test can fail only because the server was asleep. That is a false positive, and
 it would block PRs if CI ran it. Keeping live tests apart means we choose when they run.
 
@@ -305,7 +305,7 @@ else is an `e2e/` test. The full checklist, with examples, is in
 |---|---|---|
 | Needs the server awake | No | Yes |
 | Runs in CI | Yes, on every PR | **Never** |
-| Who runs it | Anyone, any time | QA, at 8pm EST when the server is active |
+| Who runs it | Anyone, any time | QA, when the server is awake |
 | Failure means | A real regression | A regression, or the environment (check the server first) |
 
 Everything in the "Tests to write" tables is a mocked `e2e/` test. A new candidate that needs real
