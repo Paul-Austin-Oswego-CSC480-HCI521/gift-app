@@ -28,23 +28,40 @@ message, and redirect, plus real routing. They use the fake server.
 
 ## Back-End (API and database)
 
-Playwright is not the right tool here. API tests already live in Maven (`./mvnw test`, plus the
-Failsafe integration tests), and a second API suite in Playwright would duplicate them. What exists
-in `src/test/java/`:
+What exists in `src/test/java/` (read from the code, not run):
 
-- **Resource tests** (`resource_tests/`): create, read, update and delete for gifts, people, and user
-  and person attributes, with the 200/201/204 and 400/404 cases.
-- **Auth resource tests**: login with an unknown email, wrong password and missing stored hash all
-  return 401.
-- **`AuthEndpointIT`**: no token and a tampered token get a 401 on a protected endpoint, and bad
-  credentials get identical 401 responses.
+- **Resource tests** (`resource_tests/`): unit tests. They build a resource class directly and swap in
+  a Mockito mock of the repository, so there is no HTTP, no Liberty, no database, and filters such as
+  `OwnershipFilter` never run. They check the resource logic: create, read, update and delete, with
+  the 200/201/204 and 400/404 cases.
+- **`AuthEndpointIT`**: the only test that talks to a real server. It is opt-in (the `auth-contract`
+  Maven profile plus `AUTH_TEST_*` environment variables) and only covers auth: login, the token
+  against the trusted JWKS, and 401s for no token, a tampered token and bad credentials.
 
-Gaps I found by searching the tests, which are Maven ideas, not Playwright ones:
+So nothing tests the real HTTP layer or a real data round trip. Ideas, best first. Each can be a
+Failsafe integration test in Maven (like `AuthEndpointIT`) or a Playwright `request` test (HTTP only,
+no browser) in `e2e-live/`:
 
-- **Ownership:** `OwnershipFilter` returns 403 when the `/user/<id>` in the path is not the token's
-  subject. No test references it. A user's token asking for another user's data is worth an
-  integration test.
-- **Duplicate sign-up:** the frontend maps a 409 to "An account with those details already exists."
-  but no test I found checks that the API returns 409.
+1. **Ownership.** `OwnershipFilter` returns 403 when the `/user/<id>` in the path is not the token's
+   subject. A user's token asking for another user's data should get 403, and no token should get 401
+   on every protected route, not just one. No test references the filter today.
+2. **Create, read, update, delete round trip over HTTP.** Create a person and a gift, read them back,
+   update, delete, and confirm a 404 afterwards. Clean up so the shared test account stays reusable
+   (#73).
+3. **Response shape.** Assert the JSON field names the frontend relies on (for example a person's
+   `firstName`, a gift's `status`). This is the contract that keeps the frontend's mock data honest
+   (see below).
+4. **Duplicate sign-up returns 409.** The frontend shows "An account with those details already
+   exists." for it, but no test checks the API sends it. Needs a unique email per run, so agree how
+   test accounts are cleaned up first.
+5. **Invalid input.** Missing required fields or a malformed id gets a 400 or 404, never a 500.
 
-QA's live checks (guide and `e2e-live/`) only reach the API through the UI, which is the SVT scope.
+## Why QA's tests use a fake server
+
+The mocked tests in `e2e/` do not call Render at all, so they do not depend on whether the server is
+awake and they run in seconds in CI. That is the right trade for workflow tests. The cost is that the
+mock can drift from the real API: the frontend tests keep passing after the backend changes a field
+name. Two things guard against it, and both are worth keeping:
+
+- the response-shape tests in idea 3, run by Back-End, so a backend change fails there first;
+- the live smoke run in `e2e-live/`, which QA runs by hand when the server is awake.
