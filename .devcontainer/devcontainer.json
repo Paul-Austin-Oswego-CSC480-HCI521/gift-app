@@ -16,6 +16,9 @@
       "vncPort": "5901"
     }
   },
+  "containerEnv": {
+    "VNC_RESOLUTION": "1440x900x16"
+  },
   "forwardPorts": [5173, 6006, 6080, 9080],
   "portsAttributes": {
     "6080": {
