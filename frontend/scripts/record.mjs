@@ -26,7 +26,7 @@ const scenarios = {
   "create-account": { url: "/create-account", about: "Create account page, signed out" },
   "signup-conflict": { url: "/create-account", overrides: { signup: { status: 409 } }, about: "Create account, the email already exists" },
   "signed-out": { url: "/dashboard", about: "Open a signed-in page while signed out (you get sent to login)" },
-  "not-found": { url: "/no-such-page", about: "A page that does not exist" },
+  "not-found": { url: "/404", about: "The page-not-found page" },
 
   dashboard: { url: "/dashboard", signedIn: true, about: "Dashboard with people, dates and gifts" },
   "dashboard-error": { url: "/dashboard", signedIn: true, overrides: { user: { status: 500 } }, about: "Dashboard, the server fails" },

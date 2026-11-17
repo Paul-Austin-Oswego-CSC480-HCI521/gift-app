@@ -172,7 +172,7 @@ being built. Decide with Front-End what that link should do before writing a tes
 | # | Test: what to do, then what to check | Record with | Level |
 |---|---|---|---|
 | 19 | **Side nav.** Click each item in the side nav and check the right page opens. `routes.js` still lists All Gifts and Settings, which open empty placeholder pages. Decide whether to remove them before testing them. Also check what Add Gift and Add Recipient do (they have no pages and may show a 404). | `dashboard` | Medium |
-| 20 | **404 page.** Check the not-found page shows, click the link home, and check you land on the login page. | `not-found` | Easy |
+| 20 | **404 page.** Check the not-found page shows, click the link home, and check you land on the login page. The scenario opens `/404` directly: the local dev server cannot show this page for a made-up address (it returns an empty 404), only the deployed site can. | `not-found` | Easy |
 | 21 | **Dashboard cards.** Click Add and View all on each card and check where each one goes. | `dashboard` | Medium |
 
 ### Needs a developer
@@ -334,7 +334,7 @@ ones in the README's "Mocking the API" table.
 
 | Scenario | Starts on | Mock overrides |
 |---|---|---|
-| `login`, `create-account`, `not-found`, `signed-out` | `/`, `/create-account`, `/no-such-page`, `/dashboard` (signed out) | none |
+| `login`, `create-account`, `not-found`, `signed-out` | `/`, `/create-account`, `/404`, `/dashboard` (signed out) | none |
 | `login-fail` | `/` | `login` 401 |
 | `signup-conflict` | `/create-account` | `signup` 409 |
 | `dashboard` | `/dashboard` | none |
