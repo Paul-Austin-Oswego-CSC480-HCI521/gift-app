@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Keeps api-shapes.json in step with what the backend really returns.
  *
- * The frontend's mock data (Storybook stories and the Playwright fake server) is checked against the
+ * The frontend's mock data (Storybook stories and the Playwright fake server - workaround that make it so we can run ci checks for e2e without issues w/ render being sleepy) is checked against the
  * same file by frontend/src/mocks/api-shapes.test.js. So a backend change fails here until the file
  * is updated, and updating the file fails the frontend test until the mocks follow.
  *
