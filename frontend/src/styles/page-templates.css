@@ -51,28 +51,22 @@
 }
 
 /* Authenticated template: header + side nav + main content. */
-/* Bottom group of the authenticated side nav: primary actions and Settings pinned below the
-   links. margin-top:auto works because cds-side-nav's panel is a flex column. */
+/* Bottom group of the authenticated side nav: the theme switcher, pinned below the links.
+   margin-top:auto works because cds-side-nav's panel is a flex column. */
 .page-sidenav-footer {
   margin-block-start: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem 0 0.5rem;
+  padding: 1rem 0.5rem;
 }
 
-.page-sidenav-footer cds-button {
+.page-sidenav-footer cds-content-switcher {
   inline-size: 100%;
-  max-inline-size: none;
-  padding-inline: 1rem;
-  box-sizing: border-box;
 }
 
-.page-sidenav-footer cds-button::part(button) {
-  inline-size: 100%;
-  max-inline-size: none;
-  padding-inline: 0.75rem;
-  font-size: 0.75rem;
+/* Three labels (Light / Dark / System) must fit the 12rem side nav. Carbon pads each item from this
+   layout token, which is set on both the switcher and its items because the items define it too. */
+.page-sidenav-footer cds-content-switcher,
+.page-sidenav-footer cds-content-switcher-item {
+  --cds-layout-density-padding-inline-local: var(--cds-spacing-02, 0.25rem);
 }
 
 .page-main {

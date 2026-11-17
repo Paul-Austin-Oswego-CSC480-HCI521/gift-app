@@ -43,18 +43,10 @@ it("navigates to the correct page when clicked", async () => {
   delete window.location;
   window.location = { href: "" };
 
-  const controls = [...nav.querySelectorAll("cds-side-nav-link, cds-button")];
+  const controls = [...nav.querySelectorAll("cds-side-nav-link")];
 
-  // Expected HTML file routes matching your component's navigation mapping
-  // Note: "All Gifts" and "Settings" have been removed from the navigation
-  const expectedRoutes = [
-    "/dashboard",
-    "/my-wishlist",
-    "/people",
-    "/upcoming-dates",
-    "/add-gift",
-    "/add-recipient"
-  ];
+  const expectedRoutes = ["/dashboard", "/my-wishlist", "/people", "/upcoming-dates"];
+  expect(controls).toHaveLength(expectedRoutes.length);
 
   for (let i = 0; i < controls.length; i++) {
     const control = controls[i];
@@ -67,4 +59,12 @@ it("navigates to the correct page when clicked", async () => {
 
   // Restore original window location object
   window.location = originalLocation;
+});
+
+it("pins the theme switcher below the links", async () => {
+  const nav = await renderNav();
+  const footer = nav.querySelector(".page-sidenav-footer");
+  expect(footer.querySelector("gift-theme-switcher")).not.toBeNull();
+  const items = nav.querySelector("cds-side-nav-items");
+  expect(items.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
