@@ -73,12 +73,14 @@ cds-table {
 /* Tile/Card (Figma "Tile (brand themed)" 12:406 and Gift Tile): Background/background surface,
    16px corners and the hard offset shadow. Hover (--cds-layer-hover) and focus (--cds-focus) already
    come from the tokens above. Carbon paints the tile from --cds-layer, so setting that (not
-   background) keeps the hover fill working. cds-clickable-tile is its own element, not a cds-tile. */
+   background) keeps the hover fill working. --tile-background and --tile-shadow-color default to the
+   page background and --cds-border-interactive; brand-theme-dark.css overrides both so dark tiles
+   are not the page colour with a neon outline. cds-clickable-tile is its own element, not a cds-tile. */
 cds-tile,
 cds-clickable-tile {
-  --cds-layer: var(--cds-background);
+  --cds-layer: var(--tile-background, var(--cds-background));
   border-radius: var(--tile-radius);
-  box-shadow: 6px 5px 4px 0 var(--cds-border-interactive); /* Figma: x6 y5 blur4 */
+  box-shadow: 6px 5px 4px 0 var(--tile-shadow-color, var(--cds-border-interactive)); /* Figma: x6 y5 blur4 */
 }
 
 /* Carbon paints a clickable tile's hover fill on a square inner link inside its shadow root, which

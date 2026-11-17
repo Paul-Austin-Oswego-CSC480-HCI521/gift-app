@@ -42,9 +42,9 @@ export class GiftTile extends LitElement {
        gets it except preference, which stays a plain Carbon tile in Figma. */
     :host(:not([type="preference"])) cds-tile,
     :host(:not([type="preference"])) cds-clickable-tile {
-      --cds-layer: var(--cds-background);
+      --cds-layer: var(--tile-background, var(--cds-background));
       border-radius: var(--tile-radius);
-      box-shadow: 6px 5px 4px 0 var(--cds-border-interactive); /* Figma: x6 y5 blur4 */
+      box-shadow: 6px 5px 4px 0 var(--tile-shadow-color, var(--cds-border-interactive)); /* Figma: x6 y5 blur4 */
     }
 
     /* The clickable tile's inner link is square and would cover the rounded corners. The 1px border is
