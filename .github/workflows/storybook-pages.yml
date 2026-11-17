@@ -3,7 +3,6 @@ name: Deploy Storybook to GitHub Pages
 on:
   push:
     branches:
-      - feature/ui-start
       - main
   workflow_dispatch:
 
