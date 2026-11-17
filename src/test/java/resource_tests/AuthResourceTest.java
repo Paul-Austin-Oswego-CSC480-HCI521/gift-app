@@ -40,7 +40,7 @@ public class AuthResourceTest {
         passwords = spy(service);
         tokens = mock(JwtService.class);
         resource = new AuthResource();
-        inject("users", users);
+        inject("uRepo", users);
         inject("passwords", passwords);
         inject("tokens", tokens);
 
@@ -175,6 +175,44 @@ public class AuthResourceTest {
         Field field = AuthResource.class.getDeclaredField(name);
         field.setAccessible(true);
         field.set(resource, value);
+    }
+
+    @Test
+    public void signup_withoutUsername_201() {
+        String email = "signup@example.test";
+        when(users.findByEmail(email)).thenReturn(Optional.empty());
+        when(users.save(any(User.class))).thenAnswer(invocation -> {
+            User signup = invocation.getArgument(0);
+            assertNull(signup.getUsername());
+            assertEquals(email, signup.getEmail());
+            assertTrue(passwords.verify(PASSWORD, signup.getPasswordHash()));
+            signup.setId(42);
+            return signup;
+        });
+        when(tokens.mintAccessToken(42, List.of("user"), email)).thenReturn("test-token");
+
+        var form = new AuthResource.SignupForm("First", "Last", email, null, PASSWORD);
+        try (Response response = resource.signup(form)) {
+            assertEquals(201, response.getStatus());
+            assertEquals("user/42", response.getLocation().toString());
+            LoginResponse result = assertInstanceOf(LoginResponse.class, response.getEntity());
+            assertEquals("test-token", result.getToken());
+            assertEquals(Integer.valueOf(42), result.getUserId());
+        }
+
+        verify(users, never()).findByUsername(any());
+    }
+
+    @Test
+    public void signup_duplicateEmailWithoutUsername_409() {
+        var form = new AuthResource.SignupForm("First", "Last", EMAIL, null, PASSWORD);
+        try (Response response = resource.signup(form)) {
+            assertEquals(409, response.getStatus());
+        }
+
+        verify(users, never()).findByUsername(any());
+        verify(users, never()).save(any(User.class));
+        verifyNoInteractions(passwords, tokens);
     }
 
     private static LoginRequest request(String email, String password) {

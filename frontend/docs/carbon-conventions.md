@@ -108,6 +108,45 @@ Carbon. Logic that doesn't need a browser (parsing, validation rules, formatting
 Worked examples: `gift-login-form.stories.js` (validation, events, loading),
 `gift-modal.stories.js` (close, Escape, fields), `gift-dashboard.stories.js` (events, disabled while loading).
 
+## Test hooks (`data-testid`)
+
+QA writes Playwright end-to-end tests against these components, so selectors need to survive styling
+and copy changes. See [e2e/README.md](../e2e/README.md) for how the tests use them.
+
+**Locator strategy: role or label first, `data-testid` as the fallback.** Playwright's `getByRole`,
+`getByLabel` and `getByText` pierce open shadow roots, so they work with Carbon. Rule of thumb:
+*role/label if the accessible name is stable, otherwise a test id.*
+
+Add a `data-testid` to:
+
+- repeated items (rows, cards, tiles) and anything a test must pick one of
+- notifications and state regions (error banner, empty state, loading region)
+- the modal host and its actions
+- icon-only buttons, and controls whose copy is likely to change
+- Carbon inputs whose accessible name is fragile (for example `cds-password-input`)
+- each page's `<main>`
+
+Do not put one on every element: roles already cover labelled buttons, links and headings.
+
+**Naming:** `<page-or-component>-<element>-<type>`, kebab-case, for example `login-email-input`,
+`login-submit-button`, `login-error-banner`. Repeated items use the data id, never the index:
+`wishlist-row-${id}`. Only when the data has no id, fall back to the position (`dashboard-people-row-${i}`).
+Names must be unique on a page; `npm run lint:test-ids` checks the format and duplicates.
+Generic containers such as `gift-tile` get their hook from the component that uses them.
+
+**Where it goes:** on the element a user acts on. For Carbon inputs that is the `cds-*` host, and the
+real `<input>` is inside its shadow root, so tests reach it with `.locator('input')`:
+
+```js
+await page.getByTestId("login-email-input").locator("input").fill("a@b.co");
+// or, when the label is stable, straight to the inner input:
+await page.getByLabel("Email").fill("a@b.co");
+```
+
+`data-*` attributes are always allowed by `npm run lint:carbon`.
+
+**Naming is an API.** Do not rename or remove a hook without telling QA. Changing one breaks their tests.
+
 ## Styling
 
 Use Lit's `static styles = css\`...\`` (see `gift-image-container.js`), not a literal `<style>` tag

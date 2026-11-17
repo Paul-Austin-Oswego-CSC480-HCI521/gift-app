@@ -31,9 +31,10 @@ export class GiftMyWishlist extends LitElement {
 
   render() {
     return html`
-      <h1>My Wish List</h1>
+      <h1 data-testid="my-wishlist-heading">My Wish List</h1>
       <gift-preferences-header></gift-preferences-header>
       <gift-wishlist-table
+        data-testid="my-wishlist-table"
         .items=${this.items}
         ?loading=${this.loading}
         ?saving=${this.saving}

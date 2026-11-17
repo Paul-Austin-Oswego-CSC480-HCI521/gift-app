@@ -134,13 +134,13 @@ export class GiftUpcomingDates extends LitElement {
     this._pageSize = event.detail.pageSize;
   }
 
-  _metric(title, { value, description }, action) {
+  _metric(testId, title, { value, description }, action) {
     return html`
-      <gift-tile type="metric">
+      <gift-tile type="metric" data-testid="upcoming-dates-${testId}-metric">
         <h2 slot="title" class="metric-title">${title}</h2>
         <span slot="metric" class="metric-value">${value}</span>
         <span class="metric-description">${description}</span>
-        <cds-link href=${action.href}>
+        <cds-link data-testid="upcoming-dates-${testId}-link" href=${action.href}>
           ${action.label}${iconLoader(ArrowRight16, { slot: "icon" })}
         </cds-link>
       </gift-tile>
@@ -152,6 +152,7 @@ export class GiftUpcomingDates extends LitElement {
     if (visible.length === 0) {
       const filtered = this._query || this._toBuyOnly;
       return html`<cds-inline-notification
+        data-testid="upcoming-dates-empty-banner"
         kind="info"
         title=${filtered ? "No matching dates" : "No upcoming dates"}
         subtitle=${filtered
@@ -164,8 +165,9 @@ export class GiftUpcomingDates extends LitElement {
     const start = (this._page - 1) * this._pageSize;
     return html`
       <div class="list">
-        <gift-dates-table .dates=${visible.slice(start, start + this._pageSize)}></gift-dates-table>
+        <gift-dates-table data-testid="upcoming-dates-table" .dates=${visible.slice(start, start + this._pageSize)}></gift-dates-table>
         <cds-pagination
+          data-testid="upcoming-dates-pagination"
           items-per-page-text="Items per page:"
           .page=${this._page}
           .pageSize=${this._pageSize}
@@ -184,9 +186,9 @@ export class GiftUpcomingDates extends LitElement {
     const visible = this._visibleDates();
 
     return html`
-      <h1>Upcoming Dates</h1>
+      <h1 data-testid="upcoming-dates-heading">Upcoming Dates</h1>
 
-      <div role="status" aria-live="polite">
+      <div role="status" aria-live="polite" data-testid="upcoming-dates-loading">
         ${this.loading
           ? html`<cds-inline-loading status="active" assistive-text="Loading upcoming dates">
               Loading…
@@ -196,6 +198,7 @@ export class GiftUpcomingDates extends LitElement {
 
       ${this.error
         ? html`<cds-inline-notification
+            data-testid="upcoming-dates-error-banner"
             kind="error"
             title="Could not load upcoming dates"
             subtitle=${this.error}
@@ -204,15 +207,15 @@ export class GiftUpcomingDates extends LitElement {
         : nothing}
 
       <div class="metrics">
-        ${this._metric("Dates in next 30 days", summary.soon, {
+        ${this._metric("soon", "Dates in next 30 days", summary.soon, {
           label: "View dates",
           href: routes.dates.path,
         })}
-        ${this._metric("Gifts still to buy", summary.toBuy, {
+        ${this._metric("to-buy", "Gifts still to buy", summary.toBuy, {
           label: "Go to gifts",
           href: routes.gifts.path,
         })}
-        ${this._metric("Dates with no gift planned", summary.unplanned, {
+        ${this._metric("unplanned", "Dates with no gift planned", summary.unplanned, {
           label: "Plan gifts",
           href: routes.gifts.path,
         })}
@@ -220,6 +223,7 @@ export class GiftUpcomingDates extends LitElement {
 
       <div class="toolbar">
         <cds-search
+          data-testid="upcoming-dates-search-input"
           autocomplete="off"
           close-button-label-text="Clear search input"
           label-text="Search dates or people"
@@ -228,6 +232,7 @@ export class GiftUpcomingDates extends LitElement {
           @cds-search-input=${this._onSearch}
         ></cds-search>
         <cds-icon-button
+          data-testid="upcoming-dates-filter-button"
           kind=${this._toBuyOnly ? "primary" : "ghost"}
           size="lg"
           @click=${this._onToggleFilter}

@@ -155,12 +155,12 @@ export class GiftDatesTable extends LitElement {
     );
   }
 
-  _renderRow(date) {
+  _renderRow(date, index) {
     const purchased = date.status === "purchased";
     const occasion = date.occasion ?? {};
 
     return html`
-      <cds-table-row>
+      <cds-table-row data-testid="dates-row-${date.id ?? index}">
         <cds-table-cell class="days-cell">
           <span class="days">
             <span class="days__number">${date.daysUntil}</span>
@@ -179,7 +179,7 @@ export class GiftDatesTable extends LitElement {
         </cds-table-cell>
         <cds-table-cell class="status-cell">
           <span class="status">
-            <cds-tag type=${purchased ? "green" : "red"} size="md">
+            <cds-tag data-testid="dates-row-${date.id ?? index}-status" type=${purchased ? "green" : "red"} size="md">
               ${purchased ? "Purchased" : "Not purchased"}
             </cds-tag>
             ${purchased && date.purchaseDateLabel
@@ -191,7 +191,7 @@ export class GiftDatesTable extends LitElement {
           </span>
         </cds-table-cell>
         <cds-table-cell class="action-cell">
-          <cds-icon-button kind="ghost" size="lg" @click=${() => this._onEdit(date)}>
+          <cds-icon-button data-testid="dates-row-${date.id ?? index}-edit-button" kind="ghost" size="lg" @click=${() => this._onEdit(date)}>
             ${iconLoader(PencilPictogram, {
               slot: "icon",
               width: PICTOGRAM_SIZE,
@@ -207,7 +207,7 @@ export class GiftDatesTable extends LitElement {
 
   render() {
     return html`
-      <cds-table aria-label="Upcoming dates" locale="en" size="xl">
+      <cds-table data-testid="dates-table" aria-label="Upcoming dates" locale="en" size="xl">
         <cds-table-head class="visually-hidden">
           <cds-table-header-row>
             <cds-table-header-cell>Days</cds-table-header-cell>
@@ -217,7 +217,7 @@ export class GiftDatesTable extends LitElement {
             <cds-table-header-cell>Actions</cds-table-header-cell>
           </cds-table-header-row>
         </cds-table-head>
-        <cds-table-body>${this.dates.map((date) => this._renderRow(date))}</cds-table-body>
+        <cds-table-body>${this.dates.map((date, index) => this._renderRow(date, index))}</cds-table-body>
       </cds-table>
     `;
   }

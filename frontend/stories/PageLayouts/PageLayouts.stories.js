@@ -1,3 +1,6 @@
+import "../../src/components/gift-people-profile/gift-people-profile.js";
+import "../../src/components/gift-full-preferences/gift-full-preferences.js";
+import { preferences } from "../../src/mocks/preferences.js";
 import { html } from "lit";
 import "@carbon/web-components/es/components/link/index.js";
 import "@carbon/web-components/es/components/ui-shell/index.js";
@@ -9,6 +12,7 @@ import "../../src/components/gift-login-form/gift-login-form.js";
 import "../../src/components/gift-dashboard/gift-dashboard.js";
 import "../../src/components/gift-people/gift-people.js";
 import "../../src/components/gift-upcoming-dates/gift-upcoming-dates.js";
+import "../../src/components/gift-quick-preferences/gift-quick-preferences.js";
 import { people } from "../../src/mocks/people.js";
 import { upcomingDates } from "../../src/mocks/upcoming-dates.js";
 import { wishlistItems } from "../../src/mocks/wishlist.js";
@@ -165,6 +169,59 @@ export const People = {
         <gift-side-nav active="people"></gift-side-nav>
         <main class="page-main" aria-label="People page">
           <gift-people .people=${people}></gift-people>
+        </main>
+      </div>
+    `),
+};
+
+// quick-preferences.html: the first-time preference form in the authenticated app shell.
+export const QuickPreferences = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+        <gift-side-nav active="quick-preferences"></gift-side-nav>
+        <main class="page-main" aria-label="Quick preferences">
+          <gift-quick-preferences></gift-quick-preferences>
+        </main>
+      </div>
+    `),
+};
+
+export const FullPreferences = {
+  render: () => frame(html`<div style="${pageColumn}"><gift-nav-header product-name="Gift App"></gift-nav-header><gift-side-nav active="wishlist"></gift-side-nav><main class="page-main" aria-label="Gift preferences"><gift-full-preferences .values=${preferences}></gift-full-preferences></main></div>`),
+};
+
+// Person Profile page
+export const PersonProfile = {
+  render: () =>
+    frame(html`
+      <div style="${pageColumn}">
+        <gift-nav-header product-name="Gift App">
+          <cds-header-nav menu-bar-label="Gift App navigation"></cds-header-nav>
+        </gift-nav-header>
+
+        <gift-side-nav active="people"></gift-side-nav>
+
+        <main class="page-main" aria-label="Person Profile">
+          <gift-people-profile
+            .person=${{
+              id: 1,
+              fullName: "Vanessa Maike",
+              attributes: [],
+              gifts: [
+                {
+                  id: 1,
+                  name: "Headphones",
+                  status: { stage: "updated" },
+                },
+              ],
+            }}
+            .loading=${false}
+            .error=${""}
+          ></gift-people-profile>
         </main>
       </div>
     `),

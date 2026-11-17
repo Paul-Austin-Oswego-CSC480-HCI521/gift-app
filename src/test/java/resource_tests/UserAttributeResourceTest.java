@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,294 +31,177 @@ public class UserAttributeResourceTest {
         uidField.set(resource, 1);
     }
 
-    //GET user attributes tests
-    //GET user attributes, 200 success
     @Test
-    public void getUserAttributes_200_1() {
+    public void getUserAttributes_200() {
         User user = new User();
-        UserAttribute a1 = new UserAttribute();
-        UserAttribute a2 = new UserAttribute();
-        a1.setId(1);
-        a1.setAttribute_Name("Shirt Size");
-        a1.setValue("XL");
-        a2.setId(2);
-        a2.setAttribute_Name("Favorite Color");
-        a2.setValue("Blue");
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(a1);
-        attributes.add(a2);
-        user.setAttributes(attributes);
-
+        UserAttribute preferences = new UserAttribute();
+        preferences.setShirtSize("XL");
+        preferences.setFavoriteColor("Blue");
+        user.getAttributes().add(preferences);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        Response response = resource.getUserAttributes();
 
-        assertEquals(200, response.getStatus());
-        assertEquals(attributes, response.getEntity());
+        try (Response response = resource.getUserAttributes()) {
+            assertEquals(200, response.getStatus());
+            assertSame(preferences, response.getEntity());
+        }
         verify(userRepository).findById(1);
     }
 
-    //GET user attributes empty, 200 success
     @Test
-    public void getUserAttributes_200_2() {
-        User user = new User();
-        when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        Response response = resource.getUserAttributes();
-        assertEquals(200, response.getStatus());
-        assertTrue(((List<?>) response.getEntity()).isEmpty());
+    public void getUserAttributes_emptyPreferences_404() {
+        when(userRepository.findById(1)).thenReturn(Optional.of(new User()));
+
+        try (Response response = resource.getUserAttributes()) {
+            assertEquals(404, response.getStatus());
+        }
     }
 
-    //GET user attributes, 404, no user
     @Test
-    public void getUserAttributes_404() {
+    public void getUserAttributes_missingUser_404() {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
-        Response response = resource.getUserAttributes();
-        assertEquals(404, response.getStatus());
+
+        try (Response response = resource.getUserAttributes()) {
+            assertEquals(404, response.getStatus());
+        }
     }
 
-    //CREATE user attributes tests
-    //CREATE user attributes, 201 success
     @Test
-    public void createAttribute_201() {
+    public void createUserAttributes_201() {
         User user = new User();
+        user.setAttributes(null);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
 
-        UserAttribute attribute = new UserAttribute();
-        attribute.setId(null);
-        attribute.setAttribute_Name("Shirt size");
-        attribute.setValue("XL");
-        attribute.setUser(user);
+        UserAttribute preferences = new UserAttribute();
+        preferences.setId(5);
+        preferences.setShirtSize("XL");
 
-        Response response = resource.createAttribute(attribute);
-        assertEquals(201, response.getStatus());
-        assertTrue(user.getAttributes().contains(attribute));
-        assertSame(user, attribute.getUser());
+        try (Response response = resource.createUserAttributes(preferences)) {
+            assertEquals(201, response.getStatus());
+            assertSame(preferences, response.getEntity());
+        }
+        assertEquals(List.of(preferences), user.getAttributes());
+        assertSame(user, preferences.getUser());
+        assertNull(preferences.getId());
         verify(userRepository).save(user);
     }
 
-    //CREATE user attributes, 400, null
     @Test
-    public void createAttribute_400_1() {
-        Response response = resource.createAttribute(null);
-        assertEquals(400, response.getStatus());
-        verify(userRepository, never()).findById(any());
+    public void createUserAttributes_nullPayload_400() {
+        try (Response response = resource.createUserAttributes(null)) {
+            assertEquals(400, response.getStatus());
+        }
+        verifyNoInteractions(userRepository);
     }
 
-    //CREATE user attributes, 400, attribute name missing
     @Test
-    public void createAttribute_400_2() {
-        User user = new User();
-        UserAttribute attribute = new UserAttribute();
-        attribute.setId(null);
-        attribute.setAttribute_Name(null);
-        attribute.setValue("XL");
-        attribute.setUser(user);
-
-        Response response = resource.createAttribute(attribute);
-        assertEquals(400, response.getStatus());
-        verify(userRepository, never()).findById(any());
-    }
-
-    //CREATE user attributes, 400, value missing
-    @Test
-    public void createAttribute_400_3() {
-        User user = new User();
-        UserAttribute attribute = new UserAttribute();
-        attribute.setId(null);
-        attribute.setAttribute_Name("Shirt Size");
-        attribute.setValue(null);
-        attribute.setUser(user);
-
-        Response response = resource.createAttribute(attribute);
-        assertEquals(400, response.getStatus());
-        verify(userRepository, never()).findById(any());
-    }
-
-    //CREATE user attributes, 404, user entity does not exist
-    @Test
-    public void createAttribute_404() {
+    public void createUserAttributes_missingUser_404() {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
-        UserAttribute attribute = new UserAttribute();
-        attribute.setId(null);
-        attribute.setAttribute_Name("Shirt Size");
-        attribute.setValue("XL");
 
-        Response response = resource.createAttribute(attribute);
-        assertEquals(404, response.getStatus());
+        try (Response response = resource.createUserAttributes(new UserAttribute())) {
+            assertEquals(404, response.getStatus());
+        }
         verify(userRepository, never()).save(any(User.class));
     }
 
-    //UPDATE user attributes, 204 success
     @Test
-    public void updateAttribute_204() {
+    public void createUserAttributes_duplicatePreferences_409() {
+        User user = new User();
+        UserAttribute existing = new UserAttribute();
+        user.getAttributes().add(existing);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+
+        try (Response response = resource.createUserAttributes(new UserAttribute())) {
+            assertEquals(409, response.getStatus());
+        }
+        assertEquals(List.of(existing), user.getAttributes());
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    public void updateUserAttributes_204() {
         User user = new User();
         UserAttribute existing = new UserAttribute();
         existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
         existing.setUser(user);
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-        user.setAttributes(attributes);
-
+        existing.setShirtSize("XL");
+        existing.setFavoriteColor("Blue");
+        user.getAttributes().add(existing);
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
 
         UserAttribute updated = new UserAttribute();
-        updated.setId(5);
-        updated.setAttribute_Name("Shirt size");
-        updated.setValue("L");
-        Response response = resource.updateAttribute(5, updated);
-        assertEquals(204, response.getStatus());
-        assertEquals("L", existing.getValue());
-        assertEquals("Shirt size", existing.getAttribute_Name());
+        updated.setId(10);
+        updated.setShirtSize("L");
+        updated.setShoeSize("10.5");
+
+        try (Response response = resource.updateUserAttributes(updated)) {
+            assertEquals(204, response.getStatus());
+        }
+        assertEquals(5, existing.getId());
+        assertSame(user, existing.getUser());
+        assertEquals("L", existing.getShirtSize());
+        assertEquals("10.5", existing.getShoeSize());
+        assertNull(existing.getFavoriteColor());
         verify(userRepository).save(user);
     }
 
-    //UPDATE user attributes, 400, invalid attribute name
     @Test
-    public void updateAttribute_400_1() {
-        User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        existing.setUser(user);
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-        user.setAttributes(attributes);
-
-        UserAttribute updated = new UserAttribute();
-        updated.setId(5);
-        updated.setAttribute_Name(null);
-        updated.setValue("L");
-
-        Response response = resource.updateAttribute(5, updated);
-        assertEquals(400, response.getStatus());
-        verify(userRepository, never()).findById(any());
+    public void updateUserAttributes_nullPayload_400() {
+        try (Response response = resource.updateUserAttributes(null)) {
+            assertEquals(400, response.getStatus());
+        }
+        verifyNoInteractions(userRepository);
     }
 
-    //UPDATE user attributes, 400, invalid value
     @Test
-    public void updateAttribute_400_2() {
-        User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        existing.setUser(user);
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-        user.setAttributes(attributes);
+    public void updateUserAttributes_missingUser_404() {
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
 
-        UserAttribute updated = new UserAttribute();
-        updated.setId(5);
-        updated.setAttribute_Name("Shirt Size");
-        updated.setValue(null);
-
-        Response response = resource.updateAttribute(5, updated);
-        assertEquals(400, response.getStatus());
-        verify(userRepository, never()).findById(any());
-    }
-
-    //UPDATE user attributes, 404, user entity does not exist
-    @Test
-    public void updateAttribute_404_1() {
-        User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        existing.setUser(user);
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-
-        UserAttribute updated = new UserAttribute();
-        updated.setId(5);
-        updated.setAttribute_Name("Shirt Size");
-        updated.setValue("L");
-
-        Response response = resource.updateAttribute(5, updated);
-        assertEquals(404, response.getStatus());
+        try (Response response = resource.updateUserAttributes(new UserAttribute())) {
+            assertEquals(404, response.getStatus());
+        }
         verify(userRepository, never()).save(any(User.class));
     }
 
-    //UPDATE user attributes, 404, attribute does not exist
     @Test
-    public void updateAttribute_404_2() {
-        User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-        user.setAttributes(attributes);
-        UserAttribute updated = new UserAttribute();
-        updated.setId(5);
-        updated.setAttribute_Name("Shirt Size");
-        updated.setValue("L");
+    public void updateUserAttributes_emptyPreferences_404() {
+        when(userRepository.findById(1)).thenReturn(Optional.of(new User()));
 
-        Response response = resource.updateAttribute(999, updated);
-        assertEquals(404, response.getStatus());
+        try (Response response = resource.updateUserAttributes(new UserAttribute())) {
+            assertEquals(404, response.getStatus());
+        }
         verify(userRepository, never()).save(any(User.class));
     }
 
-    //DELETE attributes tests
-    //DELETE attributes, 204 success
     @Test
-    public void deleteAttribute_204() {
+    public void deleteUserAttributes_204() {
         User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-        user.setAttributes(attributes);
-
+        user.getAttributes().add(new UserAttribute());
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
 
-        Response response = resource.deleteAttribute(5);
-        assertEquals(204, response.getStatus());
+        try (Response response = resource.deleteUserAttributes()) {
+            assertEquals(204, response.getStatus());
+        }
         assertTrue(user.getAttributes().isEmpty());
         verify(userRepository).save(user);
     }
 
-    //DELETE attributes, 404, user entity does not exist
     @Test
-    public void deleteAttribute_404_1() {
-        User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        existing.setUser(user);
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
+    public void deleteUserAttributes_missingUser_404() {
         when(userRepository.findById(1)).thenReturn(Optional.empty());
 
-        Response response = resource.deleteAttribute(5);
-        assertEquals(404, response.getStatus());
+        try (Response response = resource.deleteUserAttributes()) {
+            assertEquals(404, response.getStatus());
+        }
         verify(userRepository, never()).save(any(User.class));
     }
 
-    //DELETE attributes, 404 attribute does not exist
     @Test
-    public void deleteAttribute_404_2() {
-        User user = new User();
-        UserAttribute existing = new UserAttribute();
-        existing.setId(5);
-        existing.setAttribute_Name("Shirt Size");
-        existing.setValue("XL");
-        List<UserAttribute> attributes = new ArrayList<>();
-        attributes.add(existing);
-        user.setAttributes(attributes);
+    public void deleteUserAttributes_emptyPreferences_404() {
+        when(userRepository.findById(1)).thenReturn(Optional.of(new User()));
 
-        when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        Response response = resource.deleteAttribute(999);
-        assertEquals(404, response.getStatus());
+        try (Response response = resource.deleteUserAttributes()) {
+            assertEquals(404, response.getStatus());
+        }
         verify(userRepository, never()).save(any(User.class));
     }
 }
