@@ -19,6 +19,8 @@ export class DashboardCard extends LitElement {
     // Visually hidden text after "View all" so the link name is unique, e.g. "People".
     viewAllLabel: { type: String, attribute: "view-all-label" },
     disabled: { type: Boolean },
+    // Prefix for the data-testid hooks inside the card (the page sets it per card, so hooks stay unique).
+    testId: { type: String, attribute: "test-id" },
   };
 
   static styles = css`
@@ -126,15 +128,15 @@ export class DashboardCard extends LitElement {
           <div class="heading">
             <h2>${this.heading}</h2>
             <p>${this.description}</p>
-            <cds-button size="sm" ?disabled=${this.disabled} @click=${this._add}>
+            <cds-button size="sm" data-testid="${this.testId}-add-button" ?disabled=${this.disabled} @click=${this._add}>
               ${this.addLabel}${iconLoader(Add16, { slot: "icon" })}
             </cds-button>
           </div>
         </header>
 
         <div class="summary">
-          <div class="total"><span class="count">${this.total}</span>Total</div>
-          <cds-link href=${this.viewAllHref ?? "#"}>
+          <div class="total" data-testid="${this.testId}-total"><span class="count">${this.total}</span>Total</div>
+          <cds-link data-testid="${this.testId}-view-all-link" href=${this.viewAllHref ?? "#"}>
             View all <span class="cds--visually-hidden">${this.viewAllLabel}</span>${iconLoader(ArrowRight16, { slot: "icon" })}
           </cds-link>
         </div>

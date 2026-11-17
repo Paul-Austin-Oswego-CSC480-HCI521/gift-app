@@ -136,51 +136,52 @@ export class GiftPeople extends LitElement {
 
   render() {
     return html`
-      <h1>People</h1>
+      <h1 data-testid="people-heading">People</h1>
 
       <div class="toolbar">
         <cds-search
+          data-testid="people-search-input"
           label-text="Search for people"
           placeholder="Search for people"
           .value=${this.search}
           @input=${(event) => { this.search = event.target.value ?? ""; }}
         ></cds-search>
-        <cds-button @click=${this.openForm}>
+        <cds-button data-testid="people-add-button" @click=${this.openForm}>
           Add Person ${iconLoader(Add16, { slot: "icon" })}
         </cds-button>
       </div>
 
       ${this.showForm ? html`
-        <form class="form" @submit=${this.submitPerson}>
+        <form class="form" data-testid="people-add-form" @submit=${this.submitPerson}>
           <h2>Add Person</h2>
-          <cds-text-input name="firstName" label="First Name" required></cds-text-input>
-          <cds-text-input name="lastName" label="Last Name" required></cds-text-input>
+          <cds-text-input data-testid="people-first-name-input" name="firstName" label="First Name" required></cds-text-input>
+          <cds-text-input data-testid="people-last-name-input" name="lastName" label="Last Name" required></cds-text-input>
           <div class="form-actions">
-            <cds-button type="submit" button-type="submit" @click=${this.submitPerson}>Save Person</cds-button>
-            <cds-button kind="secondary" type="button" @click=${() => { this.showForm = false; }}>Cancel</cds-button>
+            <cds-button data-testid="people-save-button" type="submit" button-type="submit" @click=${this.submitPerson}>Save Person</cds-button>
+            <cds-button data-testid="people-cancel-button" kind="secondary" type="button" @click=${() => { this.showForm = false; }}>Cancel</cds-button>
           </div>
         </form>
       ` : nothing}
 
       ${this.error ? html`
-        <cds-inline-notification kind="error" title="Error" subtitle=${this.error}></cds-inline-notification>
+        <cds-inline-notification data-testid="people-error-banner" kind="error" title="Error" subtitle=${this.error}></cds-inline-notification>
       ` : nothing}
 
-      ${this.loading ? html`<div role="status" aria-live="polite">
+      ${this.loading ? html`<div role="status" aria-live="polite" data-testid="people-loading">
           <cds-inline-loading status="active" assistive-text="Loading people">Loading people…</cds-inline-loading>
         </div>` : nothing}
 
       ${!this.loading && !this.error ? html`
-        <div class="grid">
+        <div class="grid" data-testid="people-grid">
           ${this.filteredPeople.map((person) => html`
-            <gift-tile type="person" href=${`/gift-people-profile?personId=${person.id}`}>
+            <gift-tile type="person" data-testid="people-tile-${person.id}" href=${`/gift-people-profile?personId=${person.id}`}>
               <span>${person.fullName || [person.firstName, person.lastName].filter(Boolean).join(" ")}</span>
             </gift-tile>
           `)}
-          <gift-tile type="add" add-label="Add person" @gift-tile-add=${this.openForm}></gift-tile>
+          <gift-tile type="add" data-testid="people-add-tile" add-label="Add person" @gift-tile-add=${this.openForm}></gift-tile>
         </div>
         ${this.filteredPeople.length === 0 ? html`
-          <p class="message">${this.search ? "No matching people found." : "No people yet. Add your first person."}</p>
+          <p class="message" data-testid="people-empty-message">${this.search ? "No matching people found." : "No people yet. Add your first person."}</p>
         ` : nothing}
       ` : nothing}
     `;

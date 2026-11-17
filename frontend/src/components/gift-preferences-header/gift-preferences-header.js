@@ -24,21 +24,22 @@ export class GiftPreferencesHeader extends LitElement {
     .yellow { --swatch: var(--cds-support-warning); }
     .note { margin-bottom: 0; color: var(--cds-text-secondary); font-size: var(--cds-helper-text-01-font-size, .75rem); }
   `;
+  _slug(label) { return label.toLowerCase().replaceAll(" ", "-"); }
   _preferenceLink(label) {
-    return html`<cds-link href=${routes.preferences.path}><span class="sr-only">${label} preferences</span><span aria-hidden="true">→</span></cds-link>`;
+    return html`<cds-link data-testid="preferences-${this._slug(label)}-link" href=${routes.preferences.path}><span class="sr-only">${label} preferences</span><span aria-hidden="true">→</span></cds-link>`;
   }
   render() {
-    return html`<section aria-labelledby="preferences-title"><cds-tile class="panel">
+    return html`<section aria-labelledby="preferences-title" data-testid="preferences-header"><cds-tile class="panel">
       <h2 id="preferences-title">Preferences</h2>
       <p>Things you like, your go-to sizes, favorite colors, and more</p>
       <div class="cards">
-        <cds-tile class="card"><h3>Favorite Colors</h3>
+        <cds-tile class="card" data-testid="preferences-favorite-colors-card"><h3>Favorite Colors</h3>
           <div class="colors" role="img" aria-label="Example colors: red, green, teal, blue, and yellow">
             ${["red", "green", "teal", "blue", "yellow"].map(color => html`<span class="swatch ${color}" aria-hidden="true"></span>`)}
           </div>
           ${this._preferenceLink("Favorite Colors")}
         </cds-tile>
-        ${[["Sizes", "Unknown"], ["Interests", "Music"], ["Dislikes", "Reading"]].map(([label, value]) => html`<cds-tile class="card"><h3>${label}</h3><span>${value}</span>${this._preferenceLink(label)}</cds-tile>`)}
+        ${[["Sizes", "Unknown"], ["Interests", "Music"], ["Dislikes", "Reading"]].map(([label, value]) => html`<cds-tile class="card" data-testid="preferences-${label.toLowerCase()}-card"><h3>${label}</h3><span>${value}</span>${this._preferenceLink(label)}</cds-tile>`)}
       </div>
       <p class="note">Preview only — these are sample preferences, not saved account information.</p>
     </cds-tile></section>`;
