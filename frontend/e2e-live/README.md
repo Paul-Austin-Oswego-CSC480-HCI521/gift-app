@@ -1,7 +1,7 @@
 # Live end-to-end tests
 
 Tests that use the **real** backend (Render) and database (Neon). They are **not** part of CI and
-**not** part of `npm run test:e2e`. Run them by hand, at **8pm EST** when the server is active.
+**not** part of `npm run test:e2e`. Run them by hand, when the server is awake.
 Mocked tests (anything that does not need the real server) go in [`../e2e/`](../e2e/README.md#which-folder-does-my-test-go-in)
 instead. Read that section first if you are not sure which folder a test belongs in.
 
@@ -14,7 +14,7 @@ instead. Read that section first if you are not sure which folder a test belongs
    ```
 2. That is all. The run wakes the server for you: it pings the backend for up to two minutes first.
    If the server never answers, the run stops with **BLOCKED**. Report that as blocked, not as
-   passed or failed, and try again at 8pm EST.
+   passed or failed, and try again when the server is awake.
 
 ## Run
 

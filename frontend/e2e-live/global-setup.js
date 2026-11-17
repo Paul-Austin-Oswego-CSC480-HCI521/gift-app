@@ -55,8 +55,8 @@ export default async function globalSetup() {
       "",
       "BLOCKED: the backend did not wake up, so no live test was run.",
       `  Checked ${PING_URL} for ${WAKE_TIMEOUT_MS / 1000}s. Last problem: ${lastProblem}.`,
-      "  The server is automatically active at 8pm EST. Try again then, and report this run as",
-      "  blocked (not passed, not failed) if it still does not respond.",
+      "  Try again when the server is awake, and report this run as blocked (not passed, not",
+      "  failed) if it still does not respond.",
       "",
     ].join("\n"),
   );

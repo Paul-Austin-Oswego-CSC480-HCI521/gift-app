@@ -12,7 +12,7 @@ npm run test:e2e                  # run everything, headless (starts the dev ser
 npm run test:e2e:ui               # UI mode: pick tests, watch them run, time-travel through steps
 npx playwright test login         # only files matching "login"
 npx playwright test --headed      # watch a real browser window
-npm run test:e2e:all              # mocked tests, then the live tests (by hand, at 8pm EST; never in CI)
+npm run test:e2e:all              # mocked tests, then the live tests (by hand, when the server is awake; never in CI)
 npx playwright codegen http://localhost:5173   # record clicks and get locator suggestions
 npx playwright show-report        # open the HTML report from the last run
 ```
@@ -27,9 +27,9 @@ There are two kinds of Playwright test. Pick the folder **before** you record.
 | | `e2e/` (this folder) | `e2e-live/` (separate folder, run on command) |
 |---|---|---|
 | API | Mocked by `mockApi` (`fixtures/api.js`) | The real Render backend and Neon database |
-| Depends on the time of day | No | **Yes.** The backend is only reliably awake at **8pm EST**; Render sleeps otherwise and the first request can take about a minute |
+| Depends on the time of day | No | **Yes.** The backend is only awake some of the time; Render sleeps when idle and the first request can take about a minute |
 | Runs in CI | **Yes**, on every PR (`npm run test:e2e`) | **Never.** No workflow may call it |
-| Who runs it | Anyone, any time | QA, by hand, at 8pm EST |
+| Who runs it | Anyone, any time | QA, by hand, when the server is awake |
 | Recorded with | `npm run record -- <scenario>` | `npx playwright codegen <live site>` after waking the server |
 | If it fails | A real regression: fix it before merging | A regression **or** the environment. Check the server first, and report "blocked", not "failed", if it was asleep |
 

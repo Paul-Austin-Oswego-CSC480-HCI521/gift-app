@@ -1,5 +1,5 @@
 // Real-backend smoke run (the SVT-style check). Real login against the live backend; no mocks.
-// Run by hand at 8pm EST with: npm run test:e2e:live
+// Run by hand when the server is awake, with: npm run test:e2e:live
 import { test, expect } from "@playwright/test";
 import { liveCredentials } from "./credentials.js";
 
