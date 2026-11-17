@@ -36,9 +36,11 @@ The project's brand re-theme lives in `src/styles/brand-theme.css` (light) and `
 <body data-carbon-theme="brand">
 ```
 
-For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` or a wrapping element. When adding a new page, copy the `<body>` tag from `pages/index.html`. Storybook stories apply the same attribute on their wrapper (see `.storybook/preview.js`).
+For the dark variant, use `class="cds--g100" data-carbon-theme="brand-dark"` on `<body>` (both are required). You normally don't write this by hand: users choose **Light / Dark / System** with the switcher at the bottom of the side nav (`gift-theme-switcher`), and the app sets the two body settings for them. **System** (the default) follows the OS and updates live; an explicit Light or Dark choice is remembered in `localStorage` under `theme`. The logic lives in `src/theme/theme.js`, it is started by `src/app/boot.js`, and a small inline script in `pages/_partials/head.html` applies dark before first paint so there is no light flash. When adding a new page, copy the `<body>` tag from `pages/index.html` and leave the theme to those. Storybook stories apply the same attributes on their wrapper (see `.storybook/preview.js`).
 
-We're using the `white` theme as the default; `data-carbon-theme="brand"` on `<body>` is all a page needs, with no extra `cds--*` theme class. Carbon also ships `g10`, `g90`, `g100` (see [Carbon's theming docs](https://carbondesignsystem.com/elements/color/overview/#theme)) if we ever need a dark theme — that's a design decision, loop in Shauna before changing it project-wide.
+The `white` theme is the default markup; `data-carbon-theme="brand"` on `<body>` is all a page needs, with no extra `cds--*` theme class. Changing the dark palette itself (`brand-theme-dark.css`) is a design decision, so loop in Shauna first.
+
+**Checking dark.** `npm run test:storybook:dark` runs every story in the dark theme and fails on `color-contrast` violations (the normal `test:storybook` run does not fail on accessibility findings, so this is what protects dark contrast). Never hardcode a color in a component: a hex that works on a light surface is the usual cause of a dark failure, so use a token such as `var(--cds-layer-01)`. For a disabled control, exempt only that story as described in `AGENTS.md` ("Accessibility test exceptions"). Happo only captures the default light theme.
 
 ## Carbon first
 

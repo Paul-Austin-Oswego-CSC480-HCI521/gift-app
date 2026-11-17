@@ -149,7 +149,9 @@ domain event (`login-submit`).
   Copy the body tag from `pages/dashboard.html`:
   `<body data-carbon-theme="brand">`. Stories are the exception: the decorator in
   `.storybook/preview.js` wraps each one in a `<div>` with the theme class and attribute (and the
-  toolbar switches light/dark), so do not add them in a story.
+  toolbar switches light/dark/system), so do not add them in a story. In the app the theme is set
+  for you by `src/theme/theme.js` (Light / Dark / System switcher in the side nav): do not set
+  `cds--g100` or `brand-dark` in a page or component.
 - Headings use Outfit (`--font-family-heading`). `brand-theme.css` applies it to `h1`-`h6` and
   `cds--type-heading-*` in the page, but those rules cannot reach inside a shadow root: a `gift-*`
   component that renders its own heading must set `font-family: var(--font-family-heading)` (and
@@ -234,7 +236,9 @@ Run from `frontend/`:
 ```sh
 npm run lint:carbon     # Carbon-first + Carbon attribute checks, also runs in CI and must pass to merge
 npm run test:unit
-npm run test:storybook  # runs every story and its play function in a browser, includes accessibility checks
+npm run test:storybook  # runs every story and its play function in a browser
+npm run test:storybook:dark  # the same in the dark theme, and fails on color-contrast violations
+npm run test:e2e        # Playwright, includes the dark mode flow (e2e/theme.spec.js)
 npm run build
 ```
 
