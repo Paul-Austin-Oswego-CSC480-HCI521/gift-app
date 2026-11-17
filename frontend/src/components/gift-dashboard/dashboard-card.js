@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/link/index.js";
 import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
@@ -136,9 +136,11 @@ export class DashboardCard extends LitElement {
 
         <div class="summary">
           <div class="total" data-testid="${this.testId}-total"><span class="count">${this.total}</span>Total</div>
-          <cds-link data-testid="${this.testId}-view-all-link" href=${this.viewAllHref ?? "#"}>
-            View all <span class="cds--visually-hidden">${this.viewAllLabel}</span>${iconLoader(ArrowRight16, { slot: "icon" })}
-          </cds-link>
+          ${this.viewAllHref
+            ? html`<cds-link data-testid="${this.testId}-view-all-link" href=${this.viewAllHref}>
+                View all <span class="cds--visually-hidden">${this.viewAllLabel}</span>${iconLoader(ArrowRight16, { slot: "icon" })}
+              </cds-link>`
+            : nothing}
         </div>
 
         <div role="list"><slot></slot></div>

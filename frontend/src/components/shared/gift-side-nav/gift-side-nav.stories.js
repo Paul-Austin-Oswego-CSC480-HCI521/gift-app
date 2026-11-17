@@ -11,7 +11,7 @@ export default {
   argTypes: {
     active: {
       control: "select",
-      options: ["dashboard", "wishlist", "people", "dates", "gifts", "settings"],
+      options: ["dashboard", "wishlist", "people", "dates"],
     },
   },
   args: { active: "dashboard" },
