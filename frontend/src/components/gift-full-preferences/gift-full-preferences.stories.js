@@ -10,9 +10,17 @@ export default {
   render: args => html`<gift-full-preferences .values=${args.values} ?loading=${args.loading} ?saving=${args.saving} .loadFailed=${args.loadFailed} .error=${args.error} @preferences-save=${args.onSave}></gift-full-preferences>`,
 };
 export const Default = {};
-export const Loading = { args: { loading: true } };
-export const LoadError = { args: { loadFailed: true, error: "Check your connection and retry." } };
-export const Saving = { args: { saving: true } };
+// WCAG 1.4.3 exempts inactive (disabled) components from contrast requirements. These states disable
+// the form, and the dark accessibility run (npm run test:storybook:dark) checks color-contrast, so
+// exempt only these stories.
+const disabledContrastExempt = { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } };
+
+export const Loading = { args: { loading: true }, parameters: disabledContrastExempt };
+export const LoadError = {
+  args: { loadFailed: true, error: "Check your connection and retry." },
+  parameters: disabledContrastExempt,
+};
+export const Saving = { args: { saving: true }, parameters: disabledContrastExempt };
 export const EditAndSave = {
   play: async ({ canvasElement, args, step }) => {
     const { host, root } = await renderedForm(canvasElement, "gift-full-preferences");

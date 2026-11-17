@@ -6,6 +6,9 @@ export default defineConfig({
   project: "default",
   integration: {
     type: "storybook",
+    // Not tracked in screenshots. The theme switcher is a control, not a visual state. Happo always
+    // renders the default light theme, so the Storybook Theme toolbar never changes snapshots.
+    skip: [{ component: "Custom Components/Theme Switcher" }],
   },
   targets: {
     "chrome-large": {

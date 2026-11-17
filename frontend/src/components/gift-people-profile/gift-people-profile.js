@@ -116,7 +116,7 @@ export class GiftingPeopleProfile extends LitElement {
       }
 
       .preferences {
-        background: #e8f4ed;
+        background: var(--cds-layer-01);
         border-radius: 10px;
         padding: 1.25rem;
         margin-bottom: 1.5rem;

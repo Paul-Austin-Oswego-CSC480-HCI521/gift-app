@@ -29,7 +29,13 @@ jobs:
       - run: npm run test:unit
 
   storybook-a11y:
+    name: storybook-a11y (${{ matrix.theme }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # dark also fails on color-contrast violations (see frontend/.storybook/preview.js)
+        theme: [light, dark]
     defaults: { run: { working-directory: frontend } }
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +43,7 @@ jobs:
         with: { node-version: 22, cache: npm, cache-dependency-path: frontend/package-lock.json }
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:storybook
+      - run: npm run ${{ matrix.theme == 'dark' && 'test:storybook:dark' || 'test:storybook' }}
 
   e2e:
     runs-on: ubuntu-latest

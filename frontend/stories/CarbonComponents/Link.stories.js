@@ -17,6 +17,9 @@ export default {
 
 export const Default = {};
 
+// WCAG 1.4.3 exempts inactive (disabled) components from contrast requirements. The dark
+// accessibility run (npm run test:storybook:dark) checks color-contrast, so exempt this one story.
 export const Disabled = {
   args: { disabled: true },
+  parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } },
 };
