@@ -46,7 +46,21 @@ sideNavSheet.replaceSync(`
   }
 `);
 
-const SHEETS = { "cds-side-nav": sideNavSheet };
+// cds-content-switcher-item left-aligns its label inside the button, on an element that exposes no
+// part. Centre it, so Light / Dark / System sit in the middle of their sections. The :host() selector
+// matches the specificity of Carbon's own button rule, which a plain class selector would lose to.
+const contentSwitcherItemSheet = new CSSStyleSheet();
+contentSwitcherItemSheet.replaceSync(`
+  :host(cds-content-switcher-item) .cds--content-switcher-btn {
+    justify-content: center;
+    text-align: center;
+  }
+`);
+
+const SHEETS = {
+  "cds-side-nav": sideNavSheet,
+  "cds-content-switcher-item": contentSwitcherItemSheet,
+};
 
 function upgrade(element) {
   const root = element.shadowRoot;

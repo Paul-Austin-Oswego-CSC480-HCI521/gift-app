@@ -310,6 +310,12 @@ body,
   --card-background: #FCFBF4;
   --card-heading: #1C544A; /* 8.38:1 on --card-background; the brand green, same as --cds-button-primary */
 
+  /* Tile (see the cds-tile rule above). Defined here, not just defaulted in var() fallbacks, so a light
+     theme nested inside a dark one (Storybook's themed wrapper inside a dark <body>) resets them
+     instead of inheriting the dark values. */
+  --tile-background: var(--cds-background);
+  --tile-shadow-color: var(--cds-border-interactive);
+
   /* Text */
   --cds-text-primary: #0A0A0A;
   --cds-text-secondary: #5A4D4A; /* was Carbon default #525252 - warmed toward the border-subtle rose hue (same lightness) */

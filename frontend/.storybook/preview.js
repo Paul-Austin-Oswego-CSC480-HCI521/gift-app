@@ -7,7 +7,9 @@ import "../src/styles/brand-theme.css";
 import "../src/styles/brand-theme-dark.css";
 import "../src/styles/carbon-shape-overrides.js";
 import "../src/styles/carbon-font-overrides.js";
-import { resolveTheme } from "../src/theme/theme.js";
+import { addons } from "storybook/preview-api";
+import { UPDATE_GLOBALS } from "storybook/internal/core-events";
+import { THEME_CHANGE_EVENT, getPreference, resolveTheme, setPreference } from "../src/theme/theme.js";
 
 // Every axe rule except color-contrast, switched off for the dark run (see the a11y parameter below).
 // Turning rules off, rather than running only color-contrast, keeps the per-story contrast exemptions
@@ -34,6 +36,13 @@ const showsPageBackground = (title) => /^Foundations\/|(^|\/)[^/]*(Tile|Card)/.t
 const startingTheme = ["light", "dark", "system"].includes(import.meta.env.VITE_STORYBOOK_THEME)
   ? import.meta.env.VITE_STORYBOOK_THEME
   : "light";
+
+// Stories can show two theme controls: the Theme toolbar, and the real gift-theme-switcher inside the
+// side nav (Page Layouts). Keep them in step. The switcher moves the toolbar, and a toolbar change
+// moves the switcher (decorator below), so there is one theme and it is the one on screen.
+window.addEventListener(THEME_CHANGE_EVENT, (event) => {
+  addons.getChannel().emit(UPDATE_GLOBALS, { globals: { theme: event.detail.preference } });
+});
 
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
@@ -77,6 +86,9 @@ const preview = {
   },
   decorators: [
     (story, context) => {
+      // The toolbar is the source of truth: mirror it into the real preference so a switcher in the
+      // story shows the same choice. (Same three values: light, dark, system.)
+      if (getPreference() !== context.globals.theme) setPreference(context.globals.theme);
       // "system" follows the OS, the same as the app's default.
       const theme = resolveTheme(context.globals.theme);
       const { carbonClass, brandTheme } = THEMES[theme] ?? THEMES.light;
