@@ -40,5 +40,8 @@ export const Default = {
       await waitFor(() => expect(first.open).toBe(false));
       expect(second.open).toBe(true);
     });
+    // The accessibility check runs right after this play function. Closing an item fades its text, so
+    // without this wait axe can sample a half-faded colour and report a contrast failure that is not real.
+    await Promise.allSettled(document.getAnimations().map((animation) => animation.finished));
   },
 };

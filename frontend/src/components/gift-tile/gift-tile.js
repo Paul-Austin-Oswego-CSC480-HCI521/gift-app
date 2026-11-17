@@ -43,6 +43,7 @@ export class GiftTile extends LitElement {
     :host(:not([type="preference"])) cds-tile,
     :host(:not([type="preference"])) cds-clickable-tile {
       --cds-layer: var(--tile-background, var(--cds-background));
+      --cds-layer-hover: var(--tile-hover-background, var(--cds-layer-hover-01));
       border-radius: var(--tile-radius);
       box-shadow: 6px 5px 4px 0 var(--tile-shadow-color, var(--cds-border-interactive)); /* Figma: x6 y5 blur4 */
     }

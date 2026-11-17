@@ -73,8 +73,9 @@
   --cds-layer-accent-hover-02: #4A5A52;
 
   --card-background: #222A26; /* dark equivalent of the light #FCFBF4 card: layer-01 */
-  --tile-background: var(--card-background); /* lifted off the page: tiles were the page colour (#191813), so only the shadow set them apart */
-  --tile-shadow-color: rgba(255, 70, 69, 0.3); /* same hue as --cds-border-interactive (#FF4645) but muted; the full-strength coral read as a neon outline on dark */
+  --tile-background: #26231D; /* warm, not the sage --card-background: lifted above the page (#100F0B) and the chrome (#191813) in the same warm hue family */
+  --tile-hover-background: #312D25; /* warm hover for clickable tiles, so hovering does not flash the sage --cds-layer-hover-01 */
+  --tile-shadow-color: #1C544A; /* the brand green moved here from the tile fill; the same green as --cds-button-primary */
   --card-heading: #8CC4B6; /* lightened brand green: 7.49:1 on --card-background (#1C544A would be 1.69:1) */
 
   /* Text */

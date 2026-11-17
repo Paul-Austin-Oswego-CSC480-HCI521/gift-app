@@ -79,6 +79,7 @@ cds-table {
 cds-tile,
 cds-clickable-tile {
   --cds-layer: var(--tile-background, var(--cds-background));
+  --cds-layer-hover: var(--tile-hover-background, var(--cds-layer-hover-01));
   border-radius: var(--tile-radius);
   box-shadow: 6px 5px 4px 0 var(--tile-shadow-color, var(--cds-border-interactive)); /* Figma: x6 y5 blur4 */
 }
@@ -314,6 +315,7 @@ body,
      theme nested inside a dark one (Storybook's themed wrapper inside a dark <body>) resets them
      instead of inheriting the dark values. */
   --tile-background: var(--cds-background);
+  --tile-hover-background: var(--cds-layer-hover-01);
   --tile-shadow-color: var(--cds-border-interactive);
 
   /* Text */
