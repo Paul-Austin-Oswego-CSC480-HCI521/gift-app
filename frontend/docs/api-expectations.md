@@ -74,7 +74,7 @@ The `/db` development endpoint exists only in local builds; the production image
 - JSON in, JSON out.
 - Login errors use `{ "message": "..." }` with a real HTTP status. Other resources do not yet share one error shape; prefer the HTTP status code and treat bodies as optional until Backend standardizes this.
 - Resource shapes (gift, person, user, and so on) come from the entity classes and the database schema ([ADR: Database](../../../../wiki/ADR-Database)), which is Backend's call in coordination with Requirements.
-- The frontend currently uses a hard-coded user ID on some pages (for example `dashboard.js` and the gift modal); it should use the `userId` returned by login.
+- Pages read the signed-in user's ID from `getUserId()` in `src/auth/token-store.js`, which login fills from the `userId` in the login response. The wishlist API (`src/api/wishlist.js`) reads the same ID from the token's `sub` claim instead.
 
 ## Questions / coordination
 
