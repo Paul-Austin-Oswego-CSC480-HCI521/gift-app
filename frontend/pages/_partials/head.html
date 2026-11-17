@@ -9,6 +9,29 @@
 <link rel="stylesheet" href="/src/styles/brand-theme.css" />
 <link rel="stylesheet" href="/src/styles/brand-theme-dark.css" />
 <link rel="stylesheet" href="/src/styles/page-templates.css" />
+<!-- Applies a dark theme before first paint so dark users never see a light flash. Light is the
+     markup default (<body data-carbon-theme="brand">), so this only acts for dark. <body> does not
+     exist yet while <head> is parsed, so wait for it to be created. Keep the storage key and the
+     two body settings in sync with src/theme/theme.js, which takes over once the app boots. -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("theme");
+      var dark =
+        saved === "dark" || (saved !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      if (!dark) return;
+      document.documentElement.style.colorScheme = "dark";
+      new MutationObserver(function (_changes, observer) {
+        if (!document.body) return;
+        document.body.classList.add("cds--g100");
+        document.body.dataset.carbonTheme = "brand-dark";
+        observer.disconnect();
+      }).observe(document.documentElement, { childList: true });
+    } catch (e) {
+      /* storage or matchMedia unavailable: stay on the light default */
+    }
+  })();
+</script>
 <!-- Hide custom elements until their JS defines them, avoiding a flash of unstyled
      <gift-*>/<cds-*> elements before they upgrade. -->
 <style>
