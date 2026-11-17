@@ -12,6 +12,7 @@ npm run test:e2e                  # run everything, headless (starts the dev ser
 npm run test:e2e:ui               # UI mode: pick tests, watch them run, time-travel through steps
 npx playwright test login         # only files matching "login"
 npx playwright test --headed      # watch a real browser window
+npm run test:e2e:all              # mocked tests, then the live tests (by hand, at 8pm EST; never in CI)
 npx playwright codegen http://localhost:5173   # record clicks and get locator suggestions
 npx playwright show-report        # open the HTML report from the last run
 ```

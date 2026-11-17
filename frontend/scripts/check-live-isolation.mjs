@@ -1,6 +1,6 @@
 // Fails if the live (real-backend) tests could run in CI. Rules:
 //   - e2e/ (mocked API) runs in CI; e2e-live/ (real server) never does.
-//   - No GitHub workflow may mention e2e-live, test:e2e:live, record:live or playwright.live.config.
+//   - No GitHub workflow may mention e2e-live, test:e2e:live, test:e2e:all, record:live or playwright.live.config.
 //   - The main Playwright config must keep testDir at ./e2e and never mention the live folder or config.
 //   - The `test:e2e` script must not point at the live config.
 import { readdirSync, readFileSync } from "node:fs";
@@ -8,7 +8,7 @@ import { join } from "node:path";
 
 const root = join(import.meta.dirname, "..");
 const workflows = join(root, "..", ".github", "workflows");
-const forbidden = /e2e-live|test:e2e:live|record:live|playwright\.live\.config/;
+const forbidden = /e2e-live|test:e2e:live|test:e2e:all|record:live|playwright\.live\.config/;
 const problems = [];
 
 for (const file of readdirSync(workflows).filter((name) => /\.ya?ml$/.test(name))) {

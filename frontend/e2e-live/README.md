@@ -21,6 +21,7 @@ instead. Read that section first if you are not sure which folder a test belongs
 ```bash
 cd frontend
 npm run test:e2e:live                 # run every live test against the production Netlify site
+npm run test:e2e:all                  # the mocked tests first, then the live tests (stops if a mocked test fails)
 npm run test:e2e:live -- --headed     # watch the browser (in a Codespace: the port 6080 desktop tab)
 npm run record:live                   # record a new live test (opens the site and the Inspector)
 npx playwright show-report playwright-report-live    # open the report from the last run
