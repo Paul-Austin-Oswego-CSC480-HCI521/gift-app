@@ -123,6 +123,12 @@ the Storybook data in `src/mocks/` (`dashboard-user.js`, `people.js`, `person-gi
 `preferences.js`). Writes (POST, PUT) change an in-memory copy for that test, so after adding a person the
 list reloads with them. Nothing is saved anywhere else.
 
+The mock data is checked against the backend in CI. `../../api-shapes.json` lists the fields each
+response has, `ApiShapesTest` (Maven) checks it against the Java entities, and
+`src/mocks/api-shapes.test.js` (`npm run test:unit`) fails if a mock uses a field the backend does not
+return. If that test fails after a backend change, update the mock to match. To add a field to a mock
+that the backend does not return yet, list it in `frontendOnly` in that test, with a reason.
+
 To change a response for one test, pass `{ status, body, delay }` for an endpoint. Leave out any part to
 keep its default. Call it **before** `page.goto()`:
 

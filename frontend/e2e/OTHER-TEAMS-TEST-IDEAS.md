@@ -48,9 +48,9 @@ no browser) in `e2e-live/`:
 2. **Create, read, update, delete round trip over HTTP.** Create a person and a gift, read them back,
    update, delete, and confirm a 404 afterwards. Clean up so the shared test account stays reusable
    (#73).
-3. **Response shape.** Assert the JSON field names the frontend relies on (for example a person's
-   `firstName`, a gift's `status`). This is the contract that keeps the frontend's mock data honest
-   (see below).
+3. **Response shape against the real server.** The field names are already checked without a server
+   by `api-shapes.json` (see below). A live check would confirm the real Liberty response matches the
+   file, for example a Jsonb naming strategy that the Java-side test cannot see.
 4. **Duplicate sign-up returns 409.** The frontend shows "An account with those details already
    exists." for it, but no test checks the API sends it. Needs a unique email per run, so agree how
    test accounts are cleaned up first.
@@ -61,7 +61,20 @@ no browser) in `e2e-live/`:
 The mocked tests in `e2e/` do not call Render at all, so they do not depend on whether the server is
 awake and they run in seconds in CI. That is the right trade for workflow tests. The cost is that the
 mock can drift from the real API: the frontend tests keep passing after the backend changes a field
-name. Two things guard against it, and both are worth keeping:
+name. A check in CI keeps them in step. `api-shapes.json` at the repo root lists the fields of every
+response type (person, gift, wish list item and so on). Two tests read it:
 
-- the response-shape tests in idea 3, run by Back-End, so a backend change fails there first;
-- the live smoke run in `e2e-live/`, which QA runs by hand when the server is awake.
+- `src/test/java/api_shapes/ApiShapesTest.java` (Maven, `./mvnw test`) serializes each Java entity with
+  JSON-B and fails if the response and the file disagree. It needs no server or database.
+- `frontend/src/mocks/api-shapes.test.js` (Vitest, `npm run test:unit`) fails if a mock invents a field
+  the file does not list.
+
+So renaming a field in Java fails the backend test until the file is updated, and updating the file
+fails the frontend test until the mocks follow. A mock may leave fields out, but not add one. Fields
+the frontend uses that the backend does not return yet (a gift's `quantity`, the wish list's
+`priority`, `status` and `added`) are listed in the frontend test with a reason, so the gap stays
+visible.
+
+The live smoke run in `e2e-live/`, which QA runs by hand when the server is awake, remains the
+backstop for everything the shapes file cannot see: types beyond string and number, status codes, and
+real data.
