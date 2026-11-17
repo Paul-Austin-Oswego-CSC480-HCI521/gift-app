@@ -51,5 +51,20 @@ Write down the **site URL, commit SHA, date and time, and result** with every ru
 | `credentials.js` | Reads the test account from the environment. |
 | `../playwright.live.config.js` | Separate config. The main `playwright.config.js` only looks in `e2e/`. |
 
-Candidate live tests (CRUD round trip, unauthorized access, persistence, per-user dashboards) are
-listed in [`../e2e/CANDIDATE-TESTS.md`](../e2e/CANDIDATE-TESTS.md#priority-1-real-backend-smoke-run-svt).
+## Candidate live tests
+
+For a developer to build. Raw API checks such as unauthorized access belong to Back-End: see [`../e2e/OTHER-TEAMS-TEST-IDEAS.md`](../e2e/OTHER-TEAMS-TEST-IDEAS.md). All need the real server, so they go in this folder. Clean up afterwards so
+the shared test account stays reusable (issue #73).
+
+- **Full CRUD round trip**: create a wishlist item or person, read it back after a reload, edit it,
+  delete it, confirm it is gone.
+- **Data persists across sessions**: log out, log back in, the earlier data is still there.
+- **Per-user dashboards** (#229): two test accounts each see only their own people, gifts and dates.
+- **View-all lists match saved records** (#228): after adding at least two people and dates, the full
+  lists show all of them.
+- **Sign-up with a real account** (#217, #218): needs a unique email each run and creates a permanent
+  account, so decide with Backend how test accounts are cleaned up first.
+
+Record a run with the URL, commit SHA, date and time, and result. If the account, data or backend is
+unavailable, report the run as blocked, not passed. Backend CORS allows only the production origin, so
+Netlify Deploy Previews cannot call the API.

@@ -85,7 +85,7 @@ e2e/
   dashboard.spec.js
 ```
 
-Not sure what to test, or new to coding? [CANDIDATE-TESTS.md](CANDIDATE-TESTS.md) lists what to write next and explains how to record a test by clicking through the app (`npm run record -- <scenario>`), no coding needed.
+New to coding? [QA-GUIDE.md](QA-GUIDE.md) is a step-by-step guide for QA: set up, record a first test by clicking through the app (`npm run record -- <scenario>`), then a short list of tests to write. No coding needed.
 
 Put new tests in `e2e/<feature>.spec.js`. Import `test` and `expect` from `./fixtures/index.js`
 (not from `@playwright/test`) so every test gets the mocked API automatically.
