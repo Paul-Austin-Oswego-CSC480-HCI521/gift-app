@@ -1,7 +1,10 @@
-name: Unit Tests (Person & User Endpoints)
+name: Backend Unit Tests
 on:
   push:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:

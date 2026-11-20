@@ -9,10 +9,22 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "22"
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "password": "vscode",
+      "webPort": "6080",
+      "vncPort": "5901"
+    }
   },
-  "forwardPorts": [5173, 6006, 9080],
+  "containerEnv": {
+    "VNC_RESOLUTION": "1440x900x16"
+  },
+  "forwardPorts": [5173, 6006, 6080, 9080],
   "portsAttributes": {
+    "6080": {
+      "label": "Desktop (noVNC): open this to see the Playwright browser and Inspector",
+      "onAutoForward": "notify"
+    },
     "5173": {
       "label": "Vite dev server",
       "onAutoForward": "notify"
@@ -26,7 +38,7 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "npm install --prefix frontend",
+  "postCreateCommand": "npm install --prefix frontend && cd frontend && npx playwright install --with-deps chromium",
   "customizations": {
     "vscode": {
       "extensions": [

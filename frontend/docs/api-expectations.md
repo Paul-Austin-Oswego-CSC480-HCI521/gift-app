@@ -31,13 +31,19 @@ Per the course's JWT requirement, the frontend signs in once and sends a bearer 
 - `400` with `{ "message": "Email and password are required." }`
 - `401` with `{ "message": "Invalid email or password." }`
 
+`POST /auth/signup` with JSON `{ "firstName": "...", "surname": "...", "email": "...", "password": "..." }` creates an account and returns:
+
+- `201` with the same `{ "token": "<jwt>", "userId": <number> }` body as login (the frontend currently ignores it and sends the user to the login page)
+- `400` with an empty body when a field is missing or blank, or the password fails the password rules
+- `409` with an empty body when the email is already in use
+
 The frontend then sends the token on authenticated requests:
 
 ```
 Authorization: Bearer <token>
 ```
 
-- `/auth/login` and `/ping` are public. The `/user/...` resources are intended to require a valid token with the `user` role.
+- `/auth/login`, `/auth/signup` and `/ping` are public. The `/user/...` resources are intended to require a valid token with the `user` role.
 - The token is stored in `sessionStorage` by `src/auth/token-store.js`. That file notes this is a stopgap because scripts can read it; a better approach is still open.
 - The login page ignores "remember me" until the backend supports persistent sessions.
 - Tokens are signed with Liberty's auto-generated keys, so a backend restart or redeploy invalidates existing tokens and users must log in again. The issuer comes from the `jwt.issuer` setting (`JWT_ISSUER` on Render).
@@ -51,12 +57,14 @@ These are the JAX-RS resources in the backend (all JSON in and out); see the cla
 | --- | --- | --- |
 | `/ping` | GET | Health check; returns `{ "status": "OK" }`. Public. |
 | `/auth/login` | POST | Email/password login. Public. |
-| `/user`, `/user/{id}` | GET, POST, PUT, DELETE | Users |
-| `/user/{uid}/attributes[/{aid}]` | GET, POST, PUT, DELETE | A user's attributes |
+| `/auth/signup` | POST | Create an account; returns a token like login. Public. |
+| `/user`, `/user/{id}` | `/user`: GET; `/user/{id}`: GET, PUT, DELETE | Users. Accounts are created through `/auth/signup`, not `POST /user`. |
+| `/user/{uid}/preferences` | GET, POST, PUT, DELETE | The user's own preferences (a `UserAttribute` record: sizes, favorites, likes and dislikes). The frontend treats it as one record per user and there is no `{aid}` in the path, but the database does not enforce that (see the backend tickets). |
+| `/user/{uid}/wished_items[/{wid}]` | `/wished_items`: GET, POST; `/wished_items/{wid}`: PUT, DELETE | The user's wishlist items (`giftName`, `value`) |
 | `/user/{uid}/person[/{pid}]` | GET, POST, PUT, DELETE | People the user gives gifts to |
-| `/user/{uid}/person/{pid}/attributes[/{aid}]` | GET, POST, PUT, DELETE | A person's attributes |
-| `/user/{uid}/gift[/{gid}]`, `/user/{uid}/gift/person/{pid}` | GET, POST, PUT, DELETE | Gifts, directly or per person |
-| `/user/{uid}/gift/{gid}/status` | GET, POST, PUT, DELETE | A gift's status |
+| `/user/{uid}/person/{pid}/attributes[/{aid}]` | `/attributes`: GET, POST; `/attributes/{aid}`: PUT, DELETE | A person's attributes |
+| `/user/{uid}/gift[/{gid}]`, `/user/{uid}/gift/person/{pid}` | `/gift`: GET, DELETE (all); `/gift/{gid}`: GET, PUT, DELETE; `/gift/person/{pid}`: GET, POST, DELETE | Gifts, directly or per person. Gifts are created per person with `POST /gift/person/{pid}`. |
+| `/user/{uid}/gift/{gid}/status` | GET, POST, PUT | A gift's status (no DELETE) |
 | `/user/{uid}/gift/{gid}/occasion` | GET, POST, PUT, DELETE | A gift's occasion |
 
 The `/db` development endpoint exists only in local builds; the production image removes it.
@@ -66,7 +74,7 @@ The `/db` development endpoint exists only in local builds; the production image
 - JSON in, JSON out.
 - Login errors use `{ "message": "..." }` with a real HTTP status. Other resources do not yet share one error shape; prefer the HTTP status code and treat bodies as optional until Backend standardizes this.
 - Resource shapes (gift, person, user, and so on) come from the entity classes and the database schema ([ADR: Database](../../../../wiki/ADR-Database)), which is Backend's call in coordination with Requirements.
-- The frontend currently uses a hard-coded user ID on some pages (for example `dashboard.js` and the gift modal); it should use the `userId` returned by login.
+- Pages read the signed-in user's ID from `getUserId()` in `src/auth/token-store.js`, which login fills from the `userId` in the login response. The wishlist API (`src/api/wishlist.js`) reads the same ID from the token's `sub` claim instead.
 
 ## Questions / coordination
 

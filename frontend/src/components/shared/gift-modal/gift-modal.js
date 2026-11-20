@@ -1,6 +1,5 @@
-//Note. USER_ID is hardcoded. Auth is storing the current users user-id, I just did not
-//bother with getting it. This is just a hardcoded bandaid for demo. Similarly, every gift currently has
-//gift type as "Gift". This would need to be changed to something dynamic, otherwise its redundant.
+//Note. Every gift is currently sent with the type "gift". This would need to be changed to
+//something dynamic, otherwise it is redundant.
 
 import { LitElement, html, css } from "lit";
 import "@carbon/web-components/es/components/modal/index.js";

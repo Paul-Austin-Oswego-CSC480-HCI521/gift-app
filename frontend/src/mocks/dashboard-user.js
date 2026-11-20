@@ -2,6 +2,7 @@ export const user = {
   fullName: "Test User 1",
   people: [
     {
+      id: 1,
       fullName: "Alex Rivera",
       gifts: [
         {
@@ -20,6 +21,6 @@ export const user = {
         },
       ],
     },
-    { fullName: "Sam Patel", gifts: [] },
+    { id: 2, fullName: "Sam Patel", gifts: [] },
   ],
 };

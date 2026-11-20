@@ -1,0 +1,67 @@
+{
+  "User": {
+    "id": "number",
+    "firstName": "string",
+    "surname": "string",
+    "fullName": "string",
+    "email": "string",
+    "username": "string",
+    "people": "Person[]",
+    "wishlist": "UserWishedItem[]",
+    "attributes": "UserAttribute[]"
+  },
+  "Person": {
+    "id": "number",
+    "firstName": "string",
+    "lastName": "string",
+    "fullName": "string",
+    "attributes": "PersonAttribute[]",
+    "gifts": "Gift[]"
+  },
+  "Gift": {
+    "id": "number",
+    "name": "string",
+    "type": "string",
+    "purchaseDate": "string",
+    "status": "GiftStatus",
+    "occasion": "Occasion"
+  },
+  "GiftStatus": {
+    "id": "number",
+    "stage": "string"
+  },
+  "Occasion": {
+    "id": "number",
+    "name": "string",
+    "date": "string"
+  },
+  "PersonAttribute": {
+    "id": "number",
+    "attribute_name": "string",
+    "value": "string"
+  },
+  "UserAttribute": {
+    "id": "number",
+    "favoriteColor": "string",
+    "shirtSize": "string",
+    "pantSize": "string",
+    "shoeSize": "string",
+    "jacketSize": "string",
+    "dressSize": "string",
+    "preferredFit": "string",
+    "styleDescription": "string",
+    "favoriteBrands": "string",
+    "favoriteFoods": "string",
+    "favoriteDrinks": "string",
+    "ringSize": "string",
+    "metalPreference": "string",
+    "likes": "string",
+    "dislikes": "string",
+    "interests": "string"
+  },
+  "UserWishedItem": {
+    "id": "number",
+    "giftName": "string",
+    "value": "string"
+  }
+}

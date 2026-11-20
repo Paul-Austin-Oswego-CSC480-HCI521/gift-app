@@ -164,12 +164,17 @@ point, not logic) and `*.stories.js` files (Storybook fixtures, not app logic) â
 own sake; prioritize tests for real success/error/empty/interaction behavior over hitting a
 percentage.
 
+## End-to-end tests
+
+Browser-level end-to-end tests live in [`e2e/`](../e2e/README.md) and run with `npm run test:e2e`.
+They use `@playwright/test` with the API mocked, so no backend or database is needed. Components expose
+stable selectors through `data-testid` hooks; see
+[Test hooks](carbon-conventions.md#test-hooks-data-testid). Unit tests, Storybook story tests and e2e
+tests are separate layers: the Vitest `storybook` project above only checks that stories render.
+
 ## Scope: what this does *not* cover
 
-Per the class's team split, Full Stack owns unit/function testing (this doc); QA owns end-to-end
-system workflows, smoke testing, and regression testing (see the wiki's
-[Team-QA](../../../wiki/Team-QA)). The `storybook` project's use of Playwright is scoped narrowly to
-running our own stories in a browser (a frontend-owned, component-level concern) â€” it is not a
-general license to add Playwright-based end-to-end app testing, load testing, or visual regression
-tooling here; those stay with QA's own tooling and whichever visual regression tool the team
-adopts, respectively (see the wiki's [Frontend CI Proposal](../../../wiki/Frontend-CI-Proposal)).
+Full Stack owns unit/function testing (this doc); QA owns the end-to-end system workflows, smoke
+testing, and regression testing (see the wiki's [Team-QA](../../../wiki/Team-QA)) and writes the specs
+in `e2e/`. Load testing and visual regression tooling stay with whichever tool the team adopts
+(see the wiki's [Frontend CI Proposal](../../../wiki/Frontend-CI-Proposal)).

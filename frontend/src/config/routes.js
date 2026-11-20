@@ -8,8 +8,6 @@ export const routes = {
   people: { label: "People", path: "/people" },
   "people-profile": { label: "Person Profile",path: "/gift-people-profile",},
   dates: { label: "Upcoming Dates", path: "/upcoming-dates" },
-  gifts: { label: "All Gifts", path: "/all-gifts" },
-  settings: { label: "Settings", path: "/settings" },
   // Targets the side nav can navigate to that do not have pages yet.
   "add-gift": { path: "/add-gift" },
   "add-recipient": { path: "/add-recipient" },

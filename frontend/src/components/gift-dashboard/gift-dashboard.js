@@ -176,8 +176,6 @@ export class GiftDashboard extends LitElement {
           data-testid="dashboard-gifts-card"
           test-id="dashboard-gifts"
           heading="Gifts to Buy"
-          view-all-href=${routes.gifts.path}
-          view-all-label="Gifts to Buy"
           description="See what still needs to be purchased"
           add-label="Add Gift"
           .total=${toBuy.length}

@@ -140,9 +140,11 @@ export class GiftUpcomingDates extends LitElement {
         <h2 slot="title" class="metric-title">${title}</h2>
         <span slot="metric" class="metric-value">${value}</span>
         <span class="metric-description">${description}</span>
-        <cds-link data-testid="upcoming-dates-${testId}-link" href=${action.href}>
-          ${action.label}${iconLoader(ArrowRight16, { slot: "icon" })}
-        </cds-link>
+        ${action
+          ? html`<cds-link data-testid="upcoming-dates-${testId}-link" href=${action.href}>
+              ${action.label}${iconLoader(ArrowRight16, { slot: "icon" })}
+            </cds-link>`
+          : nothing}
       </gift-tile>
     `;
   }
@@ -211,14 +213,8 @@ export class GiftUpcomingDates extends LitElement {
           label: "View dates",
           href: routes.dates.path,
         })}
-        ${this._metric("to-buy", "Gifts still to buy", summary.toBuy, {
-          label: "Go to gifts",
-          href: routes.gifts.path,
-        })}
-        ${this._metric("unplanned", "Dates with no gift planned", summary.unplanned, {
-          label: "Plan gifts",
-          href: routes.gifts.path,
-        })}
+        ${this._metric("to-buy", "Gifts still to buy", summary.toBuy)}
+        ${this._metric("unplanned", "Dates with no gift planned", summary.unplanned)}
       </div>
 
       <div class="toolbar">

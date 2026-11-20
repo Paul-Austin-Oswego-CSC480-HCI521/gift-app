@@ -2,9 +2,9 @@
 
 Four workflows are wired up and running today:
 
-- `unit-testing.yml` — runs the backend unit tests (`./mvnw test`) on every push and pull request.
-- `frontend-checks.yml` — runs the frontend Carbon lint and unit tests on pull requests targeting `main`.
-- `storybook-pages.yml` — builds Storybook and deploys it to GitHub Pages, on pushes to `feature/ui-start`/`main` or a manual run.
+- `unit-testing.yml` — runs the backend unit tests (`./mvnw test`), including the shared `api-shapes.json` check, on every push and pull request.
+- `frontend-checks.yml` — on pull requests targeting `main` or `develop`, runs five jobs: Carbon lint (`lint:carbon`), frontend unit tests, Storybook accessibility tests, the mocked Playwright end-to-end tests (with the live-isolation lint; the report is uploaded as an artifact), and the production build. The live end-to-end tests in `frontend/e2e-live/` are not part of CI.
+- `storybook-pages.yml` — builds Storybook and deploys it to GitHub Pages, on pushes to `main` or a manual run.
 - `happo.yml` — runs Happo visual/accessibility regression against the Storybook build, on pushes to `main` and on pull requests targeting `main`. Needs the `HAPPO_API_KEY`/`HAPPO_API_SECRET` repo secrets.
 
 See the wiki's [GitHub Actions Guide](../../wiki/GitHub-Actions-Guide) for how to read a run's status and re-run a failed job, and [ADR: CI/CD Pipeline](../../wiki/ADR-CI-CD-Pipeline) for the decision record.
