@@ -12,6 +12,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
+    private static final String COOKIE_NAME = "gift_access_token";
+    private static final String CACHE_CONTROL = "private, no-store";
     private static final String DUMMY_HASH = new PasswordService().hash("dummy-password");
     private static final int MIN_PASSWORD_LENGTH= 6;
 
@@ -72,7 +75,7 @@ public class AuthResource {
 
         String token = tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
         log.info("Auth Request successful for user {}.", user.getId());
-        return reply(Response.Status.OK, new LoginResponse(token, user.getId()));
+        return authenticated(Response.ok(), user.getId(), token);
     }
 
     @POST
@@ -108,13 +111,32 @@ public class AuthResource {
 
         user = uRepo.save(user);
         String token = tokens.mintAccessToken(user.getId(), List.of("user"), user.getEmail());
-        LoginResponse tokenObject = new LoginResponse(token, user.getId());
-        return Response.created(UriBuilder.fromPath("user/" + user.getId()).build()).entity(tokenObject).build();
+        return authenticated(
+                Response.created(UriBuilder.fromPath("user/" + user.getId()).build()),
+                user.getId(), token);
+    }
+
+    @POST
+    @Path("/logout")
+    public Response logout() {
+        return Response.noContent().header("Cache-Control", CACHE_CONTROL)
+                .cookie(authCookie("").maxAge(0).build()).build();
+    }
+
+    private Response authenticated(Response.ResponseBuilder response, Integer userId, String token) {
+        return response.type(MediaType.APPLICATION_JSON_TYPE).entity(new LoginResponse(userId))
+                .header("Cache-Control", CACHE_CONTROL)
+                .cookie(authCookie(token).build()).build();
+    }
+
+    private NewCookie.Builder authCookie(String value) {
+        return new NewCookie.Builder(COOKIE_NAME).value(value).path("/")
+                .httpOnly(true).secure(true).sameSite(NewCookie.SameSite.STRICT);
     }
 
     private Response reply(Response.Status status, Object body) {
         return Response.status(status).type(MediaType.APPLICATION_JSON_TYPE)
-                .header("Cache-Control", "no-store").entity(body).build();
+                .header("Cache-Control", CACHE_CONTROL).entity(body).build();
     }
 
     public record SignupForm(String firstName, String surname,
