@@ -1,3 +1,4 @@
+import { html } from "lit";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import "./gift-modal.js";
 
@@ -57,6 +58,37 @@ describe("gift-modal", () => {
       "legend-text",
       "Set Status"
     );
+  });
+
+  it("renders caller-supplied fields and hands submission back to the caller", async () => {
+    const modal = await renderModal('type="custom" open heading="Add Person" submit-label="Save Person"');
+    modal.fields = html`<cds-text-input name="full-name" label="Full Name"></cds-text-input>`;
+    await modal.updateComplete;
+
+    const root = modal.shadowRoot;
+    const form = root.querySelector("form");
+    expect(root.querySelector("cds-modal")).toHaveAttribute("aria-label", "Add Person");
+    expect(root.querySelector("cds-modal-heading")).toHaveTextContent("Add Person");
+    const submitButton = root.querySelector("cds-button");
+    const nameInput = form.querySelector("cds-text-input");
+    expect(submitButton).toHaveTextContent("Save Person");
+    expect(nameInput).toHaveAttribute("name", "full-name");
+    expect(form.querySelector('[name="gift-name"]')).toBeNull();
+
+    const onSubmit = vi.fn();
+    modal.parentElement.addEventListener("item-submit", onSubmit);
+
+    submitButton.click();
+    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(onSubmit.mock.calls[0][0].detail.form).toBe(form);
+
+    nameInput.dispatchEvent(new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    }));
+    expect(onSubmit).toHaveBeenCalledTimes(2);
+    expect(modal.open).toBe(true);
   });
 
   it("falls back to Add Gift for an unknown type", async () => {

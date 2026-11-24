@@ -1,7 +1,9 @@
 //Note. Every gift is currently sent with the type "gift". This would need to be changed to
 //something dynamic, otherwise it is redundant.
 
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
+import Add16 from "@carbon/icons/es/add/16.js";
+import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
 import "@carbon/web-components/es/components/modal/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
@@ -24,6 +26,9 @@ export class GiftAddGiftModal extends LitElement {
     open: { type: Boolean, reflect: true },
     type: { type: String, reflect: true },
     people: { attribute: false },
+    heading: { type: String },
+    submitLabel: { type: String, attribute: "submit-label" },
+    fields: { attribute: false },
     _personId: { state: true },
     _saving: { state: true },
     _errors: { state: true },
@@ -70,8 +75,53 @@ export class GiftAddGiftModal extends LitElement {
       gap: var(--cds-spacing-03, 0.5rem);
     }
 
-    cds-button {
+    .gift-form > cds-button {
       align-self: flex-end;
+    }
+
+    /* Finalized Add Gift mockup: 716px dialog and 408px form column. */
+    :host([type="custom"]) cds-modal::part(dialog) {
+      inline-size: 44.75rem;
+      max-inline-size: calc(100vw - var(--cds-spacing-07));
+      max-block-size: calc(100dvh - var(--cds-spacing-07));
+      border-radius: var(--radius-small);
+    }
+
+    :host([type="custom"]) cds-modal-header {
+      margin-block-end: 0;
+      padding: var(--cds-spacing-10) var(--cds-spacing-05) 0;
+    }
+
+    :host([type="custom"]) cds-modal-close-button {
+      inset-block-start: var(--cds-spacing-02);
+      inset-inline-end: var(--cds-spacing-02);
+    }
+
+    :host([type="custom"]) cds-modal-heading,
+    :host([type="custom"]) .gift-form {
+      max-inline-size: 25.5rem;
+      margin-inline: auto;
+    }
+
+    :host([type="custom"]) cds-modal-heading {
+      padding: 0;
+      font-size: var(--cds-heading-04-font-size, 1.5rem);
+    }
+
+    :host([type="custom"]) cds-modal-body {
+      margin: 0;
+      min-block-size: 0;
+      padding: var(--cds-spacing-02) var(--cds-spacing-05) var(--cds-spacing-07);
+      font-family: var(--font-family-body);
+      --cds-field: var(--cds-field-02);
+      --cds-label-01-font-size: 0.625rem;
+      --cds-body-compact-01-font-size: 0.6875rem;
+      --cds-body-01-font-size: 0.6875rem;
+    }
+
+    :host([type="custom"]) cds-button::part(button),
+    :host([type="custom"]) cds-dropdown::part(trigger-button) {
+      border-radius: 0;
     }
   `;
 
@@ -152,136 +202,166 @@ export class GiftAddGiftModal extends LitElement {
     }
   }
 
+  _submitOnEnter(event) {
+    if (
+      event.key === "Enter" &&
+      !event.defaultPrevented &&
+      !event.isComposing &&
+      event.target.localName === "cds-text-input"
+    ) {
+      event.preventDefault();
+      event.currentTarget.requestSubmit();
+    }
+  }
+
+  // Custom forms own their data and decide when to close the modal.
+  _submitCustom(event) {
+    event.preventDefault();
+    this.dispatchEvent(new CustomEvent("item-submit", {
+      detail: { form: event.currentTarget },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  _renderGiftFields() {
+    return html`
+      <cds-text-input
+        data-testid="gift-modal-name-input"
+        name="gift-name"
+        label="Gift Name"
+        placeholder="Enter gift name"
+        size="lg"
+        type="text"
+        required
+        data-modal-primary-focus
+        ?invalid=${Boolean(this._errors.name)}
+        invalid-text=${this._errors.name ?? ""}
+      ></cds-text-input>
+
+      <cds-text-input
+        data-testid="gift-modal-link-input"
+        name="gift-link"
+        label="Gift Link"
+        placeholder="Enter a link to the gift"
+        size="lg"
+        type="url"
+      ></cds-text-input>
+
+      <cds-text-input
+        data-testid="gift-modal-quantity-input"
+        name="quantity"
+        label="Quantity"
+        placeholder="Insert Quantity"
+        size="lg"
+        type="text"
+      ></cds-text-input>
+
+      <cds-text-input
+        data-testid="gift-modal-occasion-input"
+        name="occasion"
+        label="Occasion"
+        placeholder="Enter the occasion"
+        size="lg"
+        type="text"
+      ></cds-text-input>
+
+      <cds-dropdown
+        data-testid="gift-modal-person-dropdown"
+        name="person-id"
+        title-text="Who is this gift for?"
+        label="Choose a person"
+        direction="bottom"
+        ?invalid="${Boolean(this._errors.person)}"
+        invalid-text="${this._errors.person ?? ''}"
+        @cds-dropdown-selected="${(e) => {
+          this._personId = e.detail.item.value;
+          this._errors = { ...this._errors, person: undefined };
+        }}"
+      >
+        ${(this.people ?? []).map(
+          (person) => html`
+            <cds-dropdown-item data-testid="gift-modal-person-option-${person.id}" value="${person.id}">
+              ${person.fullName ?? "Unnamed person"}
+            </cds-dropdown-item>
+          `
+        )}
+      </cds-dropdown>
+
+      <cds-radio-button-group
+        data-testid="gift-modal-status-group"
+        legend-text="Set Status"
+        label-position="right"
+        orientation="horizontal"
+        name="status"
+        value="need-to-buy"
+      >
+        <cds-radio-button
+          data-testid="gift-modal-status-need-to-buy-radio"
+          value="need-to-buy"
+          label-text="Need to buy"
+        ></cds-radio-button>
+
+        <cds-radio-button
+          data-testid="gift-modal-status-purchased-radio"
+          value="purchased"
+          label-text="Purchased"
+        ></cds-radio-button>
+      </cds-radio-button-group>
+
+      ${this._errors.general
+        ? html`
+            <cds-inline-notification
+              data-testid="gift-modal-error-banner"
+              kind="error"
+              title="Error"
+              subtitle=${this._errors.general}
+              hide-close-button
+              open
+            ></cds-inline-notification>
+          `
+        : ""}
+    `;
+  }
+
   render() {
+    const custom = this.type === "custom";
+    const heading = custom ? this.heading || "Add Item" : "Add Gift";
+    const submitLabel = (custom && this.submitLabel) || heading;
+
     return html`
       <cds-modal
         data-testid="gift-modal-dialog"
         ?open=${this.open}
-        aria-label="Add Gift"
+        aria-label=${heading}
         @cds-modal-closed=${this._closeModal}
       >
         <cds-modal-header>
           <cds-modal-close-button data-testid="gift-modal-close-button"></cds-modal-close-button>
-          <cds-modal-heading>Add Gift</cds-modal-heading>
+          <cds-modal-heading>${heading}</cds-modal-heading>
         </cds-modal-header>
 
         <cds-modal-body>
-          <form class="gift-form" data-testid="gift-modal-form">
-            <cds-text-input
-              data-testid="gift-modal-name-input"
-              name="gift-name"
-              label="Gift Name"
-              placeholder="Enter gift name"
-              size="lg"
-              type="text"
-              required
-              data-modal-primary-focus
-              ?invalid=${Boolean(this._errors.name)}
-              invalid-text=${this._errors.name ?? ""}
-            ></cds-text-input>
-
-            <cds-text-input
-              data-testid="gift-modal-link-input"
-              name="gift-link"
-              label="Gift Link"
-              placeholder="Enter a link to the gift"
-              size="lg"
-              type="url"
-            ></cds-text-input>
-
-            <cds-text-input
-              data-testid="gift-modal-quantity-input"
-              name="quantity"
-              label="Quantity"
-              placeholder="Insert Quantity"
-              size="lg"
-              type="text"
-            ></cds-text-input>
-
-            <cds-text-input
-              data-testid="gift-modal-occasion-input"
-              name="occasion"
-              label="Occasion"
-              placeholder="Enter the occasion"
-              size="lg"
-              type="text"
-            ></cds-text-input>
-
-            <cds-dropdown
-              data-testid="gift-modal-person-dropdown"
-              name="person-id"
-              title-text="Who is this gift for?"
-              label="Choose a person"
-              direction="bottom"
-              ?invalid="${Boolean(this._errors.person)}"
-              invalid-text="${this._errors.person ?? ''}"
-              @cds-dropdown-selected="${(e) => {
-                this._personId = e.detail.item.value;
-                this._errors = { ...this._errors, person: undefined };
-              }}"
-            >
-              ${(this.people ?? []).map(
-                (person) => html`
-                  <cds-dropdown-item data-testid="gift-modal-person-option-${person.id}" value="${person.id}">
-                    ${person.fullName ?? "Unnamed person"}
-                  </cds-dropdown-item>
-                `
-              )}
-            </cds-dropdown>
-
-            <cds-radio-button-group
-              data-testid="gift-modal-status-group"
-              legend-text="Set Status"
-              label-position="right"
-              orientation="horizontal"
-              name="status"
-              value="need-to-buy"
-            >
-              <cds-radio-button
-                data-testid="gift-modal-status-need-to-buy-radio"
-                value="need-to-buy"
-                label-text="Need to buy"
-              ></cds-radio-button>
-
-              <cds-radio-button
-                data-testid="gift-modal-status-purchased-radio"
-                value="purchased"
-                label-text="Purchased"
-              ></cds-radio-button>
-            </cds-radio-button-group>
-
-            ${this._errors.general
-              ? html`
-                  <cds-inline-notification
-                    data-testid="gift-modal-error-banner"
-                    kind="error"
-                    title="Error"
-                    subtitle=${this._errors.general}
-                    hide-close-button
-                    open
-                  ></cds-inline-notification>
-                `
-              : ""}
+          <form
+            class="gift-form"
+            data-testid="gift-modal-form"
+            @submit=${custom ? this._submitCustom : nothing}
+            @keydown=${custom ? this._submitOnEnter : nothing}
+          >
+            ${custom ? this.fields : this._renderGiftFields()}
 
             <cds-button
               data-testid="gift-modal-submit-button"
               type="button"
+              size=${custom ? "sm" : "lg"}
               kind="primary"
-              ?disabled=${this._saving}
-              @click=${this._submit}
+              ?disabled=${!custom && this._saving}
+              @click=${custom
+                ? (event) => event.currentTarget.closest("form").requestSubmit()
+                : this._submit}
             >
-              ${this._saving ? "Adding…" : "Add Gift"}
-              <svg
-                slot="icon"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                fill="currentColor"
-                width="16"
-                height="16"
-                aria-hidden="true"
-              >
-                <path d="M17 15V8h-2v7H8v2h7v7h2v-7h7v-2h-7z"></path>
-              </svg>
+              ${!custom && this._saving ? "Adding…" : submitLabel}
+              ${iconLoader(Add16, { slot: "icon", "aria-hidden": "true" })}
             </cds-button>
           </form>
         </cds-modal-body>

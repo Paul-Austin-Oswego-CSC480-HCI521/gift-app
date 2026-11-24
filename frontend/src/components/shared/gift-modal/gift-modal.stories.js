@@ -1,10 +1,12 @@
 import { html } from "lit";
-import { expect, userEvent, waitFor } from "storybook/test";
+import Add16 from "@carbon/icons/es/add/16.js";
+import { iconLoader } from "@carbon/web-components/es/globals/internal/icon-loader.js";
+import "@carbon/web-components/es/components/date-picker/index.js";
+import "@carbon/web-components/es/components/link/index.js";
+import { expect, fn, userEvent, waitFor } from "storybook/test";
 import { nativeInput } from "../../../../stories/helpers/shadow.js";
 import "./gift-modal.js";
 
-// One story per modal type; `type` selects which modal gift-modal renders. Add a story here
-// whenever a new type is added to MODALS in gift-modal.js.
 export default {
   title: "Custom Components/Modal",
   component: "gift-modal",
@@ -128,6 +130,84 @@ export const FillInGift = {
     await step("Modal stays open", async () => {
       expect(host.open).toBe(true);
       expect(dialog.open).toBe(true);
+    });
+  },
+};
+
+export const AddGiftMockup = {
+  parameters: carbonRadioAriaReadonly,
+  render: () => html`
+    <gift-modal
+      type="custom"
+      heading="Add Gift"
+      submit-label="Add gift"
+      open
+      .fields=${html`
+        <cds-dropdown data-testid="gift-modal-mockup-list" name="list" title-text="Choose a list" label="Choose a list" size="sm">
+          <cds-dropdown-item value="holiday">Holiday gifts</cds-dropdown-item>
+        </cds-dropdown>
+        <cds-link data-testid="gift-modal-mockup-create-list" href="#create-list" size="sm">
+          Create a list ${iconLoader(Add16, { slot: "icon", "aria-hidden": "true" })}
+        </cds-link>
+        <cds-text-input data-testid="gift-modal-mockup-name" name="gift-name" label="Gift Name" placeholder="Add Name" size="sm"></cds-text-input>
+        <cds-text-input data-testid="gift-modal-mockup-link" name="product-link" label="Product Link" placeholder="Insert link" size="sm" type="url"></cds-text-input>
+        <cds-dropdown data-testid="gift-modal-mockup-recipient" name="recipient" title-text="Recipient" label="Choose recipient" size="sm">
+          <cds-dropdown-item value="sam">Sam Rivera</cds-dropdown-item>
+        </cds-dropdown>
+        <cds-dropdown data-testid="gift-modal-mockup-occasion" name="occasion" title-text="Occasion" label="Choose Occasion" size="sm">
+          <cds-dropdown-item value="birthday">Birthday</cds-dropdown-item>
+        </cds-dropdown>
+        <cds-date-picker data-testid="gift-modal-mockup-date" name="date" allow-input>
+          <cds-date-picker-input kind="single" label-text="Date" placeholder="mm/dd/yyyy" size="sm" is-fluid></cds-date-picker-input>
+        </cds-date-picker>
+        <cds-dropdown data-testid="gift-modal-mockup-reminder" name="reminder" title-text="Set a reminder" label="No Reminder" size="sm">
+          <cds-dropdown-item value="none">No Reminder</cds-dropdown-item>
+          <cds-dropdown-item value="week">One week before</cds-dropdown-item>
+        </cds-dropdown>
+        <cds-radio-button-group data-testid="gift-modal-mockup-status" name="status" legend-text="Select a status" orientation="vertical" label-position="right">
+          <cds-radio-button value="need-to-buy" label-text="Need to buy"></cds-radio-button>
+          <cds-radio-button value="purchased" label-text="Purchased"></cds-radio-button>
+        </cds-radio-button-group>
+      `}
+    ></gift-modal>
+  `,
+};
+
+export const SubmitCustomForm = {
+  args: { onItemSubmit: fn() },
+  argTypes: { onItemSubmit: { table: { disable: true } } },
+  render: ({ onItemSubmit }) => html`
+    <gift-modal
+      type="custom"
+      heading="Add Person"
+      submit-label="Save Person"
+      open
+      @item-submit=${onItemSubmit}
+      .fields=${html`
+        <cds-text-input
+          data-testid="gift-modal-custom-name-input"
+          data-modal-primary-focus
+          name="full-name"
+          label="Full Name"
+        ></cds-text-input>
+      `}
+    ></gift-modal>
+  `,
+  play: async ({ args, canvasElement, step }) => {
+    const { host, named } = await renderedModal(canvasElement);
+    const name = named("full-name");
+
+    await step("Fill in the supplied field", async () => {
+      await userEvent.type(await nativeInput(name), "Sam Rivera");
+    });
+
+    await step("Submit the custom form", async () => {
+      await userEvent.click(host.shadowRoot.querySelector("cds-button"));
+      await waitFor(() => expect(args.onItemSubmit).toHaveBeenCalledTimes(1));
+      const [{ detail }] = args.onItemSubmit.mock.calls[0];
+      expect(detail.form.contains(name)).toBe(true);
+      expect(name.value).toBe("Sam Rivera");
+      expect(host.open).toBe(true);
     });
   },
 };
