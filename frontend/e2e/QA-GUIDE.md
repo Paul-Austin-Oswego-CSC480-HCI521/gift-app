@@ -20,9 +20,15 @@ you view in a browser tab.
 2. Open a terminal (**Terminal > New Terminal**) and check everything works:
    ```bash
    cd frontend
+   npx playwright install chromium
    npm run test:e2e
    ```
-   You should see `8 passed`.
+   `npm install` installs Playwright, but the browser download is a separate step. You should see
+   `8 passed`. If the browser is still missing, run the install command again; in a Codespace, you
+   may need to rebuild the container so its setup command runs.
+   The **Playwright** VS Code extension adds a Testing view for running and debugging individual
+   tests, and a locator picker. For recording tests against this project's mocked scenarios, keep
+   using `npm run record -- <scenario>` below; it sets up the fake API and signed-in state.
 3. Open the virtual desktop: in the **Ports** tab at the bottom, find port **6080** ("Desktop
    (noVNC)") and click its globe icon. Click **Connect** and enter the password `vscode`. **Keep this
    tab open.**
@@ -40,15 +46,20 @@ This example opens a person on the People page and checks their name shows. Do i
    ```bash
    npm run record -- people
    ```
-   Wait about 10 seconds. The terminal prints `Scenario: people` and a block of code. Keep that code
-   for later. **Do not use this terminal again until you finish.** If you need to type something, open
-   a second terminal with the **+** in the terminal panel.
+   Wait about 10 seconds. The terminal prints `Scenario: people` and a block of code. **Keep that code
+   for later—every scenario prints its own custom block, so always save the one you were given.** You'll
+   paste this into the test file in Step 2 of "Save it as a test". **Do not use this terminal again
+   until you finish.** If you need to type something, open a second terminal with the **+** in the
+   terminal panel.
 2. **Go to the Desktop tab.** Two windows are open:
    - the **browser**, large, showing the app already signed in as a test user. A fake server is
      behind it, so nothing you do changes real data;
    - the **Playwright Inspector**, small, at the left, on top of the browser. Ignore the code in it.
 
    ![The Desktop tab before recording: the Inspector at the left on top of the browser](images/record-ready.png)
+
+   The Inspector shows a default test template when it opens—this is just boilerplate. Ignore it; we'll use the code block the terminal printed instead.
+
 3. **Click Record** in the Inspector toolbar. The circle turns red. Now every click is written down.
 4. **Click a person.** In the browser, click **Jaritza Lopez**. Her profile opens.
 5. **Add a check.** Click the **eye icon** in the Inspector toolbar (hover over icons to see their
@@ -84,7 +95,8 @@ This example opens a person on the People page and checks their name shows. Do i
 1. In VS Code's file list, right-click the `frontend/e2e` folder, choose **New File**, and name it
    after the feature, ending in `.spec.js`: `people-profile.spec.js`.
 2. Paste the code block the terminal printed in step 1 (select it in the terminal, copy, paste).
-   Every scenario prints its own block, so always use the one you were given. For this example:
+   This is important: **every scenario prints its own custom setup block**, so use the exact one you
+   were given, not the example below or the one from a different scenario. For this `people` scenario:
    ```js
    import { test, expect, signIn, mockApi } from "./fixtures/index.js";
 
@@ -142,6 +154,8 @@ This example opens a person on the People page and checks their name shows. Do i
 These are the end-to-end user workflows QA owns. Do them in this order, easiest first. For each one: run the **Record command**, do the **Click**
 steps, add the **Check** (step 5 above), then save it as in Part 2. Use the **File** name as the file
 name. Several rows ask for more than one test: make one file or one `test(...)` for each.
+
+**Important:** Every test here uses the code block your terminal prints. When you run `npm run record -- login`, use *that* block; when you run `npm run record -- people`, use *that* block. Do not reuse a block from a different scenario or the example in Part 2.
 
 Every test here runs against the fake server, so it works any time. To see all scenario names, run
 `npm run record -- --list`.
