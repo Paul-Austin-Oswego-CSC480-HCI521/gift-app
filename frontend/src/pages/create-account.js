@@ -1,4 +1,5 @@
 import { apiFetch } from "../api/client.js";
+import { setAccessToken, setUserId } from "../auth/token-store.js";
 import "../components/gift-create-account-form/gift-create-account-form.js";
 
 const form = document.querySelector("gift-create-account-form");
@@ -17,13 +18,15 @@ form.addEventListener("create-account-submit", async (event) => {
   form.errorMessage = "";
 
   try {
-    await apiFetch("/auth/signup", {
+    const data = await apiFetch("/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstName, surname, email, password }),
     });
 
-    window.location.assign("/");
+    setAccessToken(data.token);
+    setUserId(data.userId);
+    window.location.assign("/quick-preferences");
   } catch (error) {
     form.errorMessage = signupErrorMessage(error);
     form.loading = false;

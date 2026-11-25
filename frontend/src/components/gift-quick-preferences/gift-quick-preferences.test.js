@@ -44,20 +44,30 @@ describe("gift-quick-preferences", () => {
     ]);
   });
 
-  it("renders five Basic Information dropdowns", async () => {
+  it("renders a Favorite Colors text field and four size dropdowns", async () => {
     const component = await renderQuickPreferences();
     const selects = Array.from(
       component.shadowRoot.querySelectorAll("cds-select")
     );
 
-    expect(selects).toHaveLength(5);
+    expect(component.shadowRoot.querySelector("cds-text-input")).toHaveAttribute("label", "Favorite Colors");
+    expect(selects).toHaveLength(4);
     expect(selects.map((select) => select.getAttribute("label-text"))).toEqual([
-      "Favorite Colors",
       "Shirt Size",
       "Pant Size",
       "Shoe Size",
       "Jacket Size",
     ]);
+  });
+
+  it("emits the entered values when the form is submitted", async () => {
+    const component = await renderQuickPreferences();
+    const save = vi.fn();
+    component.addEventListener("preferences-save", save);
+    component.shadowRoot.querySelector("cds-text-input").value = "Teal and copper";
+    component.shadowRoot.querySelector("form").requestSubmit();
+    expect(save).toHaveBeenCalledOnce();
+    expect(save.mock.calls[0][0].detail).toMatchObject({ "favorite-color": "Teal and copper" });
   });
 
   it("renders three textareas with 100-character counters", async () => {
