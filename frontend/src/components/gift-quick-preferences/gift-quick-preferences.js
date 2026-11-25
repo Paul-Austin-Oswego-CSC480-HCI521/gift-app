@@ -1,29 +1,37 @@
 import { LitElement, html, css } from "lit";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/select/index.js";
+import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import "../gift-tile/gift-tile.js";
 import { pageContentStyles } from "../../styles/page-content.js";
-
-const COLOR_OPTIONS = [
-  "Red",
-  "Orange",
-  "Yellow",
-  "Green",
-  "Blue",
-  "Purple",
-  "Pink",
-  "Black",
-  "White",
-  "Gray",
-];
+import { notificationTheme } from "../../styles/notification-theme.js";
 
 const CLOTHING_SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "2XL"];
 const SHOE_SIZE_OPTIONS = ["5", "6", "7", "8", "9", "10", "11", "12", "13"];
 
 export class GiftQuickPreferences extends LitElement {
+  static properties = {
+    saving: { type: Boolean },
+    error: { type: String },
+  };
+
   static styles = [
+    notificationTheme,
     pageContentStyles,
     css`
+      form {
+        display: grid;
+        gap: var(--cds-spacing-05);
+        justify-items: start;
+      }
+
+      .preferences-grid {
+        inline-size: 100%;
+        box-sizing: border-box;
+      }
+
       .intro {
         display: flex;
         flex-direction: column;
@@ -95,6 +103,18 @@ export class GiftQuickPreferences extends LitElement {
     `,
   ];
 
+  save(event) {
+    event.preventDefault();
+    if (this.saving) return;
+    const detail = Object.fromEntries(
+      Array.from(event.currentTarget.querySelectorAll("cds-text-input, cds-select, cds-textarea"), field => [
+        field.getAttribute("name"),
+        field.value ?? "",
+      ])
+    );
+    this.dispatchEvent(new CustomEvent("preferences-save", { detail, bubbles: true, composed: true }));
+  }
+
   renderSelect(label, name, options) {
     return html`
       <cds-select data-testid="quick-preferences-${name}-select" label-text=${label} name=${name} placeholder="Choose an option">
@@ -115,13 +135,17 @@ export class GiftQuickPreferences extends LitElement {
         </p>
       </header>
 
-      <form data-testid="quick-preferences-form">
+      <form data-testid="quick-preferences-form" @submit=${this.save}>
         <div class="preferences-grid">
           <gift-tile type="section" data-testid="quick-preferences-basic-information-section" class="basic-information">
             <h2 slot="title">Basic Information</h2>
 
             <div class="basic-information-fields">
-              ${this.renderSelect("Favorite Colors", "favorite-color", COLOR_OPTIONS)}
+              <cds-text-input
+                data-testid="quick-preferences-favorite-color-input"
+                label="Favorite Colors"
+                name="favorite-color"
+              ></cds-text-input>
               ${this.renderSelect("Shirt Size", "shirt-size", CLOTHING_SIZE_OPTIONS)}
               ${this.renderSelect("Pant Size", "pant-size", CLOTHING_SIZE_OPTIONS)}
               ${this.renderSelect("Shoe Size", "shoe-size", SHOE_SIZE_OPTIONS)}
@@ -171,6 +195,15 @@ export class GiftQuickPreferences extends LitElement {
             ></cds-textarea>
           </gift-tile>
         </div>
+        ${this.error ? html`
+          <cds-inline-notification kind="error" title="Couldn’t save preferences" subtitle=${this.error} hide-close-button></cds-inline-notification>
+        ` : ""}
+        <cds-button
+          type="button"
+          data-testid="quick-preferences-save-button"
+          ?disabled=${this.saving}
+          @click=${() => this.renderRoot.querySelector("form").requestSubmit()}
+        >${this.saving ? "Saving…" : "Save Preferences"}</cds-button>
       </form>
     `;
   }
